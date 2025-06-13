@@ -4,8 +4,9 @@
 <html>
 <head runat="server">
     <title>Data Pharma</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="~/Content/tailwind.css" rel="stylesheet" />
+<link href="Content/bootstrap.min.css" rel="stylesheet" />
+<script src="Scripts/bootstrap.bundle.min.js"></script>
+
 </head>
 <body class="bg-gray-100 text-gray-900">
     <form id="form1" runat="server">
