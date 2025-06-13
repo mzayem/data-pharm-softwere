@@ -7,7 +7,7 @@ using System.Web.UI.WebControls;
 
 namespace data_pharm_softwere
 {
-    public partial class WebForm1 : System.Web.UI.Page
+    public partial class Layout : System.Web.UI.MasterPage
     {
         protected void Page_Load(object sender, EventArgs e)
         {
