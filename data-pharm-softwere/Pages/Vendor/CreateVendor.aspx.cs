@@ -1,11 +1,15 @@
 ﻿using data_pharm_softwere.Data;
-using data_pharm_softwere.Models;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
 using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.Xml.Linq;
 
-namespace data_pharm_softwere.Pages
+namespace data_pharm_softwere.Pages.Vendor
 {
-    public partial class Vendor : Page
+    public partial class CreateVendor : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -28,6 +32,7 @@ namespace data_pharm_softwere.Pages
                             Name = txtName.Text.Trim(),
                             Email = txtEmail.Text.Trim(),
                             Address = txtAddress.Text.Trim(),
+                            Contact = txtContact.Text.Trim(),
                             Town = txtTown.Text.Trim(),
                             City = txtCity.Text.Trim(),
                             LicenceNo = txtLicenceNo.Text.Trim(),
@@ -62,6 +67,7 @@ namespace data_pharm_softwere.Pages
             txtName.Text = string.Empty;
             txtEmail.Text = string.Empty;
             txtAddress.Text = string.Empty;
+            txtContact.Text = string.Empty;
             txtTown.Text = string.Empty;
             txtCity.Text = string.Empty;
             txtLicenceNo.Text = string.Empty;

@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace data_pharm_softwere
+namespace data_pharm_softwere.Pages
 {
     public partial class Layout : System.Web.UI.MasterPage
     {
