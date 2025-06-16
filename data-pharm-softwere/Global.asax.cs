@@ -33,13 +33,15 @@ namespace data_pharm_softwere
                 "",
                 "~/Pages/Main.aspx"
             );
+
+            //vendor routes
             routes.MapPageRoute(
-                "Vendor Create",
+                "Create Vendor",
                 "vendor/create",
                 "~/pages/Vendor/CreateVendor.aspx"
             );
             routes.MapPageRoute(
-                "Vendor Edit",
+                "Edit Vendor",
                 "vendor/edit",
                 "~/pages/Vendor/EditVendor.aspx"
             );
@@ -47,6 +49,57 @@ namespace data_pharm_softwere
                 "Vendor Management",
                 "vendor",
                 "~/pages/Vendor/VendorPage.aspx"
+            );
+
+            //group routes
+            routes.MapPageRoute(
+                "Create Group",
+                "group/create",
+                "~/pages/Group/CreateGroup.aspx"
+            );
+            routes.MapPageRoute(
+                " Edit Group",
+                "group/edit",
+                "~/pages/Group/EditGroup.aspx"
+            );
+            routes.MapPageRoute(
+                "Group Management",
+                "group",
+                "~/pages/Group/GroupPage.aspx"
+            );
+
+            //subgroup routes
+            routes.MapPageRoute(
+                "Create SubGroup",
+                "subgroup/create",
+                "~/pages/SubGroup/CreateSubGroup.aspx"
+            );
+            routes.MapPageRoute(
+                "Edit SubGroup",
+                "subgroup/edit",
+                "~/pages/SubGroup/EditSubGroup.aspx"
+            );
+            routes.MapPageRoute(
+                "SubGroup Management",
+                "subgroup",
+                "~/pages/SubGroup/SubGroupPage.aspx"
+            );
+
+            //product routes
+            routes.MapPageRoute(
+                "Product Create",
+                "product/create",
+                "~/pages/Product/CreateProduct.aspx"
+            );
+            routes.MapPageRoute(
+                "Product Edit",
+                "product/edit",
+                "~/pages/Product/EditProduct.aspx"
+            );
+            routes.MapPageRoute(
+                "Product Management",
+                "product",
+                "~/pages/Product/ProductPage.aspx"
             );
         }
 

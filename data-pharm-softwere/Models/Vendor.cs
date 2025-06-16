@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -63,5 +64,7 @@ namespace data_pharm_softwere.Models
         public string Remarks { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
+       public ICollection<Group> Groups { get; set; }
+
     }
 }
