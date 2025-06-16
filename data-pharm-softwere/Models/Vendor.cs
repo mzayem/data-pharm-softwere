@@ -64,7 +64,6 @@ namespace data_pharm_softwere.Models
         public string Remarks { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
-       public ICollection<Group> Groups { get; set; }
-
+        public ICollection<Group> Groups { get; set; }
     }
 }

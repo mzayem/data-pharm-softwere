@@ -184,7 +184,7 @@
                         CssClass="btn btn-primary px-5 py-2 rounded-pill"
                         OnClick="btnSave_Click"
                         ValidationGroup="VendorForm" />
-                     <asp:HyperLink NavigateUrl="~/Pages/Vendor/VendorPage.aspx" Text="Back to List" CssClass="btn btn-secondary px-5 py-2 rounded-pill" runat="server" />
+                     <asp:HyperLink NavigateUrl="/vendor" Text="Back to List" CssClass="btn btn-secondary px-5 py-2 rounded-pill" runat="server" />
 
 
                 </div>

@@ -119,7 +119,7 @@
             <div class="d-flex flex-wrap gap-2 justify-content-between mt-4">
                 <asp:Button ID="btnUpdate" runat="server" Text="Update Vendor" CssClass="btn btn-primary px-5 py-2 rounded-pill" OnClick="btnUpdate_Click" />
                 <asp:HyperLink ID="btnCreateVendor" runat="server" NavigateUrl="/vendor/create" CssClass="btn btn-primary px-5 py-2 rounded-pill">+ Add New Vendor</asp:HyperLink>
-                <asp:HyperLink NavigateUrl="~/Pages/Vendor/VendorPage.aspx" Text="Back to List" CssClass="btn btn-secondary px-5 py-2 rounded-pill" runat="server" />
+                <asp:HyperLink NavigateUrl="/vendor" Text="Back to List" CssClass="btn btn-secondary px-5 py-2 rounded-pill" runat="server" />
             </div>
         </asp:Panel>
     </div>
