@@ -50,7 +50,7 @@ namespace data_pharm_softwere.Pages.Vendor
         protected void txtSearch_TextChanged(object sender, EventArgs e)
         {
             string search = txtSearch.Text.Trim();
-            ViewState["VendorSearch"] = search; // Store in viewstate
+            ViewState["VendorSearch"] = search;
             LoadVendors(search);
         }
 

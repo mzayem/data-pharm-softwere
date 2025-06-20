@@ -14,7 +14,17 @@ namespace data_pharm_softwere.Pages.Vendor
         {
             if (!IsPostBack)
             {
-                LoadVendor();
+                if (VendorId > 0)
+                {
+                    LoadVendor();
+
+                }
+
+                else
+                {
+                    Response.Redirect("/vendor/create/");
+                }
+
             }
         }
 
@@ -23,7 +33,7 @@ namespace data_pharm_softwere.Pages.Vendor
             var vendor = _context.Vendors.FirstOrDefault(v => v.VendorID == VendorId);
             if (vendor == null)
             {
-                Response.Redirect("VendorPage.aspx");
+                Response.Redirect("/vendor/create/");
                 return;
             }
 
@@ -50,7 +60,7 @@ namespace data_pharm_softwere.Pages.Vendor
             var vendor = _context.Vendors.FirstOrDefault(v => v.VendorID == VendorId);
             if (vendor == null)
             {
-                Response.Redirect("VendorPage.aspx");
+                Response.Redirect("/vendor/create/");
                 return;
             }
 
@@ -70,7 +80,7 @@ namespace data_pharm_softwere.Pages.Vendor
             vendor.Remarks = txtRemarks.Text;
 
             _context.SaveChanges();
-            Response.Redirect("VendorPage.aspx");
+            Response.Redirect("/vendor");
         }
     }
 }

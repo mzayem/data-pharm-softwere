@@ -144,9 +144,26 @@
     <Compile Include="Migrations\202506160653398_add-migration update.Designer.cs">
       <DependentUpon>202506160653398_add-migration update.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202506190620331_SeedProductIdStart.cs" />
+    <Compile Include="Migrations\202506190620331_SeedProductIdStart.Designer.cs">
+      <DependentUpon>202506190620331_SeedProductIdStart.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202506190700355_ProductUpdate.cs" />
+    <Compile Include="Migrations\202506190700355_ProductUpdate.Designer.cs">
+      <DependentUpon>202506190700355_ProductUpdate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202506190717525_productCode.cs" />
+    <Compile Include="Migrations\202506190717525_productCode.Designer.cs">
+      <DependentUpon>202506190717525_productCode.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202506200951191_Update.cs" />
+    <Compile Include="Migrations\202506200951191_Update.Designer.cs">
+      <DependentUpon>202506200951191_Update.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\DataPharmaContext.cs" />
     <Compile Include="Models\Group.cs" />
+    <Compile Include="Models\Product.cs" />
     <Compile Include="Models\SubGroup.cs" />
     <Compile Include="Pages\Group\CreateGroup.aspx.cs">
       <DependentUpon>CreateGroup.aspx</DependentUpon>
@@ -295,6 +312,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202506160653398_add-migration update.resx">
       <DependentUpon>202506160653398_add-migration update.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202506190620331_SeedProductIdStart.resx">
+      <DependentUpon>202506190620331_SeedProductIdStart.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202506190700355_ProductUpdate.resx">
+      <DependentUpon>202506190700355_ProductUpdate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202506190717525_productCode.resx">
+      <DependentUpon>202506190717525_productCode.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202506200951191_Update.resx">
+      <DependentUpon>202506200951191_Update.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

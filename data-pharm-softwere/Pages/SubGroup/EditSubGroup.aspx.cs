@@ -26,7 +26,7 @@ namespace data_pharm_softwere.Pages.SubGroup
                 }
                 else
                 {
-                    Response.Redirect("/subgroup");
+                    Response.Redirect("/subgroup/create/");
                 }
             }
         }
@@ -85,7 +85,7 @@ namespace data_pharm_softwere.Pages.SubGroup
 
                 if (subGroup == null)
                 {
-                    Response.Redirect("/subgroup");
+                    Response.Redirect("/subgroup/create/");
                     return;
                 }
 

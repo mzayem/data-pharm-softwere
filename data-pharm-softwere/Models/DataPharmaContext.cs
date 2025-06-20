@@ -13,6 +13,7 @@ namespace data_pharm_softwere.Data
         public DbSet<Vendor> Vendors { get; set; }
         public DbSet<Group> Groups { get; set; }
         public DbSet<SubGroup> SubGroups { get; set; }
+        public DbSet<Product> Products { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -21,6 +22,7 @@ namespace data_pharm_softwere.Data
             modelBuilder.Entity<Vendor>().ToTable("Vendors");
             modelBuilder.Entity<Group>().ToTable("Groups");
             modelBuilder.Entity<SubGroup>().ToTable("SubGroups");
+            modelBuilder.Entity<Product>().ToTable("Products");
 
             modelBuilder.Entity<Group>()
                 .HasRequired(g => g.Vendor)
@@ -32,6 +34,12 @@ namespace data_pharm_softwere.Data
                 .HasRequired(sg => sg.Group)
                 .WithMany(g => g.SubGroups)
                 .HasForeignKey(sg => sg.GroupID)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<Product>()
+                .HasRequired(p => p.SubGroup)
+                .WithMany()
+                .HasForeignKey(p => p.SubGroupID)
                 .WillCascadeOnDelete(false);
         }
     }
