@@ -7,92 +7,110 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace data_pharm_softwere.Pages.Group
+namespace data_pharm_softwere.Pages.Batch.Controls
 {
 
 
-    public partial class GroupPage
+    public partial class BatchModal
     {
 
         /// <summary>
-        /// ScriptManager1 control.
+        /// pnlForm control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.ScriptManager ScriptManager1;
+        protected global::System.Web.UI.WebControls.Panel pnlForm;
 
         /// <summary>
-        /// BatchModalControl control.
+        /// ddlProduct control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::data_pharm_softwere.Pages.Batch.Controls.BatchModal BatchModalControl;
+        protected global::System.Web.UI.WebControls.DropDownList ddlProduct;
 
         /// <summary>
-        /// btnCreateGroup control.
+        /// txtBatchNo control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink btnCreateGroup;
+        protected global::System.Web.UI.WebControls.TextBox txtBatchNo;
 
         /// <summary>
-        /// btnOpenBatchModal control.
+        /// txtMFGDate control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnOpenBatchModal;
+        protected global::System.Web.UI.WebControls.TextBox txtMFGDate;
 
         /// <summary>
-        /// UpdatePanel1 control.
+        /// txtExpiryDate control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.UpdatePanel UpdatePanel1;
+        protected global::System.Web.UI.WebControls.TextBox txtExpiryDate;
 
         /// <summary>
-        /// txtSearch control.
+        /// txtDP control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtSearch;
+        protected global::System.Web.UI.WebControls.TextBox txtDP;
 
         /// <summary>
-        /// gvGroups control.
+        /// txtTP control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView gvGroups;
+        protected global::System.Web.UI.WebControls.TextBox txtTP;
 
         /// <summary>
-        /// btnExportPdf control.
+        /// txtMRP control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnExportPdf;
+        protected global::System.Web.UI.WebControls.TextBox txtMRP;
 
         /// <summary>
-        /// btnExportExcel control.
+        /// txtCartonQty control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnExportExcel;
+        protected global::System.Web.UI.WebControls.TextBox txtCartonQty;
+
+        /// <summary>
+        /// txtCartonPrice control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtCartonPrice;
+
+        /// <summary>
+        /// btnSave control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnSave;
     }
 }

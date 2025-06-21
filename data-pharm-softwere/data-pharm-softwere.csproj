@@ -98,6 +98,8 @@
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="Global.asax" />
+    <Content Include="Pages\Batch\Controls\BatchModal.ascx" />
+    <Content Include="Pages\Batch\CreateBatch.aspx" />
     <Content Include="Pages\Group\CreateGroup.aspx" />
     <Content Include="Pages\Group\EditGroup.aspx" />
     <Content Include="Pages\Group\GroupPage.aspx" />
@@ -160,11 +162,34 @@
     <Compile Include="Migrations\202506200951191_Update.Designer.cs">
       <DependentUpon>202506200951191_Update.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202506201059127_CreateBatchTable.cs" />
+    <Compile Include="Migrations\202506201059127_CreateBatchTable.Designer.cs">
+      <DependentUpon>202506201059127_CreateBatchTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202506210452257_EnableCascadeDelete.cs" />
+    <Compile Include="Migrations\202506210452257_EnableCascadeDelete.Designer.cs">
+      <DependentUpon>202506210452257_EnableCascadeDelete.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Batch.cs" />
     <Compile Include="Models\DataPharmaContext.cs" />
     <Compile Include="Models\Group.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\SubGroup.cs" />
+    <Compile Include="Pages\Batch\Controls\BatchModal.ascx.cs">
+      <DependentUpon>BatchModal.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Batch\Controls\BatchModal.ascx.designer.cs">
+      <DependentUpon>BatchModal.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Batch\CreateBatch.aspx.cs">
+      <DependentUpon>CreateBatch.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Batch\CreateBatch.aspx.designer.cs">
+      <DependentUpon>CreateBatch.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Group\CreateGroup.aspx.cs">
       <DependentUpon>CreateGroup.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -324,6 +349,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202506200951191_Update.resx">
       <DependentUpon>202506200951191_Update.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202506201059127_CreateBatchTable.resx">
+      <DependentUpon>202506201059127_CreateBatchTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202506210452257_EnableCascadeDelete.resx">
+      <DependentUpon>202506210452257_EnableCascadeDelete.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

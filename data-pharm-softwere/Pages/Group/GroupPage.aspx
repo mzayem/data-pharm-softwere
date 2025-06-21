@@ -1,6 +1,10 @@
 ﻿<%@ Page Title="Group" Language="C#" MasterPageFile="~/Pages/Layout.Master" AutoEventWireup="true" CodeBehind="GroupPage.aspx.cs" Inherits="data_pharm_softwere.Pages.Group.GroupPage" %>
+<%@ Register TagPrefix="uc" TagName="BatchModal" Src="~/Pages/Batch/Controls/BatchModal.ascx" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <asp:ScriptManager ID="ScriptManager1" runat="server" />
+    <uc:BatchModal ID="BatchModalControl" runat="server" />
+    
 
     <div class="container mt-4">
         <h2 class="mb-3">Group List</h2>
@@ -12,6 +16,13 @@
             CssClass="btn btn-primary mb-3">
             + Add New Group
         </asp:HyperLink>
+        <asp:Button 
+            ID="btnOpenBatchModal" 
+            runat="server" 
+            Text="Create Batch" 
+            CssClass="btn btn-primary"
+            OnClientClick="$('#batchModal').modal('show'); return false;" />
+
 
         <asp:UpdatePanel ID="UpdatePanel1" runat="server">
             <ContentTemplate>

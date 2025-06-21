@@ -379,7 +379,7 @@ namespace data_pharm_softwere.Pages.Product
                 };
 
                 string[] headers = {
-                "Code", "Name", "Prdct #", "HS #", "Packing", "Type", "Pack Size",
+                "Code", "Name", "Prod. #", "HS #", "Packing", "Type", "Pack Size",
                 "Carton", "UOM", "Pur. Disc", "Req GST", "UnReq GST", "Adv Tax Ex?", "GST Ex?", "Vendor",
                 "Group", "SubGrp.",
             };
