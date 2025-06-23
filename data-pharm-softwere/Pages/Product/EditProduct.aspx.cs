@@ -9,7 +9,6 @@ namespace data_pharm_softwere.Pages.Product
     public partial class EditProduct : System.Web.UI.Page
     {
         private readonly DataPharmaContext _context = new DataPharmaContext();
-
         private int ProductId => int.TryParse(Request.QueryString["id"], out int id) ? id : 0;
 
         protected void Page_Load(object sender, EventArgs e)
@@ -17,10 +16,10 @@ namespace data_pharm_softwere.Pages.Product
             if (!IsPostBack)
             {
                 lblMessage.Text = string.Empty;
-
                 LoadVendors();
-                LoadPackingTypes();
-                LoadProductTypes();
+                LoadGroups();
+                LoadSubGroups();
+                LoadDropdowns();
 
                 if (ProductId > 0)
                 {
@@ -30,6 +29,18 @@ namespace data_pharm_softwere.Pages.Product
                 {
                     Response.Redirect("/product/create");
                 }
+
+                txtPurchaseDiscount.Attributes["step"] = "0.1";
+                txtPurchaseDiscount.Attributes["min"] = "0";
+                txtPurchaseDiscount.Attributes["max"] = "100";
+
+                txtReqGST.Attributes["step"] = "0.1";
+                txtReqGST.Attributes["min"] = "0";
+                txtReqGST.Attributes["max"] = "100";
+
+                txtUnReqGST.Attributes["step"] = "0.1";
+                txtUnReqGST.Attributes["min"] = "0";
+                txtUnReqGST.Attributes["max"] = "100";
             }
         }
 
@@ -46,20 +57,19 @@ namespace data_pharm_softwere.Pages.Product
             }
             catch (Exception ex)
             {
-                lblMessage.Text = "Error loading vendors: " + ex.Message;
-                lblMessage.CssClass = "text-danger fw-semibold";
+                ShowError("Error loading vendors: " + ex.Message);
             }
         }
 
-        private void LoadGroupsByVendor(int? vendorId = null)
+        private void LoadGroups(int? vendorId = null)
         {
             try
             {
-                var groups = vendorId.HasValue
-                    ? _context.Groups.Where(g => g.VendorID == vendorId).ToList()
-                    : _context.Groups.ToList();
+                var query = _context.Groups.AsQueryable();
+                if (vendorId.HasValue)
+                    query = query.Where(g => g.VendorID == vendorId.Value);
 
-                ddlGroup.DataSource = groups;
+                ddlGroup.DataSource = query.ToList();
                 ddlGroup.DataTextField = "Name";
                 ddlGroup.DataValueField = "GroupID";
                 ddlGroup.DataBind();
@@ -67,20 +77,22 @@ namespace data_pharm_softwere.Pages.Product
             }
             catch (Exception ex)
             {
-                lblMessage.Text = "Error loading groups: " + ex.Message;
-                lblMessage.CssClass = "text-danger fw-semibold";
+                ShowError("Error loading groups: " + ex.Message);
             }
         }
 
-        private void LoadSubGroupsByGroup(int? groupId = null)
+        private void LoadSubGroups(int? vendorId = null, int? groupId = null)
         {
             try
             {
-                var subGroups = groupId.HasValue
-                    ? _context.SubGroups.Where(sg => sg.GroupID == groupId).ToList()
-                    : _context.SubGroups.ToList();
+                var query = _context.SubGroups.AsQueryable();
+                if (vendorId.HasValue)
+                    query = query.Where(sg => sg.Group.VendorID == vendorId.Value);
 
-                ddlSubGroup.DataSource = subGroups;
+                if (groupId.HasValue)
+                    query = query.Where(sg => sg.GroupID == groupId.Value);
+
+                ddlSubGroup.DataSource = query.ToList();
                 ddlSubGroup.DataTextField = "Name";
                 ddlSubGroup.DataValueField = "SubGroupID";
                 ddlSubGroup.DataBind();
@@ -88,19 +100,19 @@ namespace data_pharm_softwere.Pages.Product
             }
             catch (Exception ex)
             {
-                lblMessage.Text = "Error loading subgroups: " + ex.Message;
-                lblMessage.CssClass = "text-danger fw-semibold";
+                ShowError("Error loading subgroups: " + ex.Message);
             }
         }
 
-        private void LoadPackingTypes()
+        private void LoadDropdowns()
         {
-            ddlPackingType.Items.Insert(0, new ListItem("Select", ""));
-        }
+            ddlPackingType.DataSource = Enum.GetNames(typeof(PackingType));
+            ddlPackingType.DataBind();
+            ddlPackingType.Items.Insert(0, new ListItem("-- Select PackingType --", ""));
 
-        private void LoadProductTypes()
-        {
-            ddlType.Items.Insert(0, new ListItem("Select", ""));
+            ddlType.DataSource = Enum.GetNames(typeof(ProductType));
+            ddlType.DataBind();
+            ddlType.Items.Insert(0, new ListItem("-- Select Type --", ""));
         }
 
         private void LoadProduct()
@@ -108,10 +120,9 @@ namespace data_pharm_softwere.Pages.Product
             try
             {
                 var product = _context.Products.Find(ProductId);
-
                 if (product == null)
                 {
-                    Response.Redirect("/product/create/");
+                    Response.Redirect("/product/create");
                     return;
                 }
 
@@ -120,7 +131,7 @@ namespace data_pharm_softwere.Pages.Product
                 txtProductCode.Text = product.ProductCode;
                 txtHSCode.Text = product.HSCode.ToString();
                 txtPackingSize.Text = product.PackingSize;
-                txtCartonSize.Text = product.CartonSize;
+                txtCartonSize.Text = product.CartonSize.ToString();
                 txtUom.Text = product.Uom;
                 txtPurchaseDiscount.Text = product.PurchaseDiscount.ToString();
                 txtReqGST.Text = product.ReqGST.ToString();
@@ -130,7 +141,6 @@ namespace data_pharm_softwere.Pages.Product
                 chkAdvTaxExempted.Checked = product.IsAdvTaxExempted;
                 chkGSTExempted.Checked = product.IsGSTExempted;
 
-                // Load Vendor > Group > SubGroup chain properly
                 var subGroup = _context.SubGroups.Find(product.SubGroupID);
                 if (subGroup != null)
                 {
@@ -138,19 +148,16 @@ namespace data_pharm_softwere.Pages.Product
                     if (group != null)
                     {
                         ddlVendor.SelectedValue = group.VendorID.ToString();
-                        LoadGroupsByVendor(group.VendorID);
-
+                        LoadGroups(group.VendorID);
                         ddlGroup.SelectedValue = group.GroupID.ToString();
-                        LoadSubGroupsByGroup(group.GroupID);
-
+                        LoadSubGroups(group.VendorID, group.GroupID);
                         ddlSubGroup.SelectedValue = subGroup.SubGroupID.ToString();
                     }
                 }
             }
             catch (Exception ex)
             {
-                lblMessage.Text = "Error loading product: " + ex.Message;
-                lblMessage.CssClass = "text-danger fw-semibold";
+                ShowError("Error loading product: " + ex.Message);
             }
         }
 
@@ -158,19 +165,32 @@ namespace data_pharm_softwere.Pages.Product
         {
             if (int.TryParse(ddlVendor.SelectedValue, out int vendorId))
             {
-                LoadGroupsByVendor(vendorId);
-                ddlGroup.ClearSelection();
-                ddlSubGroup.ClearSelection();
+                LoadGroups(vendorId);
+                LoadSubGroups(vendorId);
             }
+            else
+            {
+                LoadGroups();
+                LoadSubGroups();
+            }
+
+            ddlGroup.SelectedIndex = 0;
+            ddlSubGroup.SelectedIndex = 0;
         }
 
         protected void ddlGroup_SelectedIndexChanged(object sender, EventArgs e)
         {
+            int.TryParse(ddlVendor.SelectedValue, out int vendorId);
             if (int.TryParse(ddlGroup.SelectedValue, out int groupId))
             {
-                LoadSubGroupsByGroup(groupId);
-                ddlSubGroup.ClearSelection();
+                LoadSubGroups(vendorId > 0 ? (int?)vendorId : null, groupId);
             }
+            else
+            {
+                LoadSubGroups(vendorId > 0 ? (int?)vendorId : null);
+            }
+
+            ddlSubGroup.SelectedIndex = 0;
         }
 
         protected void btnUpdate_Click(object sender, EventArgs e)
@@ -180,32 +200,63 @@ namespace data_pharm_softwere.Pages.Product
             try
             {
                 var product = _context.Products.Find(ProductId);
-
                 if (product == null)
                 {
-                    lblMessage.Text = "Product not found.";
-                    lblMessage.CssClass = "text-danger fw-semibold";
+                    ShowError("Product not found.");
+                    return;
+                }
+
+                if (!int.TryParse(txtHSCode.Text, out int hsCode))
+                {
+                    ShowError("Invalid HS Code format.");
+                    return;
+                }
+
+                if (!int.TryParse(txtCartonSize.Text, out int cartonSize))
+                {
+                    ShowError("Invalid Carton Size format.");
+                    return;
+                }
+
+                if (!decimal.TryParse(txtReqGST.Text, out decimal reqGst) ||
+                    !decimal.TryParse(txtUnReqGST.Text, out decimal unreqGst))
+                {
+                    ShowError("Invalid GST format.");
+                    return;
+                }
+
+                if (!Enum.TryParse(ddlPackingType.SelectedValue, out PackingType packingType))
+                {
+                    ShowError("Please select a valid Packing Type.");
+                    return;
+                }
+
+                if (!Enum.TryParse(ddlType.SelectedValue, out ProductType productType))
+                {
+                    ShowError("Please select a valid Product Type.");
+                    return;
+                }
+
+                if (!int.TryParse(ddlSubGroup.SelectedValue, out int subGroupId))
+                {
+                    ShowError("Please select a valid SubGroup.");
                     return;
                 }
 
                 product.Name = txtName.Text.Trim();
                 product.ProductCode = txtProductCode.Text.Trim();
-                product.HSCode = int.Parse(txtHSCode.Text);
+                product.HSCode = hsCode;
                 product.PackingSize = txtPackingSize.Text.Trim();
-                product.CartonSize = txtCartonSize.Text.Trim();
+                product.CartonSize = cartonSize;
                 product.Uom = txtUom.Text.Trim();
                 product.PurchaseDiscount = decimal.TryParse(txtPurchaseDiscount.Text, out var discount) ? discount : 0;
-                product.ReqGST = int.Parse(txtReqGST.Text);
-                product.UnReqGST = int.Parse(txtUnReqGST.Text);
-
-                product.PackingType = (PackingType)Enum.Parse(typeof(PackingType), ddlPackingType.SelectedValue);
-                product.Type = (ProductType)Enum.Parse(typeof(ProductType), ddlType.SelectedValue);
-
-                product.SubGroupID = int.Parse(ddlSubGroup.SelectedValue);
-
+                product.ReqGST = reqGst;
+                product.UnReqGST = unreqGst;
+                product.PackingType = packingType;
+                product.Type = productType;
+                product.SubGroupID = subGroupId;
                 product.IsAdvTaxExempted = chkAdvTaxExempted.Checked;
                 product.IsGSTExempted = chkGSTExempted.Checked;
-
                 product.UpdatedAt = DateTime.Now;
 
                 _context.SaveChanges();
@@ -214,9 +265,14 @@ namespace data_pharm_softwere.Pages.Product
             }
             catch (Exception ex)
             {
-                lblMessage.Text = "Error updating product: " + ex.Message;
-                lblMessage.CssClass = "text-danger fw-semibold";
+                ShowError("Error updating product: " + ex.Message);
             }
+        }
+
+        private void ShowError(string message)
+        {
+            lblMessage.Text = message;
+            lblMessage.CssClass = "text-danger fw-semibold";
         }
     }
 }

@@ -8,7 +8,6 @@ using System.Linq;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using WebListItem = System.Web.UI.WebControls.ListItem;
-using PdfListItem = iTextSharp.text.ListItem;
 
 namespace data_pharm_softwere.Pages.Product
 {
@@ -260,7 +259,7 @@ namespace data_pharm_softwere.Pages.Product
             p.PackingType.ToString(),
             p.Type.ToString(),
             EscapeCsv(p.PackingSize),
-            EscapeCsv(p.CartonSize),
+            EscapeCsv(p.CartonSize.ToString()),
             EscapeCsv(p.Uom),
             p.PurchaseDiscount.ToString("0.##"),
             p.ReqGST.ToString(),
@@ -402,7 +401,7 @@ namespace data_pharm_softwere.Pages.Product
                     table.AddCell(new Phrase(p.PackingType.ToString(), bodyFont));
                     table.AddCell(new Phrase(p.Type.ToString(), bodyFont));
                     table.AddCell(new Phrase(p.PackingSize, bodyFont));
-                    table.AddCell(new Phrase(p.CartonSize, bodyFont));
+                    table.AddCell(new Phrase(p.CartonSize.ToString(), bodyFont));
                     table.AddCell(new Phrase(p.Uom, bodyFont));
                     table.AddCell(new Phrase(p.PurchaseDiscount.ToString("0.##") + "%", bodyFont));
                     table.AddCell(new Phrase(p.ReqGST.ToString() + "%", bodyFont));

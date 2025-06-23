@@ -101,6 +101,23 @@ namespace data_pharm_softwere
                 "product",
                 "~/pages/Product/ProductPage.aspx"
             );
+
+            //Batch routes
+            routes.MapPageRoute(
+                "Batch Create",
+                "batch/create",
+                "~/pages/Batch/CreateBatch.aspx"
+            );
+            routes.MapPageRoute(
+                "Batch Edit",
+                "batch/edit",
+                "~/pages/Batch/EditBatch.aspx"
+            );
+            routes.MapPageRoute(
+                "Batch Management",
+                "batch",
+                "~/pages/Batch/BatchPage.aspx"
+            );
         }
 
         // Default event hooks

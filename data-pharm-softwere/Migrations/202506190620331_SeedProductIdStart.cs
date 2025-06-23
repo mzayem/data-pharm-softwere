@@ -36,9 +36,11 @@
                 .Index(t => t.VendorID)
                 .Index(t => t.GroupID);
             Sql(@"
-                IF IDENT_CURRENT('Products') < 101000
+                DECLARE @currentId BIGINT = IDENT_CURRENT('Products');
+
+                IF @currentId IS NULL OR @currentId < 101001
                 BEGIN
-                    DBCC CHECKIDENT ('Products', RESEED, 101000);
+                    DBCC CHECKIDENT ('Products', RESEED, 101001);
                 END
             ");
         }

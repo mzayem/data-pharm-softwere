@@ -31,7 +31,14 @@
                 })
                 .PrimaryKey(t => t.VendorID);
 
-            Sql("DBCC CHECKIDENT ('dbo.Vendors', RESEED, 1000);");
+            Sql(@"
+                DECLARE @currentVendorId BIGINT = IDENT_CURRENT('Vendors');
+
+                IF @currentVendorId IS NULL OR @currentVendorId < 1001
+                BEGIN
+                    DBCC CHECKIDENT ('Vendors', RESEED, 1001);
+                END
+            ");
         }
 
         public override void Down()

@@ -40,8 +40,18 @@ namespace data_pharm_softwere.Pages.Product
         {
             try
             {
-                int nextId = (_context.Products.Any() ? _context.Products.Max(p => p.ProductID) : 0) + 1;
-                lblProductId.Text = nextId.ToString(); // For TextBox use .Text
+                var connection = _context.Database.Connection;
+                if (connection.State != System.Data.ConnectionState.Open)
+                    connection.Open();
+
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText = "SELECT IDENT_CURRENT('Products') + IDENT_INCR('Products')";
+                    var result = command.ExecuteScalar();
+                    lblProductId.Text = Convert.ToInt32(result).ToString();
+                }
+
+                connection.Close();
             }
             catch (Exception ex)
             {
@@ -49,6 +59,7 @@ namespace data_pharm_softwere.Pages.Product
                 lblMessage.CssClass = "text-danger fw-semibold";
             }
         }
+
 
         private void LoadVendors()
         {
@@ -157,23 +168,60 @@ namespace data_pharm_softwere.Pages.Product
             if (Page.IsValid)
             {
                 try
-                {
+                {// Validate PackingType
+                    PackingType packingType;
+                    if (!Enum.TryParse(ddlPackingType.SelectedValue, out packingType))
+                    {
+                        lblMessage.Text = "Please select a valid Packing Type.";
+                        return;
+                    }
+
+                    // Validate ProductType
+                    ProductType productType;
+                    if (!Enum.TryParse(ddlType.SelectedValue, out productType))
+                    {
+                        lblMessage.Text = "Please select a valid Product Type.";
+                        return;
+                    }
+
+                    // Validate HSCode
+                    if (!int.TryParse(txtHSCode.Text, out int hsCode))
+                    {
+                        lblMessage.Text = "Invalid HS Code format.";
+                        return;
+                    }
+
+                    // Validate CartonSize
+                    if (!int.TryParse(txtCartonSize.Text, out int cartonSize))
+                    {
+                        lblMessage.Text = "Invalid Carton Size format.";
+                        return;
+                    }
+
+                    // Validate SubGroup
+                    if (!int.TryParse(ddlSubGroup.SelectedValue, out int subGroupId))
+                    {
+                        lblMessage.Text = "Please select a valid SubGroup.";
+                        return;
+                    }
+
+                    // Assign values
                     var product = new Models.Product
                     {
+                        Type = productType,
+                        PackingType = packingType,
                         Name = txtName.Text.Trim(),
                         ProductCode = txtProductCode.Text.Trim(),
+                        HSCode = hsCode,
                         PackingSize = txtPackingSize.Text.Trim(),
-                        CartonSize = txtCartonSize.Text.Trim(),
-                        PurchaseDiscount = decimal.TryParse(txtPurchaseDiscount.Text, out var disc) ? disc : 0,
-                        Type = (ProductType)Enum.Parse(typeof(ProductType), ddlType.SelectedValue),
-                        PackingType = (PackingType)Enum.Parse(typeof(PackingType), ddlPackingType.SelectedValue),
+                        CartonSize = cartonSize,
                         Uom = txtUom.Text.Trim(),
-                        HSCode = int.Parse(txtHSCode.Text),
-                        ReqGST = int.Parse(txtReqGST.Text),
-                        UnReqGST = int.Parse(txtUnReqGST.Text),
+                        PurchaseDiscount = decimal.TryParse(txtPurchaseDiscount.Text, out var disc1) ? disc1 : 0,
+                        ReqGST = decimal.TryParse(txtReqGST.Text, out var disc2) ? disc2 : 0,
+                        UnReqGST = decimal.TryParse(txtUnReqGST.Text, out var disc3) ? disc3 : 0,
                         IsAdvTaxExempted = chkAdvTaxExempted.Checked,
                         IsGSTExempted = chkGSTExempted.Checked,
-                        SubGroupID = int.Parse(ddlSubGroup.SelectedValue),
+                        SubGroupID = subGroupId,
                         CreatedAt = DateTime.Now
                     };
 

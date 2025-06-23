@@ -1,9 +1,9 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Pages/Layout.Master" AutoEventWireup="true" CodeBehind="CreateBatch.aspx.cs" Inherits="data_pharm_softwere.Pages.Batch.CreateBatch" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Pages/Layout.Master" AutoEventWireup="true" CodeBehind="EditBatch.aspx.cs" Inherits="data_pharm_softwere.Pages.Batch.EditBatch" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <asp:ScriptManager ID="ScriptManager1" runat="server" />
 
     <div class="container mt-4">
-        <h3>Create Batch</h3>
+        <h3>Edit Batch</h3>
 
         <asp:ValidationSummary ID="ValidationSummary1" runat="server" CssClass="alert alert-danger" />
 
@@ -11,9 +11,10 @@
             <asp:UpdatePanel ID="upAllControls" runat="server" UpdateMode="Conditional">
                 <ContentTemplate>
                     <div class="row g-3">
+                        <asp:HiddenField ID="hfCartonSize" runat="server" />
                         <asp:Label ID="lblMessage" runat="server" EnableViewState="false" />
 
-                        <!-- Filter Section -->
+                        <!-- Filters -->
                         <div class="col-md-12 row g-3">
                             <div class="col-md-4">
                                 <label class="form-label fw-semibold">Vendor</label>
@@ -47,8 +48,13 @@
 
                         <div class="col-md-6">
                             <label class="form-label">Batch No</label>
-                            <asp:TextBox ID="txtBatchNo" runat="server" CssClass="form-control rounded-pill"
-                                AutoPostBack="true" OnTextChanged="txtBatchNo_TextChanged" />
+                            <asp:TextBox ID="txtBatchNo" runat="server" CssClass="form-control rounded-pill" />
+                            <asp:RequiredFieldValidator ID="rfvBatchNo" runat="server"
+                                ControlToValidate="txtBatchNo"
+                                ErrorMessage="Batch No is required"
+                                CssClass="text-danger"
+                                Display="Dynamic"
+                                ValidationGroup="BatchForm" />
                         </div>
 
                         <div class="col-md-6">
@@ -125,12 +131,14 @@
                         </div>
                     </div>
 
-                    <div class="mt-4">
-                        <asp:Button ID="btnSave" runat="server"
-                            Text="Save Batch"
-                            CssClass="btn btn-primary px-5 py-2 rounded-pill"
-                            ValidationGroup="BatchForm"
-                            OnClick="btnSave_Click" />
+                    <div class="d-flex flex-wrap gap-2 justify-content-between mt-4">
+                        <asp:Button ID="btnUpdate" runat="server" Text="Update Batch"
+                            CssClass="btn btn-success px-5 py-2 rounded-pill"
+                            ValidationGroup="BatchForm" OnClick="btnUpdate_Click" />
+                        <asp:HyperLink runat="server" NavigateUrl="/batch/create"
+                            CssClass="btn btn-primary px-5 py-2 rounded-pill">+ Add New Batch</asp:HyperLink>
+                        <asp:HyperLink NavigateUrl="/batch" Text="Back to List"
+                            CssClass="btn btn-secondary px-5 py-2 rounded-pill" runat="server" />
                     </div>
                 </ContentTemplate>
                 <Triggers>
@@ -139,7 +147,6 @@
                     <asp:AsyncPostBackTrigger ControlID="ddlSubGroup" EventName="SelectedIndexChanged" />
                     <asp:AsyncPostBackTrigger ControlID="ddlProduct" EventName="SelectedIndexChanged" />
                     <asp:AsyncPostBackTrigger ControlID="txtDP" EventName="TextChanged" />
-                    <asp:AsyncPostBackTrigger ControlID="txtBatchNo" EventName="TextChanged" />
                 </Triggers>
             </asp:UpdatePanel>
         </asp:Panel>

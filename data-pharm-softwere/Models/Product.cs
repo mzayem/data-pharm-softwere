@@ -53,8 +53,7 @@ namespace data_pharm_softwere.Models
         public string PackingSize { get; set; }
 
         [Required]
-        [StringLength(100)]
-        public string CartonSize { get; set; }
+        public int CartonSize { get; set; }
 
         [Required]
         [StringLength(100)]
@@ -66,11 +65,11 @@ namespace data_pharm_softwere.Models
 
         [Required]
         [Range(0, 100)]
-        public int ReqGST { get; set; }
+        public decimal ReqGST { get; set; }
 
         [Required]
         [Range(0, 100)]
-        public int UnReqGST { get; set; }
+        public decimal UnReqGST { get; set; }
 
         public bool IsAdvTaxExempted { get; set; }
 

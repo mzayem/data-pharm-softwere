@@ -121,8 +121,8 @@
 
             <!-- Carton Size -->
             <div class="col-md-4">
-                <label class="form-label fw-semibold">Carton Size</label>
-                <asp:TextBox ID="txtCartonSize" runat="server" CssClass="form-control rounded-pill" />
+                <label class="form-label fw-semibold">Carton Size(Units)</label>
+                <asp:TextBox ID="txtCartonSize" runat="server" CssClass="form-control rounded-pill" TextMode="Number"/>
                 <asp:RequiredFieldValidator ID="rfvCartonSize" runat="server"
                     ControlToValidate="txtCartonSize"
                     ErrorMessage="Carton Size is required"

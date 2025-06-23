@@ -11,7 +11,7 @@ namespace data_pharm_softwere.Pages.Batch
 {
 
 
-    public partial class CreateBatch
+    public partial class EditBatch
     {
 
         /// <summary>
@@ -49,6 +49,15 @@ namespace data_pharm_softwere.Pages.Batch
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.UpdatePanel upAllControls;
+
+        /// <summary>
+        /// hfCartonSize control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hfCartonSize;
 
         /// <summary>
         /// lblMessage control.
@@ -112,6 +121,15 @@ namespace data_pharm_softwere.Pages.Batch
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtBatchNo;
+
+        /// <summary>
+        /// rfvBatchNo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvBatchNo;
 
         /// <summary>
         /// txtMFGDate control.
@@ -231,12 +249,12 @@ namespace data_pharm_softwere.Pages.Batch
         protected global::System.Web.UI.WebControls.TextBox txtCartonPrice;
 
         /// <summary>
-        /// btnSave control.
+        /// btnUpdate control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnSave;
+        protected global::System.Web.UI.WebControls.Button btnUpdate;
     }
 }
