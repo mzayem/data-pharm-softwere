@@ -49,8 +49,9 @@ namespace data_pharm_softwere.Pages.Product
             if (!string.IsNullOrWhiteSpace(search))
             {
                 query = query.Where(p =>
+                    p.ProductID.ToString().Contains(search) ||
                     p.Name.Contains(search) ||
-                    p.ProductCode.Contains(search) ||
+                    p.ProductCode.ToString().Contains(search) ||
                     p.Type.ToString().Contains(search) ||
                     p.PackingType.ToString().Contains(search) ||
                     p.SubGroupName.Contains(search) ||
@@ -204,8 +205,9 @@ namespace data_pharm_softwere.Pages.Product
             if (!string.IsNullOrWhiteSpace(search))
             {
                 query = query.Where(p =>
+                    p.ProductID.ToString().Contains(search) ||
                     p.Name.Contains(search) ||
-                    p.ProductCode.Contains(search) ||
+                    p.ProductCode.ToString().Contains(search) ||
                     p.Type.ToString().Contains(search) ||
                     p.PackingType.ToString().Contains(search) ||
                     p.SubGroup.Name.Contains(search) ||
@@ -254,7 +256,7 @@ namespace data_pharm_softwere.Pages.Product
                 {
             p.ProductID.ToString(),
             EscapeCsv(p.Name),
-            EscapeCsv(p.ProductCode),
+            p.ProductCode.ToString(),
             p.HSCode.ToString(),
             p.PackingType.ToString(),
             p.Type.ToString(),
@@ -306,8 +308,9 @@ namespace data_pharm_softwere.Pages.Product
             if (!string.IsNullOrWhiteSpace(search))
             {
                 query = query.Where(p =>
+                    p.ProductID.ToString().Contains(search) ||
                     p.Name.Contains(search) ||
-                    p.ProductCode.Contains(search) ||
+                    p.ProductCode.ToString().Contains(search) ||
                     p.Type.ToString().Contains(search) ||
                     p.PackingType.ToString().Contains(search) ||
                     p.SubGroup.Name.Contains(search) ||
@@ -396,7 +399,7 @@ namespace data_pharm_softwere.Pages.Product
                 {
                     table.AddCell(new Phrase(p.ProductID.ToString(), bodyFont));
                     table.AddCell(new Phrase(p.Name, bodyFont));
-                    table.AddCell(new Phrase(p.ProductCode, bodyFont));
+                    table.AddCell(new Phrase(p.ProductCode.ToString(), bodyFont));
                     table.AddCell(new Phrase(p.HSCode.ToString(), bodyFont));
                     table.AddCell(new Phrase(p.PackingType.ToString(), bodyFont));
                     table.AddCell(new Phrase(p.Type.ToString(), bodyFont));

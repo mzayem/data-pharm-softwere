@@ -42,8 +42,8 @@ namespace data_pharm_softwere.Models
         public string Name { get; set; }
 
         [Required]
-        [StringLength(50)]
-        public string ProductCode { get; set; }
+        [Column(TypeName = "bigint")]
+        public long ProductCode { get; set; }
 
         [Required]
         public int HSCode { get; set; }

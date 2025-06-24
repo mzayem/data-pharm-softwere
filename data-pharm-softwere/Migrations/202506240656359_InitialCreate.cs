@@ -11,7 +11,7 @@
                 "dbo.Vendors",
                 c => new
                 {
-                    VendorID = c.Int(nullable: false, identity: true), // Keep it clean
+                    VendorID = c.Int(nullable: false, identity: true),
                     Name = c.String(nullable: false, maxLength: 100),
                     Email = c.String(maxLength: 150),
                     Contact = c.String(maxLength: 50),
@@ -25,12 +25,10 @@
                     NtnNo = c.String(nullable: false, maxLength: 20),
                     CompanyCode = c.String(nullable: false, maxLength: 20),
                     MaxDiscountAllowed = c.Decimal(nullable: false, precision: 18, scale: 2),
-                    PartyType = c.String(maxLength: 50),
                     Remarks = c.String(maxLength: 250),
                     CreatedAt = c.DateTime(nullable: false),
                 })
                 .PrimaryKey(t => t.VendorID);
-
             Sql(@"
                 DECLARE @currentVendorId BIGINT = IDENT_CURRENT('Vendors');
 

@@ -7,13 +7,13 @@ namespace data_pharm_softwere.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.5.1")]
-    public sealed partial class EnableCascadeDelete : IMigrationMetadata
+    public sealed partial class customerModal : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(EnableCascadeDelete));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(customerModal));
         
         string IMigrationMetadata.Id
         {
-            get { return "202506210452257_EnableCascadeDelete"; }
+            get { return "202506240806465_customerModal"; }
         }
         
         string IMigrationMetadata.Source

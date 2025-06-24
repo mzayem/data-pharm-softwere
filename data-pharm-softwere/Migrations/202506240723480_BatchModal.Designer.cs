@@ -7,13 +7,13 @@ namespace data_pharm_softwere.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.5.1")]
-    public sealed partial class GroupSubGroup : IMigrationMetadata
+    public sealed partial class BatchModal : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(GroupSubGroup));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(BatchModal));
         
         string IMigrationMetadata.Id
         {
-            get { return "202506160642149_GroupSubGroup"; }
+            get { return "202506240723480_BatchModal"; }
         }
         
         string IMigrationMetadata.Source

@@ -3,7 +3,7 @@
     using System;
     using System.Data.Entity.Migrations;
 
-    public partial class SeedProductIdStart : DbMigration
+    public partial class ProductModel : DbMigration
     {
         public override void Up()
         {
@@ -12,29 +12,26 @@
                 c => new
                 {
                     ProductID = c.Int(nullable: false, identity: true),
-                    ProductCode = c.Int(nullable: false),
-                    Name = c.String(nullable: false, maxLength: 150),
                     PackingType = c.Int(nullable: false),
-                    Uom = c.String(nullable: false, maxLength: 100),
-                    PackingSize = c.String(nullable: false, maxLength: 250),
-                    CartonSize = c.String(nullable: false, maxLength: 100),
-                    PurchaseDiscount = c.Decimal(nullable: false, precision: 18, scale: 2),
                     Type = c.Int(nullable: false),
+                    Name = c.String(nullable: false, maxLength: 150),
+                    ProductCode = c.Long(nullable: false),
                     HSCode = c.Int(nullable: false),
-                    ReqGST = c.Int(nullable: false),
-                    UnReqGST = c.Int(nullable: false),
+                    PackingSize = c.String(nullable: false, maxLength: 250),
+                    CartonSize = c.Int(nullable: false),
+                    Uom = c.String(nullable: false, maxLength: 100),
+                    PurchaseDiscount = c.Decimal(nullable: false, precision: 18, scale: 2),
+                    ReqGST = c.Decimal(nullable: false, precision: 18, scale: 2),
+                    UnReqGST = c.Decimal(nullable: false, precision: 18, scale: 2),
                     IsAdvTaxExempted = c.Boolean(nullable: false),
                     IsGSTExempted = c.Boolean(nullable: false),
-                    VendorID = c.Int(nullable: false),
-                    GroupID = c.Int(nullable: false),
+                    SubGroupID = c.Int(nullable: false),
                     CreatedAt = c.DateTime(nullable: false),
                     UpdatedAt = c.DateTime(),
                 })
                 .PrimaryKey(t => t.ProductID)
-                .ForeignKey("dbo.Groups", t => t.GroupID)
-                .ForeignKey("dbo.Vendors", t => t.VendorID)
-                .Index(t => t.VendorID)
-                .Index(t => t.GroupID);
+                .ForeignKey("dbo.SubGroups", t => t.SubGroupID, cascadeDelete: true)
+                .Index(t => t.SubGroupID);
             Sql(@"
                 DECLARE @currentId BIGINT = IDENT_CURRENT('Products');
 
@@ -47,10 +44,8 @@
 
         public override void Down()
         {
-            DropForeignKey("dbo.Products", "VendorID", "dbo.Vendors");
-            DropForeignKey("dbo.Products", "GroupID", "dbo.Groups");
-            DropIndex("dbo.Products", new[] { "GroupID" });
-            DropIndex("dbo.Products", new[] { "VendorID" });
+            DropForeignKey("dbo.Products", "SubGroupID", "dbo.SubGroups");
+            DropIndex("dbo.Products", new[] { "SubGroupID" });
             DropTable("dbo.Products");
         }
     }

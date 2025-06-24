@@ -7,13 +7,13 @@ namespace data_pharm_softwere.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.5.1")]
-    public sealed partial class addmigrationupdate : IMigrationMetadata
+    public sealed partial class ProductModel : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(addmigrationupdate));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(ProductModel));
         
         string IMigrationMetadata.Id
         {
-            get { return "202506160653398_add-migration update"; }
+            get { return "202506240717117_ProductModel"; }
         }
         
         string IMigrationMetadata.Source

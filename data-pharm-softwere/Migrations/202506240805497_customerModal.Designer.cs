@@ -7,13 +7,13 @@ namespace data_pharm_softwere.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.5.1")]
-    public sealed partial class Update : IMigrationMetadata
+    public sealed partial class customerModal : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(Update));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(customerModal));
         
         string IMigrationMetadata.Id
         {
-            get { return "202506200951191_Update"; }
+            get { return "202506240805497_customerModal"; }
         }
         
         string IMigrationMetadata.Source

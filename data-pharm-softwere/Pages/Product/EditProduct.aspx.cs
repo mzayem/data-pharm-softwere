@@ -128,7 +128,7 @@ namespace data_pharm_softwere.Pages.Product
 
                 lblProductId.Text = product.ProductID.ToString();
                 txtName.Text = product.Name;
-                txtProductCode.Text = product.ProductCode;
+                txtProductCode.Text = product.ProductCode.ToString();
                 txtHSCode.Text = product.HSCode.ToString();
                 txtPackingSize.Text = product.PackingSize;
                 txtCartonSize.Text = product.CartonSize.ToString();
@@ -243,8 +243,15 @@ namespace data_pharm_softwere.Pages.Product
                     return;
                 }
 
+                if (!long.TryParse(txtProductCode.Text.Trim(), out var productCode))
+                {
+                    lblMessage.Text = "Invalid Product Code";
+                    lblMessage.CssClass = "alert alert-danger mt-3";
+                    return;
+                }
+
                 product.Name = txtName.Text.Trim();
-                product.ProductCode = txtProductCode.Text.Trim();
+                product.ProductCode = productCode;
                 product.HSCode = hsCode;
                 product.PackingSize = txtPackingSize.Text.Trim();
                 product.CartonSize = cartonSize;

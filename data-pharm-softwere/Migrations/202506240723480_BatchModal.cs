@@ -3,7 +3,7 @@
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class CreateBatchTable : DbMigration
+    public partial class BatchModal : DbMigration
     {
         public override void Up()
         {
@@ -27,7 +27,7 @@
                         ProductID = c.Int(),
                     })
                 .PrimaryKey(t => t.BatchID)
-                .ForeignKey("dbo.Products", t => t.ProductID)
+                .ForeignKey("dbo.Products", t => t.ProductID, cascadeDelete: true)
                 .Index(t => t.ProductID);
             
         }

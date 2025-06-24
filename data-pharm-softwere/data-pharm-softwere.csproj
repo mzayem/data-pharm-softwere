@@ -132,56 +132,39 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202506130759368_InitialCreate.cs" />
-    <Compile Include="Migrations\202506130759368_InitialCreate.Designer.cs">
-      <DependentUpon>202506130759368_InitialCreate.cs</DependentUpon>
+    <Compile Include="Migrations\202506240656359_InitialCreate.cs" />
+    <Compile Include="Migrations\202506240656359_InitialCreate.Designer.cs">
+      <DependentUpon>202506240656359_InitialCreate.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202506131049123_vendorUpdate.cs" />
-    <Compile Include="Migrations\202506131049123_vendorUpdate.Designer.cs">
-      <DependentUpon>202506131049123_vendorUpdate.cs</DependentUpon>
+    <Compile Include="Migrations\202506240714272_GroupSubGroup.cs" />
+    <Compile Include="Migrations\202506240714272_GroupSubGroup.Designer.cs">
+      <DependentUpon>202506240714272_GroupSubGroup.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202506160642149_GroupSubGroup.cs" />
-    <Compile Include="Migrations\202506160642149_GroupSubGroup.Designer.cs">
-      <DependentUpon>202506160642149_GroupSubGroup.cs</DependentUpon>
+    <Compile Include="Migrations\202506240717117_ProductModel.cs" />
+    <Compile Include="Migrations\202506240717117_ProductModel.Designer.cs">
+      <DependentUpon>202506240717117_ProductModel.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202506160653398_add-migration update.cs" />
-    <Compile Include="Migrations\202506160653398_add-migration update.Designer.cs">
-      <DependentUpon>202506160653398_add-migration update.cs</DependentUpon>
+    <Compile Include="Migrations\202506240723480_BatchModal.cs" />
+    <Compile Include="Migrations\202506240723480_BatchModal.Designer.cs">
+      <DependentUpon>202506240723480_BatchModal.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202506190620331_SeedProductIdStart.cs" />
-    <Compile Include="Migrations\202506190620331_SeedProductIdStart.Designer.cs">
-      <DependentUpon>202506190620331_SeedProductIdStart.cs</DependentUpon>
+    <Compile Include="Migrations\202506240743378_TownCityRouteModal.cs" />
+    <Compile Include="Migrations\202506240743378_TownCityRouteModal.Designer.cs">
+      <DependentUpon>202506240743378_TownCityRouteModal.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202506190700355_ProductUpdate.cs" />
-    <Compile Include="Migrations\202506190700355_ProductUpdate.Designer.cs">
-      <DependentUpon>202506190700355_ProductUpdate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202506190717525_productCode.cs" />
-    <Compile Include="Migrations\202506190717525_productCode.Designer.cs">
-      <DependentUpon>202506190717525_productCode.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202506200951191_Update.cs" />
-    <Compile Include="Migrations\202506200951191_Update.Designer.cs">
-      <DependentUpon>202506200951191_Update.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202506201059127_CreateBatchTable.cs" />
-    <Compile Include="Migrations\202506201059127_CreateBatchTable.Designer.cs">
-      <DependentUpon>202506201059127_CreateBatchTable.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202506210452257_EnableCascadeDelete.cs" />
-    <Compile Include="Migrations\202506210452257_EnableCascadeDelete.Designer.cs">
-      <DependentUpon>202506210452257_EnableCascadeDelete.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202506230624592_fixesUpdate.cs" />
-    <Compile Include="Migrations\202506230624592_fixesUpdate.Designer.cs">
-      <DependentUpon>202506230624592_fixesUpdate.cs</DependentUpon>
+    <Compile Include="Migrations\202506240806465_customerModal.cs" />
+    <Compile Include="Migrations\202506240806465_customerModal.Designer.cs">
+      <DependentUpon>202506240806465_customerModal.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Batch.cs" />
+    <Compile Include="Models\CityRoute.cs" />
+    <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\DataPharmaContext.cs" />
     <Compile Include="Models\Group.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\SubGroup.cs" />
+    <Compile Include="Models\Town.cs" />
     <Compile Include="Pages\Batch\BatchPage.aspx.cs">
       <DependentUpon>BatchPage.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -346,38 +329,23 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202506130759368_InitialCreate.resx">
-      <DependentUpon>202506130759368_InitialCreate.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202506240656359_InitialCreate.resx">
+      <DependentUpon>202506240656359_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202506131049123_vendorUpdate.resx">
-      <DependentUpon>202506131049123_vendorUpdate.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202506240714272_GroupSubGroup.resx">
+      <DependentUpon>202506240714272_GroupSubGroup.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202506160642149_GroupSubGroup.resx">
-      <DependentUpon>202506160642149_GroupSubGroup.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202506240717117_ProductModel.resx">
+      <DependentUpon>202506240717117_ProductModel.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202506160653398_add-migration update.resx">
-      <DependentUpon>202506160653398_add-migration update.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202506240723480_BatchModal.resx">
+      <DependentUpon>202506240723480_BatchModal.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202506190620331_SeedProductIdStart.resx">
-      <DependentUpon>202506190620331_SeedProductIdStart.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202506240743378_TownCityRouteModal.resx">
+      <DependentUpon>202506240743378_TownCityRouteModal.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202506190700355_ProductUpdate.resx">
-      <DependentUpon>202506190700355_ProductUpdate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202506190717525_productCode.resx">
-      <DependentUpon>202506190717525_productCode.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202506200951191_Update.resx">
-      <DependentUpon>202506200951191_Update.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202506201059127_CreateBatchTable.resx">
-      <DependentUpon>202506201059127_CreateBatchTable.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202506210452257_EnableCascadeDelete.resx">
-      <DependentUpon>202506210452257_EnableCascadeDelete.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202506230624592_fixesUpdate.resx">
-      <DependentUpon>202506230624592_fixesUpdate.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202506240806465_customerModal.resx">
+      <DependentUpon>202506240806465_customerModal.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Data.Entity;
 
 namespace data_pharm_softwere.Pages.Product
 {
@@ -40,18 +41,12 @@ namespace data_pharm_softwere.Pages.Product
         {
             try
             {
-                var connection = _context.Database.Connection;
-                if (connection.State != System.Data.ConnectionState.Open)
-                    connection.Open();
+                var lastProduct = _context.Products
+                    .OrderByDescending(p => p.ProductID)
+                    .FirstOrDefault();
 
-                using (var command = connection.CreateCommand())
-                {
-                    command.CommandText = "SELECT IDENT_CURRENT('Products') + IDENT_INCR('Products')";
-                    var result = command.ExecuteScalar();
-                    lblProductId.Text = Convert.ToInt32(result).ToString();
-                }
-
-                connection.Close();
+                long nextProductId = (lastProduct?.ProductID ?? 101000) + 1;
+                lblProductId.Text = nextProductId.ToString();
             }
             catch (Exception ex)
             {
@@ -59,7 +54,6 @@ namespace data_pharm_softwere.Pages.Product
                 lblMessage.CssClass = "text-danger fw-semibold";
             }
         }
-
 
         private void LoadVendors()
         {
@@ -173,6 +167,7 @@ namespace data_pharm_softwere.Pages.Product
                     if (!Enum.TryParse(ddlPackingType.SelectedValue, out packingType))
                     {
                         lblMessage.Text = "Please select a valid Packing Type.";
+                        lblMessage.CssClass = "alert alert-danger mt-3";
                         return;
                     }
 
@@ -181,6 +176,7 @@ namespace data_pharm_softwere.Pages.Product
                     if (!Enum.TryParse(ddlType.SelectedValue, out productType))
                     {
                         lblMessage.Text = "Please select a valid Product Type.";
+                        lblMessage.CssClass = "alert alert-danger mt-3";
                         return;
                     }
 
@@ -188,6 +184,7 @@ namespace data_pharm_softwere.Pages.Product
                     if (!int.TryParse(txtHSCode.Text, out int hsCode))
                     {
                         lblMessage.Text = "Invalid HS Code format.";
+                        lblMessage.CssClass = "alert alert-danger mt-3";
                         return;
                     }
 
@@ -195,6 +192,7 @@ namespace data_pharm_softwere.Pages.Product
                     if (!int.TryParse(txtCartonSize.Text, out int cartonSize))
                     {
                         lblMessage.Text = "Invalid Carton Size format.";
+                        lblMessage.CssClass = "alert alert-danger mt-3";
                         return;
                     }
 
@@ -202,6 +200,14 @@ namespace data_pharm_softwere.Pages.Product
                     if (!int.TryParse(ddlSubGroup.SelectedValue, out int subGroupId))
                     {
                         lblMessage.Text = "Please select a valid SubGroup.";
+                        lblMessage.CssClass = "alert alert-danger mt-3";
+                        return;
+                    }
+
+                    if (!long.TryParse(txtProductCode.Text.Trim(), out var productCode))
+                    {
+                        lblMessage.Text = "Invalid Product Code";
+                        lblMessage.CssClass = "alert alert-danger mt-3";
                         return;
                     }
 
@@ -211,7 +217,8 @@ namespace data_pharm_softwere.Pages.Product
                         Type = productType,
                         PackingType = packingType,
                         Name = txtName.Text.Trim(),
-                        ProductCode = txtProductCode.Text.Trim(),
+                        ProductCode = productCode,
+
                         HSCode = hsCode,
                         PackingSize = txtPackingSize.Text.Trim(),
                         CartonSize = cartonSize,

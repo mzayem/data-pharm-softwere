@@ -1,5 +1,5 @@
-﻿using System.Data.Entity;
-using data_pharm_softwere.Models;
+﻿using data_pharm_softwere.Models;
+using System.Data.Entity;
 
 namespace data_pharm_softwere.Data
 {
@@ -15,6 +15,9 @@ namespace data_pharm_softwere.Data
         public DbSet<SubGroup> SubGroups { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Batch> Batches { get; set; }
+        public DbSet<CityRoute> CityRoutes { get; set; }
+        public DbSet<Town> Towns { get; set; }
+        public DbSet<Customer> Customers { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -25,30 +28,45 @@ namespace data_pharm_softwere.Data
             modelBuilder.Entity<SubGroup>().ToTable("SubGroups");
             modelBuilder.Entity<Product>().ToTable("Products");
             modelBuilder.Entity<Batch>().ToTable("Batches");
+            modelBuilder.Entity<CityRoute>().ToTable("CityRoutes");
+            modelBuilder.Entity<Town>().ToTable("Towns");
+            modelBuilder.Entity<Customer>().ToTable("Customers");
 
+            // Group → Vendor
             modelBuilder.Entity<Group>()
                 .HasRequired(g => g.Vendor)
-                .WithMany()
+                .WithMany(v => v.Groups)
                 .HasForeignKey(g => g.VendorID)
                 .WillCascadeOnDelete(true);
 
+            // SubGroup → Group
             modelBuilder.Entity<SubGroup>()
                 .HasRequired(sg => sg.Group)
                 .WithMany(g => g.SubGroups)
                 .HasForeignKey(sg => sg.GroupID)
                 .WillCascadeOnDelete(true);
 
+            // Product → SubGroup
             modelBuilder.Entity<Product>()
                 .HasRequired(p => p.SubGroup)
-                .WithMany()
+                .WithMany(sg => sg.Products)
                 .HasForeignKey(p => p.SubGroupID)
                 .WillCascadeOnDelete(true);
 
+            // Batch → Product (optional)
             modelBuilder.Entity<Batch>()
                 .HasOptional(b => b.Product)
                 .WithMany(p => p.Batches)
                 .HasForeignKey(b => b.ProductID)
                 .WillCascadeOnDelete(true);
+
+
+            // Customer → Town
+            modelBuilder.Entity<Customer>()
+                .HasRequired(c => c.Town)
+                .WithMany(t => t.Customers)
+                .HasForeignKey(c => c.TownID)
+                .WillCascadeOnDelete(true); // safer for customer deletion
         }
     }
 }

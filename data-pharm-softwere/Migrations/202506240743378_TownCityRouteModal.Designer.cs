@@ -7,13 +7,13 @@ namespace data_pharm_softwere.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.5.1")]
-    public sealed partial class InitialCreate : IMigrationMetadata
+    public sealed partial class TownCityRouteModal : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(InitialCreate));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(TownCityRouteModal));
         
         string IMigrationMetadata.Id
         {
-            get { return "202506130759368_InitialCreate"; }
+            get { return "202506240743378_TownCityRouteModal"; }
         }
         
         string IMigrationMetadata.Source
