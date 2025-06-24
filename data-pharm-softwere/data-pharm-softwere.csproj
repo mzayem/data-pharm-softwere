@@ -102,6 +102,10 @@
     <Content Include="Pages\Batch\Controls\BatchModal.ascx" />
     <Content Include="Pages\Batch\CreateBatch.aspx" />
     <Content Include="Pages\Batch\EditBatch.aspx" />
+    <Content Include="Pages\CityRoute\CityRoutePage.aspx" />
+    <Content Include="Pages\CityRoute\CreateCityRoute.aspx" />
+    <Content Include="Pages\CityRoute\EditCityRoute.aspx" />
+    <Content Include="Pages\Customer\CreateCustomer.aspx" />
     <Content Include="Pages\Group\CreateGroup.aspx" />
     <Content Include="Pages\Group\EditGroup.aspx" />
     <Content Include="Pages\Group\GroupPage.aspx" />
@@ -112,6 +116,7 @@
     <Content Include="Pages\SubGroup\CreateSubGroup.aspx" />
     <Content Include="Pages\SubGroup\EditSubGroup.aspx" />
     <Content Include="Pages\SubGroup\SubGroupPage.aspx" />
+    <Content Include="Pages\Town\CreateTown.aspx" />
     <Content Include="Pages\Vendor\CreateVendor.aspx" />
     <Content Include="Pages\Vendor\EditVendor.aspx" />
     <Content Include="Pages\Vendor\VendorPage.aspx" />
@@ -156,6 +161,14 @@
     <Compile Include="Migrations\202506240806465_customerModal.Designer.cs">
       <DependentUpon>202506240806465_customerModal.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202506241039157_TownUpdate.cs" />
+    <Compile Include="Migrations\202506241039157_TownUpdate.Designer.cs">
+      <DependentUpon>202506241039157_TownUpdate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202506241059076_CustomerChecks.cs" />
+    <Compile Include="Migrations\202506241059076_CustomerChecks.Designer.cs">
+      <DependentUpon>202506241059076_CustomerChecks.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Batch.cs" />
     <Compile Include="Models\CityRoute.cs" />
@@ -192,6 +205,34 @@
     </Compile>
     <Compile Include="Pages\Batch\EditBatch.aspx.designer.cs">
       <DependentUpon>EditBatch.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\CityRoute\CityRoutePage.aspx.cs">
+      <DependentUpon>CityRoutePage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\CityRoute\CityRoutePage.aspx.designer.cs">
+      <DependentUpon>CityRoutePage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\CityRoute\CreateCityRoute.aspx.cs">
+      <DependentUpon>CreateCityRoute.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\CityRoute\CreateCityRoute.aspx.designer.cs">
+      <DependentUpon>CreateCityRoute.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\CityRoute\EditCityRoute.aspx.cs">
+      <DependentUpon>EditCityRoute.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\CityRoute\EditCityRoute.aspx.designer.cs">
+      <DependentUpon>EditCityRoute.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Customer\CreateCustomer.aspx.cs">
+      <DependentUpon>CreateCustomer.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Customer\CreateCustomer.aspx.designer.cs">
+      <DependentUpon>CreateCustomer.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\Group\CreateGroup.aspx.cs">
       <DependentUpon>CreateGroup.aspx</DependentUpon>
@@ -271,6 +312,13 @@
     <Compile Include="Pages\SubGroup\SubGroupPage.aspx.designer.cs">
       <DependentUpon>SubGroupPage.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Town\CreateTown.aspx.cs">
+      <DependentUpon>CreateTown.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Town\CreateTown.aspx.designer.cs">
+      <DependentUpon>CreateTown.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Vendor\CreateVendor.aspx.cs">
       <DependentUpon>CreateVendor.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -346,6 +394,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202506240806465_customerModal.resx">
       <DependentUpon>202506240806465_customerModal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202506241039157_TownUpdate.resx">
+      <DependentUpon>202506241039157_TownUpdate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202506241059076_CustomerChecks.resx">
+      <DependentUpon>202506241059076_CustomerChecks.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

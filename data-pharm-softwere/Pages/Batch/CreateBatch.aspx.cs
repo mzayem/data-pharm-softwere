@@ -166,9 +166,6 @@ namespace data_pharm_softwere.Pages.Batch
             }
         }
 
-
-
-
         protected void txtBatchNo_TextChanged(object sender, EventArgs e)
         {
             if (int.TryParse(txtBatchNo.Text.Trim(), out int batchNo))
@@ -181,7 +178,6 @@ namespace data_pharm_softwere.Pages.Batch
                 }
             }
         }
-
 
         protected void btnSave_Click(object sender, EventArgs e)
         {
@@ -222,7 +218,6 @@ namespace data_pharm_softwere.Pages.Batch
 
                     lblMessage.Text = "Batch saved successfully.";
                     lblMessage.CssClass = "alert alert-success mt-3";
-
                 }
                 catch (Exception ex)
                 {

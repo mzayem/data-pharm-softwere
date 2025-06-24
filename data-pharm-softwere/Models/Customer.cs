@@ -59,6 +59,11 @@ namespace data_pharm_softwere.Models
         [Required]
         [StringLength(20)]
         public string NtnNo { get; set; }
+        public bool NorcoticsSaleAllowed { get; set; }
+        public bool InActive { get; set; }
+        public bool IsAdvTaxExempted { get; set; }
+        public bool FbrInActiveGST { get; set; }
+        public bool FBRInActiveTax236H { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
     }

@@ -17,9 +17,9 @@ namespace data_pharm_softwere.Models
         public string Name { get; set; }
 
         [Required]
-        public int RouteID { get; set; }
+        public int CityRouteID { get; set; }
 
-        [ForeignKey("RouteID")]
+        [ForeignKey("CityRouteID")]
         public virtual CityRoute Route { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
