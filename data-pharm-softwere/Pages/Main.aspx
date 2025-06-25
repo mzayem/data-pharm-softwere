@@ -17,6 +17,18 @@
                 <a href="/product" class="btn btn-primary rounded-pill px-4 mt-4">
                     Go to Product Management
                 </a>
+                <a href="/batch" class="btn btn-primary rounded-pill px-4 mt-4">
+                    Go to Batch Management
+                </a>
+                <a href="/city-route" class="btn btn-primary rounded-pill px-4 mt-4">
+                    Go to CityRoute Management
+                </a>
+                <a href="/town" class="btn btn-primary rounded-pill px-4 mt-4">
+                    Go to Town Management
+                </a>
+                <a href="/customer" class="btn btn-primary rounded-pill px-4 mt-4">
+                    Go to Customer Management
+                </a>
 
             </div>
 </div>

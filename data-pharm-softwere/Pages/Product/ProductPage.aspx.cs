@@ -439,7 +439,11 @@ namespace data_pharm_softwere.Pages.Product
                     foreach (Control control in cell.Controls)
                     {
                         if (control is DropDownList ddl)
+                        {
                             ddl.Attributes["onclick"] = "event.stopPropagation();";
+                            ddl.Attributes["onmousedown"] = "event.stopPropagation();";
+                            ddl.Attributes["onmouseup"] = "event.stopPropagation();";
+                        }
                     }
                 }
             }

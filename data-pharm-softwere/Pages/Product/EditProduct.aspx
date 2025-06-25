@@ -233,18 +233,18 @@
             </div>
 
             <!-- Checkboxes -->
-            <div class="col-md-12 mt-2">
-                <div class="form-check">
-                    <asp:CheckBox ID="chkAdvTaxExempted" runat="server" CssClass="form-check-input border-0" />
-                    <label class="form-check-label ms-2">Advance Tax Exempted</label>
-                </div>
+        <div class="col-md-6 mt-2">
+            <div class="form-check">
+                <asp:CheckBox ID="chkAdvTaxExempted" runat="server" CssClass="form-check-input border-0" />
+                <label class="form-check-label ms-2">Advance Tax Exempted</label>
             </div>
-            <div class="col-md-12 mt-2">
-                <div class="form-check">
-                    <asp:CheckBox ID="chkGSTExempted" runat="server" CssClass="form-check-input border-0" />
-                    <label class="form-check-label ms-2">GST Exempted</label>
-                </div>
+        </div>
+        <div class="col-md-6 mt-2">
+            <div class="form-check">
+                <asp:CheckBox ID="chkGSTExempted" runat="server" CssClass="form-check-input border-0" />
+                <label class="form-check-label ms-2">GST Exempted</label>
             </div>
+        </div>
         </div>
 
         <!-- Submit Buttons -->

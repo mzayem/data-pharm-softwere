@@ -1,6 +1,6 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Pages/Layout.Master" AutoEventWireup="true" CodeBehind="CityRoutePage.aspx.cs" Inherits="data_pharm_softwere.Pages.CityRoute.CityRoutePage" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Pages/Layout.Master" AutoEventWireup="true" CodeBehind="TownPage.aspx.cs" Inherits="data_pharm_softwere.Pages.Town.TownPage" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-   <asp:ScriptManager ID="ScriptManager1" runat="server" />
+       <asp:ScriptManager ID="ScriptManager1" runat="server" />
 
 <div class="container mt-4">
     <h2 class="mb-3">Route List</h2>
@@ -8,9 +8,9 @@
     <asp:HyperLink 
         ID="btnCreateBatch" 
         runat="server" 
-        NavigateUrl="/city-route/create"
+        NavigateUrl="/town/create"
         CssClass="btn btn-primary mb-3">
-        + Add New Route
+        + Add New Town
     </asp:HyperLink>
 
     <asp:UpdatePanel ID="UpdatePanel1" runat="server">
@@ -23,6 +23,17 @@
                 Placeholder="Search by product, vendor, or group" 
                 AutoPostBack="true" 
                 OnTextChanged="txtSearch_TextChanged" />
+            <asp:Panel ID="pnlFilters" runat="server" CssClass="row g-3 mb-3">
+                <!-- cityRoutes Dropdown -->
+                <div class="col-md-4">
+                    <asp:DropDownList 
+                        ID="ddlCityRoute" 
+                        runat="server" 
+                        CssClass="form-select"
+                        AutoPostBack="true"
+                        OnSelectedIndexChanged="ddlCityRoute_SelectedIndexChanged" />
+                </div>
+            </asp:Panel>
 
             <asp:GridView 
                 ID="gvBatches" 
@@ -30,11 +41,13 @@
                 AutoGenerateColumns="False"
                 CssClass="table table-bordered table-hover" 
                 OnRowCommand="gvBatches_RowCommand"
-                OnRowDataBound="gvBatches_RowDataBound">
+                OnRowDataBound="gvBatches_RowDataBound"
+                EmptyDataText="No Towns Found">
 
                 <Columns>
-                    <asp:BoundField DataField="CityRouteID" HeaderText="Route No" />
+                    <asp:BoundField DataField="TownID" HeaderText="Town No" />
                     <asp:BoundField DataField="Name" HeaderText="Name" />
+                    <asp:BoundField DataField="CityRouteName" HeaderText="Route" />
                     <asp:BoundField DataField="CreatedAt" HeaderText="Created At" DataFormatString="{0:yyyy-MM-dd}" />
 
                     <asp:TemplateField HeaderText="Actions">
@@ -52,9 +65,9 @@
                             </asp:DropDownList>
 
                             <asp:HiddenField 
-                                ID="hfCityRouteId" 
+                                ID="hfTownID"
                                 runat="server" 
-                                Value='<%# Eval("CityRouteId") %>' />
+                                Value='<%# Eval("TownID") %>' />
                         </ItemTemplate>
                     </asp:TemplateField>
                 </Columns>

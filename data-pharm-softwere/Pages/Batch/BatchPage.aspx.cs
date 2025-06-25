@@ -105,6 +105,7 @@ namespace data_pharm_softwere.Pages.Batch
             if (!string.IsNullOrWhiteSpace(search))
             {
                 query = query.Where(b =>
+                    b.BatchNo.ToString().Contains(search)||
                     b.ProductName.Contains(search));
             }
 
@@ -219,8 +220,20 @@ namespace data_pharm_softwere.Pages.Batch
             {
                 int batchId = Convert.ToInt32(DataBinder.Eval(e.Row.DataItem, "BatchID"));
                 e.Row.Attributes["style"] = "cursor:pointer";
-
                 e.Row.Attributes["onclick"] = $"window.location='/batch/edit?id={batchId}'";
+
+                foreach (TableCell cell in e.Row.Cells)
+                {
+                    foreach (Control control in cell.Controls)
+                    {
+                        if (control is DropDownList ddl)
+                        {
+                            ddl.Attributes["onclick"] = "event.stopPropagation();";
+                            ddl.Attributes["onmousedown"] = "event.stopPropagation();";
+                            ddl.Attributes["onmouseup"] = "event.stopPropagation();";
+                        }
+                    }
+                }
             }
 
             

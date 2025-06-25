@@ -57,7 +57,7 @@
             <div class="d-flex flex-wrap gap-2 justify-content-between mt-4">
                 <asp:Button ID="btnUpdate" runat="server"
                             Text="Update Sub Group"
-                            CssClass="btn btn-primary px-5 py-2 rounded-pill"
+                            CssClass="btn btn-success px-5 py-2 rounded-pill"
                             OnClick="btnUpdate_Click"
                             ValidationGroup="SubGroupForm" />
 

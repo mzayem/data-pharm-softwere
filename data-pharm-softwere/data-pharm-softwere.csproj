@@ -106,6 +106,8 @@
     <Content Include="Pages\CityRoute\CreateCityRoute.aspx" />
     <Content Include="Pages\CityRoute\EditCityRoute.aspx" />
     <Content Include="Pages\Customer\CreateCustomer.aspx" />
+    <Content Include="Pages\Customer\CustomerPage.aspx" />
+    <Content Include="Pages\Customer\EditCustomer.aspx" />
     <Content Include="Pages\Group\CreateGroup.aspx" />
     <Content Include="Pages\Group\EditGroup.aspx" />
     <Content Include="Pages\Group\GroupPage.aspx" />
@@ -117,6 +119,8 @@
     <Content Include="Pages\SubGroup\EditSubGroup.aspx" />
     <Content Include="Pages\SubGroup\SubGroupPage.aspx" />
     <Content Include="Pages\Town\CreateTown.aspx" />
+    <Content Include="Pages\Town\EditTown.aspx" />
+    <Content Include="Pages\Town\TownPage.aspx" />
     <Content Include="Pages\Vendor\CreateVendor.aspx" />
     <Content Include="Pages\Vendor\EditVendor.aspx" />
     <Content Include="Pages\Vendor\VendorPage.aspx" />
@@ -234,6 +238,20 @@
     <Compile Include="Pages\Customer\CreateCustomer.aspx.designer.cs">
       <DependentUpon>CreateCustomer.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Customer\CustomerPage.aspx.cs">
+      <DependentUpon>CustomerPage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Customer\CustomerPage.aspx.designer.cs">
+      <DependentUpon>CustomerPage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Customer\EditCustomer.aspx.cs">
+      <DependentUpon>EditCustomer.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Customer\EditCustomer.aspx.designer.cs">
+      <DependentUpon>EditCustomer.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Group\CreateGroup.aspx.cs">
       <DependentUpon>CreateGroup.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -318,6 +336,20 @@
     </Compile>
     <Compile Include="Pages\Town\CreateTown.aspx.designer.cs">
       <DependentUpon>CreateTown.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Town\EditTown.aspx.cs">
+      <DependentUpon>EditTown.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Town\EditTown.aspx.designer.cs">
+      <DependentUpon>EditTown.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Town\TownPage.aspx.cs">
+      <DependentUpon>TownPage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Town\TownPage.aspx.designer.cs">
+      <DependentUpon>TownPage.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\Vendor\CreateVendor.aspx.cs">
       <DependentUpon>CreateVendor.aspx</DependentUpon>

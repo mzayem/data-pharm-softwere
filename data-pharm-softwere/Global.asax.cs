@@ -118,6 +118,57 @@ namespace data_pharm_softwere
                 "batch",
                 "~/pages/Batch/BatchPage.aspx"
             );
+
+            //CityRoute routes
+            routes.MapPageRoute(
+                "CityRoute Create",
+                "city-route/create",
+                "~/pages/CityRoute/CreateCityRoute.aspx"
+            );
+            routes.MapPageRoute(
+                "CityRoute Edit",
+                "city-route/edit",
+                "~/pages/CityRoute/EditCityRoute.aspx"
+            );
+            routes.MapPageRoute(
+                "CityRoute Management",
+                "city-route",
+                "~/pages/CityRoute/CityRoutePage.aspx"
+            );
+
+            //Town routes
+            routes.MapPageRoute(
+                "Town Create",
+                "town/create",
+                "~/pages/Town/CreateTown.aspx"
+            );
+            routes.MapPageRoute(
+                "Town Edit",
+                "town/edit",
+                "~/pages/Town/EditTown.aspx"
+            );
+            routes.MapPageRoute(
+                "Town Management",
+                "town",
+                "~/pages/Town/TownPage.aspx"
+            );
+
+            //Customer routes
+            routes.MapPageRoute(
+                "Customer Create",
+                "customer/create",
+                "~/pages/Customer/CreateCustomer.aspx"
+            );
+            routes.MapPageRoute(
+                "Customer Edit",
+                "customer/edit",
+                "~/pages/Customer/EditCustomer.aspx"
+            );
+            routes.MapPageRoute(
+                "Customer Management",
+                "customer",
+                "~/pages/Customer/CustomerPage.aspx"
+            );
         }
 
         // Default event hooks
