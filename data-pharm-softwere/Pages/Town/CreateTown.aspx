@@ -33,13 +33,17 @@
                          </div>
                  </div>
 
-                 <div class="mt-4">
+                 <div class="mt-4 d-flex align-items-center justify-content-between">
                      <asp:Button ID="btnSave" runat="server"
                          Text="Save Town"
                          CssClass="btn btn-primary px-5 py-2 rounded-pill"
                          ValidationGroup="TownForm"
                          OnClick="btnSave_Click" />
+                     <asp:HyperLink NavigateUrl="/town" Text="Back to List"
+                                    CssClass="btn btn-secondary px-5 py-2 rounded-pill" runat="server" />
                  </div>
+
+
              </ContentTemplate>
              <Triggers>
                  <asp:AsyncPostBackTrigger ControlID="ddlCityRoute" EventName="SelectedIndexChanged" />

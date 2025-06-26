@@ -140,17 +140,17 @@
                                                         ErrorMessage="NTN No is required"
                                                         CssClass="text-danger"
                                                         Display="Dynamic"
-                                                        ValidationGroup="CustomerForm" />git g
+                                                        ValidationGroup="CustomerForm" />
                         </div>
 
-                        <!-- Part Type -->
+                        <!-- Party Type -->
                         <div class="col-md-12">
-                            <label class="form-label fw-semibold">Part Type</label>
-                            <asp:DropDownList ID="ddlPartType" runat="server" CssClass="form-select rounded-pill" />
-                            <asp:RequiredFieldValidator ID="rfvPartType" runat="server"
-                                                        ControlToValidate="ddlPartType"
+                            <label class="form-label fw-semibold">Party Type</label>
+                            <asp:DropDownList ID="ddlPartyType" runat="server" CssClass="form-select rounded-pill" />
+                            <asp:RequiredFieldValidator ID="rfvPartyType" runat="server"
+                                                        ControlToValidate="ddlPartyType"
                                                         InitialValue=""
-                                                        ErrorMessage="Part Type is required"
+                                                        ErrorMessage="Party Type is required"
                                                         CssClass="text-danger"
                                                         Display="Dynamic"
                                                         ValidationGroup="CustomerForm" />
@@ -158,6 +158,7 @@
                         </div>
 
                         <!-- Checkboxes -->
+                    <div class="row g-3">
                         <div class="col-md-4 mt-2">
                             <div class="form-check">
                                 <asp:CheckBox ID="chkNorcoticsSaleAllowed" runat="server" CssClass="form-check-input border-0" />
@@ -169,7 +170,7 @@
                                 <asp:CheckBox ID="chkInActive" runat="server" CssClass="form-check-input border-0" />
                                 <label class="form-check-label ms-2">Inactive</label>
                             </div>
-                            </div>
+                        </div>
                         <div class="col-md-4 mt-2">
                             <div class="form-check">
                                 <asp:CheckBox ID="chkAdvTaxExempted" runat="server" CssClass="form-check-input border-0" />
@@ -181,15 +182,15 @@
                                 <asp:CheckBox ID="chkFbrInActiveGST" runat="server" CssClass="form-check-input border-0" />
                                 <label class="form-check-label ms-2">FBR Inactive GST</label>
                             </div>
-                            </div>
+                        </div>
                         <div class="col-md-4 mt-2">
                             <div class="form-check">
                                 <asp:CheckBox ID="chkFBRInActiveTax236H" runat="server" CssClass="form-check-input border-0" />
                                 <label class="form-check-label ms-2">FBR Inactive Tax 236H</label>
                             </div>
-                            </div>
                         </div>
                     </div>
+
 
                     <!-- Buttons -->
                     <div class="d-flex flex-wrap align-items-center justify-content-center gap-2 text-center mt-4">

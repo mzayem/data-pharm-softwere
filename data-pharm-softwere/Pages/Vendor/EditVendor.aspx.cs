@@ -17,14 +17,11 @@ namespace data_pharm_softwere.Pages.Vendor
                 if (VendorId > 0)
                 {
                     LoadVendor();
-
                 }
-
                 else
                 {
                     Response.Redirect("/vendor/create/");
                 }
-
             }
         }
 

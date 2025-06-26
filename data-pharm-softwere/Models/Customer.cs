@@ -7,7 +7,7 @@ using System.Web;
 
 namespace data_pharm_softwere.Models
 {
-    public enum PartType
+    public enum PartyType
     {
         Doctor,
         Pharmacy,
@@ -54,11 +54,12 @@ namespace data_pharm_softwere.Models
         public string LicenceNo { get; set; }
 
         [Required]
-        public PartType PartType { get; set; }
+        public PartyType PartyType { get; set; }
 
         [Required]
         [StringLength(20)]
         public string NtnNo { get; set; }
+
         public bool NorcoticsSaleAllowed { get; set; }
         public bool InActive { get; set; }
         public bool IsAdvTaxExempted { get; set; }

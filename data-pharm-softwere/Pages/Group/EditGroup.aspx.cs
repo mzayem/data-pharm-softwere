@@ -47,7 +47,6 @@ namespace data_pharm_softwere.Pages.Group
         {
             if (Page.IsValid)
             {
-
                 var group = _context.Groups.FirstOrDefault(v => v.GroupID == GroupId);
                 if (group == null)
                 {

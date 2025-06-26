@@ -17,7 +17,7 @@ namespace data_pharm_softwere.Pages.Customer
             {
                 LoadCityRoutes();
                 LoadTowns();
-                LoadPartTypes();
+                LoadPartyTypes();
             }
         }
 
@@ -46,11 +46,11 @@ namespace data_pharm_softwere.Pages.Customer
             ddlTown.Items.Insert(0, new ListItem("-- Select Town --", ""));
         }
 
-        private void LoadPartTypes()
+        private void LoadPartyTypes()
         {
-            ddlPartType.DataSource = Enum.GetValues(typeof(PartType));
-            ddlPartType.DataBind();
-            ddlPartType.Items.Insert(0, new ListItem("-- Select Part Type --", ""));
+            ddlPartyType.DataSource = Enum.GetValues(typeof(PartyType));
+            ddlPartyType.DataBind();
+            ddlPartyType.Items.Insert(0, new ListItem("-- Select Part Type --", ""));
         }
 
         protected void ddlCityRoute_SelectedIndexChanged(object sender, EventArgs e)
@@ -81,7 +81,7 @@ namespace data_pharm_softwere.Pages.Customer
                         TownID = int.Parse(ddlTown.SelectedValue),
                         LicenceNo = txtLicenceNo.Text.Trim(),
                         NtnNo = txtNtnNo.Text.Trim(),
-                        PartType = (PartType)Enum.Parse(typeof(PartType), ddlPartType.SelectedValue),
+                        PartyType = (PartyType)Enum.Parse(typeof(PartyType), ddlPartyType.SelectedValue),
                         NorcoticsSaleAllowed = chkNorcoticsSaleAllowed.Checked,
                         InActive = chkInActive.Checked,
                         IsAdvTaxExempted = chkAdvTaxExempted.Checked,

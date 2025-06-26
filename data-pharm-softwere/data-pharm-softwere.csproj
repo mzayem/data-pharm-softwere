@@ -173,6 +173,10 @@
     <Compile Include="Migrations\202506241059076_CustomerChecks.Designer.cs">
       <DependentUpon>202506241059076_CustomerChecks.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202506261035427_SpellFix.cs" />
+    <Compile Include="Migrations\202506261035427_SpellFix.Designer.cs">
+      <DependentUpon>202506261035427_SpellFix.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Batch.cs" />
     <Compile Include="Models\CityRoute.cs" />
@@ -432,6 +436,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202506241059076_CustomerChecks.resx">
       <DependentUpon>202506241059076_CustomerChecks.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202506261035427_SpellFix.resx">
+      <DependentUpon>202506261035427_SpellFix.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

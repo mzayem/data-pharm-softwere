@@ -222,22 +222,22 @@ namespace data_pharm_softwere.Pages.Customer
         protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvNtnNo;
 
         /// <summary>
-        /// ddlPartType control.
+        /// ddlPartyType control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlPartType;
+        protected global::System.Web.UI.WebControls.DropDownList ddlPartyType;
 
         /// <summary>
-        /// rfvPartType control.
+        /// rfvPartyType control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvPartType;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvPartyType;
 
         /// <summary>
         /// chkNorcoticsSaleAllowed control.
