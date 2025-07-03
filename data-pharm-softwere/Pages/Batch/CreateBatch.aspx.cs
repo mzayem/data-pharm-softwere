@@ -1,6 +1,7 @@
 ﻿using data_pharm_softwere.Data;
 using data_pharm_softwere.Models;
 using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Web.UI.WebControls;
 
@@ -33,11 +34,11 @@ namespace data_pharm_softwere.Pages.Batch
 
         private void LoadGroups(int? vendorId = null)
         {
-            var query = _context.Groups.AsQueryable();
+            var query = _context.Groups.Include("Division").AsQueryable();
 
             if (vendorId.HasValue && vendorId.Value > 0)
             {
-                query = query.Where(g => g.VendorID == vendorId.Value);
+                query = query.Where(g => g.Division.VendorID == vendorId.Value);
             }
 
             ddlGroup.DataSource = query.OrderBy(g => g.Name).ToList();
@@ -49,11 +50,11 @@ namespace data_pharm_softwere.Pages.Batch
 
         private void LoadSubGroups(int? vendorId = null, int? groupId = null)
         {
-            var query = _context.SubGroups.AsQueryable();
+            var query = _context.SubGroups.Include("Group.Division").AsQueryable();
 
             if (vendorId.HasValue && vendorId.Value > 0)
             {
-                query = query.Where(sg => sg.Group.VendorID == vendorId.Value);
+                query = query.Where(sg => sg.Group.Division.VendorID == vendorId.Value);
             }
 
             // Filter by Group if valid
@@ -104,7 +105,7 @@ namespace data_pharm_softwere.Pages.Batch
             }
             else if (int.TryParse(ddlVendor.SelectedValue, out int vendorId))
             {
-                query = query.Where(p => p.SubGroup.Group.VendorID == vendorId);
+                query = query.Where(p => p.SubGroup.Group.Division.VendorID == vendorId);
             }
 
             var products = query

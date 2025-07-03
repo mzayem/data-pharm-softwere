@@ -3,6 +3,7 @@ using data_pharm_softwere.Models;
 using Org.BouncyCastle.Tls.Crypto;
 using System;
 using System.Configuration;
+using System.Data.Entity;
 using System.Linq;
 using System.Web.UI.WebControls;
 using static System.Net.WebRequestMethods;
@@ -43,10 +44,10 @@ namespace data_pharm_softwere.Pages.Batch
 
         private void LoadGroups(int? vendorId = null)
         {
-            var query = _context.Groups.AsQueryable();
+            var query = _context.Groups.Include("Division").AsQueryable();
             if (vendorId.HasValue && vendorId.Value > 0)
             {
-                query = query.Where(g => g.VendorID == vendorId.Value);
+                query = query.Where(g => g.Division.VendorID == vendorId.Value);
             }
             ddlGroup.DataSource = query.OrderBy(g => g.Name).ToList();
             ddlGroup.DataTextField = "Name";
@@ -57,9 +58,12 @@ namespace data_pharm_softwere.Pages.Batch
 
         private void LoadSubGroups(int? vendorId = null, int? groupId = null)
         {
-            var query = _context.SubGroups.AsQueryable();
+            var query = _context.SubGroups
+                .Include("Group.Division")
+                .AsQueryable();
+
             if (vendorId.HasValue)
-                query = query.Where(sg => sg.Group.VendorID == vendorId.Value);
+                query = query.Where(sg => sg.Group.Division.VendorID == vendorId.Value);
             if (groupId.HasValue)
                 query = query.Where(sg => sg.GroupID == groupId.Value);
 
@@ -83,7 +87,7 @@ namespace data_pharm_softwere.Pages.Batch
             }
             else if (int.TryParse(ddlVendor.SelectedValue, out int vendorId))
             {
-                query = query.Where(p => p.SubGroup.Group.VendorID == vendorId);
+                query = query.Where(p => p.SubGroup.Group.Division.VendorID == vendorId);
             }
 
             var products = query.Select(p => new
@@ -161,7 +165,7 @@ namespace data_pharm_softwere.Pages.Batch
             var product = _context.Products.FirstOrDefault(p => p.ProductID == batch.ProductID);
             var subGroup = product?.SubGroup;
             var group = subGroup?.Group;
-            var vendor = group?.Vendor;
+            var vendor = group?.Division?.Vendor;
 
             if (vendor != null) ddlVendor.SelectedValue = vendor.VendorID.ToString();
             LoadGroups(vendor?.VendorID);
@@ -237,7 +241,5 @@ namespace data_pharm_softwere.Pages.Batch
                 lblMessage.CssClass = "alert alert-danger mt-3";
             }
         }
-
-       
     }
 }
