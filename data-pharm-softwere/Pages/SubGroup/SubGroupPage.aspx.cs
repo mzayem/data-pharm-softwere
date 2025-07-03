@@ -20,12 +20,17 @@ namespace data_pharm_softwere.Pages.SubGroup
 
         private void LoadSubGroups(string search = "")
         {
-            var query = _context.SubGroups.Select(sg => new
+            if (!_context.SubGroups.Any())
+            {
+                Response.Redirect("/subgroup/create");
+                return;
+            }
+              var query = _context.SubGroups.Select(sg => new
             {
                 sg.SubGroupID,
                 sg.Name,
                 GroupName = sg.Group.Name,
-                VendorName = sg.Group.Vendor.Name,
+                VendorName = sg.Group.Division.Vendor.Name,
                 sg.CreatedAt
             });
 
@@ -37,6 +42,7 @@ namespace data_pharm_softwere.Pages.SubGroup
                     sg.VendorName.Contains(search)
                 );
             }
+          
 
             gvSubGroups.DataSource = query.OrderByDescending(sg => sg.CreatedAt).ToList();
             gvSubGroups.DataBind();

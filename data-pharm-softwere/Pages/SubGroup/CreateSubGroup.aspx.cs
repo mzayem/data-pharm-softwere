@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Web.UI.WebControls;
 using data_pharm_softwere.Data;
@@ -43,11 +44,11 @@ namespace data_pharm_softwere.Pages.SubGroup
         {
             try
             {
-                var groupsQuery = _context.Groups.AsQueryable();
+                var groupsQuery = _context.Groups.Include("Division").AsQueryable();
 
                 if (vendorId.HasValue && vendorId.Value > 0)
                 {
-                    groupsQuery = groupsQuery.Where(g => g.VendorID == vendorId.Value);
+                    groupsQuery = groupsQuery.Where(g => g.Division.VendorID == vendorId.Value);
                 }
 
                 var groups = groupsQuery.ToList();

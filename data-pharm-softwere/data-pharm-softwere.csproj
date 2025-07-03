@@ -43,8 +43,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BouncyCastle.Crypto, Version=1.8.6.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
-      <HintPath>..\packages\BouncyCastle.1.8.6.1\lib\BouncyCastle.Crypto.dll</HintPath>
+    <Reference Include="BouncyCastle.Crypto, Version=1.8.9.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
+      <HintPath>..\packages\BouncyCastle.1.8.9\lib\BouncyCastle.Crypto.dll</HintPath>
     </Reference>
     <Reference Include="BouncyCastle.Cryptography, Version=2.0.0.0, Culture=neutral, PublicKeyToken=072edcf4a5328938, processorArchitecture=MSIL">
       <HintPath>..\packages\BouncyCastle.Cryptography.2.6.1\lib\net461\BouncyCastle.Cryptography.dll</HintPath>
@@ -81,10 +81,12 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Components\Control\ImportInfo.ascx" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
     <Content Include="Content\bootstrap-grid.rtl.css" />
     <Content Include="Content\bootstrap-grid.rtl.min.css" />
+    <Content Include="Content\bootstrap-icons.min.css" />
     <Content Include="Content\bootstrap-reboot.css" />
     <Content Include="Content\bootstrap-reboot.min.css" />
     <Content Include="Content\bootstrap-reboot.rtl.css" />
@@ -97,6 +99,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
+    <Content Include="Content\bootstrap-icons.css" />
     <Content Include="Global.asax" />
     <Content Include="Pages\Batch\BatchPage.aspx" />
     <Content Include="Pages\Batch\Controls\BatchModal.ascx" />
@@ -108,6 +111,9 @@
     <Content Include="Pages\Customer\CreateCustomer.aspx" />
     <Content Include="Pages\Customer\CustomerPage.aspx" />
     <Content Include="Pages\Customer\EditCustomer.aspx" />
+    <Content Include="Pages\Division\CreateDivision.aspx" />
+    <Content Include="Pages\Division\DivisionPage.aspx" />
+    <Content Include="Pages\Division\EditDivision.aspx" />
     <Content Include="Pages\Group\CreateGroup.aspx" />
     <Content Include="Pages\Group\EditGroup.aspx" />
     <Content Include="Pages\Group\GroupPage.aspx" />
@@ -130,6 +136,8 @@
     <Content Include="Scripts\bootstrap.esm.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Content\fonts\bootstrap-icons.woff" />
+    <Content Include="Content\fonts\bootstrap-icons.woff2" />
     <None Include="Scripts\jquery-3.7.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.1.js" />
     <Content Include="Scripts\jquery-3.7.1.min.js" />
@@ -138,6 +146,13 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\Control\ImportInfo.ascx.cs">
+      <DependentUpon>ImportInfo.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Components\Control\ImportInfo.ascx.designer.cs">
+      <DependentUpon>ImportInfo.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -177,11 +192,16 @@
     <Compile Include="Migrations\202506261035427_SpellFix.Designer.cs">
       <DependentUpon>202506261035427_SpellFix.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202506280848178_DivisionAdded.cs" />
+    <Compile Include="Migrations\202506280848178_DivisionAdded.Designer.cs">
+      <DependentUpon>202506280848178_DivisionAdded.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Batch.cs" />
     <Compile Include="Models\CityRoute.cs" />
     <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\DataPharmaContext.cs" />
+    <Compile Include="Models\Division.cs" />
     <Compile Include="Models\Group.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\SubGroup.cs" />
@@ -255,6 +275,27 @@
     </Compile>
     <Compile Include="Pages\Customer\EditCustomer.aspx.designer.cs">
       <DependentUpon>EditCustomer.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Division\CreateDivision.aspx.cs">
+      <DependentUpon>CreateDivision.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Division\CreateDivision.aspx.designer.cs">
+      <DependentUpon>CreateDivision.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Division\DivisionPage.aspx.cs">
+      <DependentUpon>DivisionPage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Division\DivisionPage.aspx.designer.cs">
+      <DependentUpon>DivisionPage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Division\EditDivision.aspx.cs">
+      <DependentUpon>EditDivision.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Division\EditDivision.aspx.designer.cs">
+      <DependentUpon>EditDivision.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\Group\CreateGroup.aspx.cs">
       <DependentUpon>CreateGroup.aspx</DependentUpon>
@@ -439,6 +480,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202506261035427_SpellFix.resx">
       <DependentUpon>202506261035427_SpellFix.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202506280848178_DivisionAdded.resx">
+      <DependentUpon>202506280848178_DivisionAdded.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

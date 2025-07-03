@@ -28,6 +28,12 @@ namespace data_pharm_softwere.Pages.Product
 
         private void LoadProducts(string search = "")
         {
+            if (!_context.Products.Any())
+            {
+                Response.Redirect("/product/create");
+                return;
+            }
+
             var query = _context.Products
                 .Select(p => new
                 {
@@ -38,10 +44,10 @@ namespace data_pharm_softwere.Pages.Product
                     p.PackingType,
                     SubGroupID = p.SubGroup.SubGroupID,
                     GroupID = p.SubGroup.Group.GroupID,
-                    VendorID = p.SubGroup.Group.Vendor.VendorID,
+                    VendorID = p.SubGroup.Group.Division.Vendor.VendorID,
                     SubGroupName = p.SubGroup.Name,
                     GroupName = p.SubGroup.Group.Name,
-                    VendorName = p.SubGroup.Group.Vendor.Name,
+                    VendorName = p.SubGroup.Group.Division.Vendor.Name,
                     p.CreatedAt
                 });
 
@@ -101,11 +107,11 @@ namespace data_pharm_softwere.Pages.Product
         private void LoadGroups()
         {
             int vendorId;
-            var allGroups = _context.Groups.AsQueryable();
+            var allGroups = _context.Groups.Include("Division").AsQueryable();
 
             if (!string.IsNullOrEmpty(ddlVendor.SelectedValue) && int.TryParse(ddlVendor.SelectedValue, out vendorId))
             {
-                allGroups = allGroups.Where(g => g.VendorID == vendorId);
+                allGroups = allGroups.Where(g => g.Division.VendorID == vendorId);
             }
 
             var groups = allGroups
@@ -212,7 +218,7 @@ namespace data_pharm_softwere.Pages.Product
                     p.PackingType.ToString().Contains(search) ||
                     p.SubGroup.Name.Contains(search) ||
                     p.SubGroup.Group.Name.Contains(search) ||
-                    p.SubGroup.Group.Vendor.Name.Contains(search)
+                    p.SubGroup.Group.Division.Vendor.Name.Contains(search)
                 );
             }
 
@@ -220,7 +226,7 @@ namespace data_pharm_softwere.Pages.Product
             if (!string.IsNullOrEmpty(ddlVendor.SelectedValue))
             {
                 int vendorId = int.Parse(ddlVendor.SelectedValue);
-                query = query.Where(p => p.SubGroup.Group.Vendor.VendorID == vendorId);
+                query = query.Where(p => p.SubGroup.Group.Division.Vendor.VendorID == vendorId);
             }
 
             string vendorText = string.IsNullOrEmpty(ddlVendor.SelectedValue)
@@ -268,7 +274,7 @@ namespace data_pharm_softwere.Pages.Product
             p.UnReqGST.ToString(),
             p.IsAdvTaxExempted ? "Yes" : "No",
             p.IsGSTExempted ? "Yes" : "No",
-            EscapeCsv(p.SubGroup?.Group?.Vendor?.Name ?? "-"),
+            EscapeCsv(p.SubGroup?.Group?.Division?.Vendor?.Name ?? "-"),
             EscapeCsv(p.SubGroup?.Group?.Name ?? "-"),
             EscapeCsv(p.SubGroup?.Name ?? "-"),
             "=\"" + p.CreatedAt.ToString("dd MMMM, yyyy") + "\"",
@@ -315,14 +321,14 @@ namespace data_pharm_softwere.Pages.Product
                     p.PackingType.ToString().Contains(search) ||
                     p.SubGroup.Name.Contains(search) ||
                     p.SubGroup.Group.Name.Contains(search) ||
-                    p.SubGroup.Group.Vendor.Name.Contains(search)
+                    p.SubGroup.Group.Division.Vendor.Name.Contains(search)
                 );
             }
 
             if (!string.IsNullOrEmpty(ddlVendor.SelectedValue))
             {
                 int vendorId = int.Parse(ddlVendor.SelectedValue);
-                query = query.Where(p => p.SubGroup.Group.Vendor.VendorID == vendorId);
+                query = query.Where(p => p.SubGroup.Group.Division.Vendor.VendorID == vendorId);
             }
 
             if (!string.IsNullOrEmpty(ddlGroup.SelectedValue))
@@ -411,7 +417,7 @@ namespace data_pharm_softwere.Pages.Product
                     table.AddCell(new Phrase(p.UnReqGST.ToString() + "%", bodyFont));
                     table.AddCell(new Phrase(p.IsAdvTaxExempted ? "Yes" : "No", bodyFont));
                     table.AddCell(new Phrase(p.IsGSTExempted ? "Yes" : "No", bodyFont));
-                    table.AddCell(new Phrase(p.SubGroup?.Group?.Vendor?.Name ?? "-", bodyFont));
+                    table.AddCell(new Phrase(p.SubGroup?.Group ?.Division?.Vendor?.Name ?? "-", bodyFont));
                     table.AddCell(new Phrase(p.SubGroup?.Group?.Name ?? "-", bodyFont));
                     table.AddCell(new Phrase(p.SubGroup?.Name ?? "-", bodyFont));
                 }

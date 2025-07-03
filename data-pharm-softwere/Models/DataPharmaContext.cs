@@ -11,6 +11,7 @@ namespace data_pharm_softwere.Data
         }
 
         public DbSet<Vendor> Vendors { get; set; }
+        public DbSet<Division> Divisions { get; set; }
         public DbSet<Group> Groups { get; set; }
         public DbSet<SubGroup> SubGroups { get; set; }
         public DbSet<Product> Products { get; set; }
@@ -32,11 +33,18 @@ namespace data_pharm_softwere.Data
             modelBuilder.Entity<Town>().ToTable("Towns");
             modelBuilder.Entity<Customer>().ToTable("Customers");
 
-            // Group → Vendor
+            // Division → Vendor
+            modelBuilder.Entity<Division>()
+                .HasRequired(d => d.Vendor)
+                .WithMany(v => v.Divisions)
+                .HasForeignKey(d => d.VendorID)
+                .WillCascadeOnDelete(true);
+
+            // Group → Division
             modelBuilder.Entity<Group>()
-                .HasRequired(g => g.Vendor)
+                .HasRequired(g => g.Division)
                 .WithMany(v => v.Groups)
-                .HasForeignKey(g => g.VendorID)
+                .HasForeignKey(g => g.DivisionID)
                 .WillCascadeOnDelete(true);
 
             // SubGroup → Group
@@ -60,13 +68,19 @@ namespace data_pharm_softwere.Data
                 .HasForeignKey(b => b.ProductID)
                 .WillCascadeOnDelete(true);
 
+            //Town → CityRoute
+            modelBuilder.Entity<Town>()
+                .HasRequired(t => t.CityRoute)
+                .WithMany(cr => cr.Towns)
+                .HasForeignKey(t => t.CityRouteID)
+                .WillCascadeOnDelete(true);
 
             // Customer → Town
             modelBuilder.Entity<Customer>()
                 .HasRequired(c => c.Town)
                 .WithMany(t => t.Customers)
                 .HasForeignKey(c => c.TownID)
-                .WillCascadeOnDelete(true); // safer for customer deletion
+                .WillCascadeOnDelete(true);
         }
     }
 }

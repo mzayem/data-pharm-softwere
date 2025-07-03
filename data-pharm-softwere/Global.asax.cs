@@ -47,6 +47,23 @@ namespace data_pharm_softwere
                 "~/pages/Vendor/VendorPage.aspx"
             );
 
+            //division routes
+            routes.MapPageRoute(
+                "Create Division",
+                "division/create",
+                "~/pages/Division/CreateDivision.aspx"
+            );
+            routes.MapPageRoute(
+                " Edit Division",
+                "division/edit",
+                "~/pages/Division/EditDivision.aspx"
+            );
+            routes.MapPageRoute(
+                "Division Management",
+                "division",
+                "~/pages/Division/DivisionPage.aspx"
+            );
+
             //group routes
             routes.MapPageRoute(
                 "Create Group",

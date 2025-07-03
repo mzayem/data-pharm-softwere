@@ -76,7 +76,8 @@
                     AutoGenerateColumns="False"
                     CssClass="table table-bordered table-hover" 
                     OnRowCommand="gvProducts_RowCommand" 
-                    OnRowDataBound="gvProducts_RowDataBound">
+                    OnRowDataBound="gvProducts_RowDataBound"
+                    EmptyDataText="No Product Found">
 
                     <Columns>
                         <asp:BoundField DataField="ProductID" HeaderText="ID" />

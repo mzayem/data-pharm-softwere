@@ -7,11 +7,11 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace data_pharm_softwere.Pages.Group
+namespace data_pharm_softwere.Pages.Division
 {
 
 
-    public partial class CreateGroup
+    public partial class CreateDivision
     {
 
         /// <summary>
@@ -51,22 +51,22 @@ namespace data_pharm_softwere.Pages.Group
         protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvName;
 
         /// <summary>
-        /// ddlDivision control.
+        /// ddlVendor control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlDivision;
+        protected global::System.Web.UI.WebControls.DropDownList ddlVendor;
 
         /// <summary>
-        /// rfvDivision control.
+        /// rfvVendor control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvDivision;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvVendor;
 
         /// <summary>
         /// btnSave control.

@@ -26,12 +26,12 @@
                                                 ValidationGroup="GroupForm" />
                 </div>
                 <div>
-                    <label for="ddlVendor" class="form-label fw-semibold">Vendor</label>
-                    <asp:DropDownList ID="ddlVendor" runat="server" CssClass="form-select rounded-pill" />
-                    <asp:RequiredFieldValidator ID="rfvVendor" runat="server"
-                                                ControlToValidate="ddlVendor"
+                    <label for="ddlDivision" class="form-label fw-semibold">Division</label>
+                    <asp:DropDownList ID="ddlDivision" runat="server" CssClass="form-select rounded-pill" />
+                    <asp:RequiredFieldValidator ID="rfvDivision" runat="server"
+                                                ControlToValidate="ddlDivision"
                                                 InitialValue=""
-                                                ErrorMessage="Vendor is required"
+                                                ErrorMessage="Division is required"
                                                 CssClass="text-danger"
                                                 Display="Dynamic"
                                                 ValidationGroup="GroupForm" />

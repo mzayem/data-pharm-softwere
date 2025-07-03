@@ -60,22 +60,22 @@ namespace data_pharm_softwere.Pages.Group
         protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvName;
 
         /// <summary>
-        /// ddlVendor control.
+        /// ddlDivision control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlVendor;
+        protected global::System.Web.UI.WebControls.DropDownList ddlDivision;
 
         /// <summary>
-        /// rfvVendor control.
+        /// rfvDivision control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvVendor;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvDivision;
 
         /// <summary>
         /// btnUpdate control.

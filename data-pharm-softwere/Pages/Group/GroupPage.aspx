@@ -31,7 +31,7 @@
                     ID="txtSearch" 
                     runat="server" 
                     CssClass="form-control mb-3"
-                    Placeholder="Search group by name or vendor" 
+                    Placeholder="Search group by name or division" 
                     AutoPostBack="true" 
                     OnTextChanged="txtSearch_TextChanged" />
 
@@ -41,12 +41,13 @@
                     AutoGenerateColumns="False"
                     CssClass="table table-bordered table-hover" 
                     OnRowCommand="gvGroups_RowCommand" 
-                    OnRowDataBound="gvGroups_RowDataBound">
+                    OnRowDataBound="gvGroups_RowDataBound"
+                    EmptyDataText="No Group Found">
 
                     <Columns>
                         <asp:BoundField DataField="GroupID" HeaderText="ID" />
                         <asp:BoundField DataField="Name" HeaderText="Group Name" />
-                        <asp:BoundField DataField="VendorName" HeaderText="Vendor" />
+                        <asp:BoundField DataField="DivisionName" HeaderText="Division" />
                         <asp:BoundField DataField="CreatedAt" HeaderText="Created At" DataFormatString="{0:yyyy-MM-dd}" />
 
                         <asp:TemplateField HeaderText="Actions">

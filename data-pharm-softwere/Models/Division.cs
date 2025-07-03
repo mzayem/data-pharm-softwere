@@ -2,24 +2,29 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Web;
 
 namespace data_pharm_softwere.Models
 {
-    [Table("CityRoutes")]
-    public class CityRoute
+    [Table("Divisions")]
+    public class Division
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int CityRouteID { get; set; }
+        public int DivisionID { get; set; }
 
         [Required]
         [StringLength(100)]
         public string Name { get; set; }
 
+        // Foreign key to Vendor
+        [Required]
+        public int VendorID { get; set; }
+
+        [ForeignKey("VendorID")]
+        public virtual Vendor Vendor { get; set; }
+
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
-        public virtual ICollection<Town> Towns { get; set; }
+        public virtual ICollection<Group> Groups { get; set; }
     }
 }

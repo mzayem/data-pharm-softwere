@@ -90,7 +90,7 @@
                 CssClass="table table-bordered table-hover" 
                 OnRowCommand="gvCustomers_RowCommand" 
                 OnRowDataBound="gvCustomers_RowDataBound"
-                EmptyDataText="No Towns Found" >
+                EmptyDataText="No Customer Found" >
 
                 <Columns>
                     <asp:BoundField DataField="CustomerID" HeaderText="Code" DataFormatString="{0:D4}" HtmlEncode="false" />

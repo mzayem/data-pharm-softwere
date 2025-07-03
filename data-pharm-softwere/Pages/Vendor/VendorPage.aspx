@@ -31,7 +31,8 @@
                     AutoGenerateColumns="False"
                     CssClass="table table-bordered table-hover" 
                     OnRowCommand="gvVendors_RowCommand" 
-                    OnRowDataBound="gvVendors_RowDataBound">
+                    OnRowDataBound="gvVendors_RowDataBound"
+                    EmptyDataText="No Vendor Found">
 
                     <Columns>
                         <asp:BoundField DataField="VendorID" HeaderText="ID" />

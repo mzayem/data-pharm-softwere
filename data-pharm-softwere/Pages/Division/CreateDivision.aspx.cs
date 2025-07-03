@@ -1,13 +1,14 @@
-﻿using System;
+﻿using data_pharm_softwere.Data;
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Web;
+using System.Web.UI;
 using System.Web.UI.WebControls;
-using data_pharm_softwere.Data;
-using data_pharm_softwere.Models;
-using System.Data.Entity;
 
-namespace data_pharm_softwere.Pages.Group
+namespace data_pharm_softwere.Pages.Division
 {
-    public partial class CreateGroup : System.Web.UI.Page
+    public partial class CreateDivision : System.Web.UI.Page
     {
         private DataPharmaContext _context = new DataPharmaContext();
 
@@ -16,25 +17,25 @@ namespace data_pharm_softwere.Pages.Group
             if (!IsPostBack)
             {
                 lblMessage.Text = string.Empty;
-                LoadDivisions();
+                LoadVendors();
             }
         }
 
-        private void LoadDivisions()
+        private void LoadVendors()
         {
             try
             {
-                var divisions = _context.Divisions.ToList();
-                ddlDivision.DataSource = divisions;
-                ddlDivision.DataTextField = "Name";
-                ddlDivision.DataValueField = "DivisionID";
-                ddlDivision.DataBind();
+                var vendors = _context.Vendors.ToList();
+                ddlVendor.DataSource = vendors;
+                ddlVendor.DataTextField = "Name";
+                ddlVendor.DataValueField = "VendorID";
+                ddlVendor.DataBind();
 
-                ddlDivision.Items.Insert(0, new ListItem("-- Select Division --", ""));
+                ddlVendor.Items.Insert(0, new ListItem("-- Select Vendor --", ""));
             }
             catch (Exception ex)
             {
-                lblMessage.Text = "Error loading divisions: " + ex.Message;
+                lblMessage.Text = "Error loading vendors: " + ex.Message;
                 lblMessage.CssClass = "text-danger fw-semibold";
             }
         }
@@ -45,18 +46,18 @@ namespace data_pharm_softwere.Pages.Group
             {
                 try
                 {
-                    var group = new Models.Group
+                    var division = new Models.Division
                     {
                         Name = txtName.Text.Trim(),
-                        DivisionID = int.Parse(ddlDivision.SelectedValue),
+                        VendorID = int.Parse(ddlVendor.SelectedValue),
                         CreatedAt = DateTime.Now
                     };
 
-                    _context.Groups.Add(group);
+                    _context.Divisions.Add(division);
                     _context.SaveChanges();
 
                     lblMessage.CssClass = "text-success fw-semibold";
-                    lblMessage.Text = "Group saved successfully.";
+                    lblMessage.Text = "Division saved successfully.";
                     ClearForm();
                 }
                 catch (Exception ex)
@@ -70,7 +71,7 @@ namespace data_pharm_softwere.Pages.Group
         private void ClearForm()
         {
             txtName.Text = string.Empty;
-            ddlDivision.SelectedIndex = 0;
+            ddlVendor.SelectedIndex = 0;
         }
     }
 }

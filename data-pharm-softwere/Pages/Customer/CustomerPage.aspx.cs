@@ -63,6 +63,11 @@ namespace data_pharm_softwere.Pages.Customer
 
         private void LoadCustomers(string search = "")
         {
+            if (!_context.Customers.Any())
+            {
+                Response.Redirect("/customer/create");
+                return;
+            }
             var query = _context.Customers
                 .Select(c => new
                 {

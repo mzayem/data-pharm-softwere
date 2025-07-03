@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Web.UI.WebControls;
 using data_pharm_softwere.Data;
@@ -65,9 +66,9 @@ namespace data_pharm_softwere.Pages.Product
         {
             try
             {
-                var query = _context.Groups.AsQueryable();
+                var query = _context.Groups.Include("Division").AsQueryable();
                 if (vendorId.HasValue)
-                    query = query.Where(g => g.VendorID == vendorId.Value);
+                    query = query.Where(g => g.Division.VendorID == vendorId.Value);
 
                 ddlGroup.DataSource = query.ToList();
                 ddlGroup.DataTextField = "Name";
@@ -85,9 +86,12 @@ namespace data_pharm_softwere.Pages.Product
         {
             try
             {
-                var query = _context.SubGroups.AsQueryable();
+                var query = _context.SubGroups
+                    .Include("Group.Division")
+                    .AsQueryable();
+
                 if (vendorId.HasValue)
-                    query = query.Where(sg => sg.Group.VendorID == vendorId.Value);
+                    query = query.Where(sg => sg.Group.Division.VendorID == vendorId.Value);
 
                 if (groupId.HasValue)
                     query = query.Where(sg => sg.GroupID == groupId.Value);
@@ -147,10 +151,10 @@ namespace data_pharm_softwere.Pages.Product
                     var group = _context.Groups.Find(subGroup.GroupID);
                     if (group != null)
                     {
-                        ddlVendor.SelectedValue = group.VendorID.ToString();
-                        LoadGroups(group.VendorID);
+                        ddlVendor.SelectedValue = group.Division.VendorID.ToString();
+                        LoadGroups(group.Division.VendorID);
                         ddlGroup.SelectedValue = group.GroupID.ToString();
-                        LoadSubGroups(group.VendorID, group.GroupID);
+                        LoadSubGroups(group.Division.VendorID, group.GroupID);
                         ddlSubGroup.SelectedValue = subGroup.SubGroupID.ToString();
                     }
                 }

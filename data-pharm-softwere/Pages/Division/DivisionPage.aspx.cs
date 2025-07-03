@@ -3,15 +3,17 @@ using data_pharm_softwere.Models;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace data_pharm_softwere.Pages.Group
+namespace data_pharm_softwere.Pages.Division
 {
-    public partial class GroupPage : System.Web.UI.Page
+    public partial class DivisionPage : System.Web.UI.Page
     {
         private DataPharmaContext _context = new DataPharmaContext();
 
@@ -19,22 +21,22 @@ namespace data_pharm_softwere.Pages.Group
         {
             if (!IsPostBack)
             {
-                LoadGroups();
+                LoadDivisions();
             }
         }
 
-        private void LoadGroups(string search = "")
+        private void LoadDivisions(string search = "")
         {
-            if (!_context.Groups.Any())
+            if (!_context.Divisions.Any())
             {
-                Response.Redirect("/group/create");
+                Response.Redirect("/division/create");
                 return;
             }
-            var query = _context.Groups.Select(g => new
+            var query = _context.Divisions.Select(g => new
             {
-                g.GroupID,
+                g.DivisionID,
                 g.Name,
-                DivisionName = g.Division.Name,
+                VendorName = g.Vendor.Name,
                 g.CreatedAt
             });
 
@@ -42,56 +44,56 @@ namespace data_pharm_softwere.Pages.Group
             {
                 query = query.Where(g =>
                     g.Name.Contains(search) ||
-                    g.DivisionName.Contains(search)
+                    g.VendorName.Contains(search)
                 );
             }
 
-            gvGroups.DataSource = query.OrderByDescending(g => g.CreatedAt).ToList();
-            gvGroups.DataBind();
+            gvDivisions.DataSource = query.OrderByDescending(g => g.CreatedAt).ToList();
+            gvDivisions.DataBind();
         }
 
         protected void txtSearch_TextChanged(object sender, EventArgs e)
         {
             string search = txtSearch.Text.Trim();
-            ViewState["GroupSearch"] = search;
-            LoadGroups(search);
+            ViewState["DivisionSearch"] = search;
+            LoadDivisions(search);
         }
 
         protected void ddlActions_SelectedIndexChanged(object sender, EventArgs e)
         {
             DropDownList ddl = (DropDownList)sender;
             GridViewRow row = (GridViewRow)ddl.NamingContainer;
-            HiddenField hf = (HiddenField)row.FindControl("hfGroupID");
+            HiddenField hf = (HiddenField)row.FindControl("hfDivisionID");
 
-            int groupId = int.Parse(hf.Value);
+            int divisionId = int.Parse(hf.Value);
             string action = ddl.SelectedValue;
 
             if (action == "Edit")
             {
-                Response.Redirect($"/group/edit?id={groupId}");
+                Response.Redirect($"/division/edit?id={divisionId}");
             }
             else if (action == "Delete")
             {
-                var group = _context.Groups.Find(groupId);
-                if (group != null)
+                var division = _context.Divisions.Find(divisionId);
+                if (division != null)
                 {
-                    _context.Groups.Remove(group);
+                    _context.Divisions.Remove(division);
                     _context.SaveChanges();
-                    LoadGroups(txtSearch.Text.Trim());
+                    LoadDivisions(txtSearch.Text.Trim());
                 }
             }
         }
 
         protected void btnExportPdf_Click(object sender, EventArgs e)
         {
-            string search = ViewState["GroupSearch"]?.ToString() ?? "";
-            var groups = _context.Groups
-                .Where(g => string.IsNullOrEmpty(search) || g.Name.Contains(search) || g.Division.Name.Contains(search))
+            string search = ViewState["DivisionSearch"]?.ToString() ?? "";
+            var divisions = _context.Divisions
+                .Where(g => string.IsNullOrEmpty(search) || g.Name.Contains(search) || g.Vendor.Name.Contains(search))
                 .Select(g => new
                 {
-                    g.GroupID,
+                    g.DivisionID,
                     g.Name,
-                    DivisionName = g.Division.Name,
+                    VendorName = g.Vendor.Name,
                     g.CreatedAt
                 })
                 .OrderBy(g => g.Name)
@@ -103,12 +105,12 @@ namespace data_pharm_softwere.Pages.Group
                 PdfWriter.GetInstance(pdfDoc, memoryStream);
                 pdfDoc.Open();
 
-                pdfDoc.Add(new Paragraph("Group Report", FontFactory.GetFont("Arial", 14, Font.BOLD)));
+                pdfDoc.Add(new Paragraph("Division Report", FontFactory.GetFont("Arial", 14, Font.BOLD)));
                 pdfDoc.Add(new Paragraph("Generated on: " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")));
                 pdfDoc.Add(new Paragraph(" "));
 
                 PdfPTable table = new PdfPTable(4) { WidthPercentage = 100 };
-                string[] headers = { "ID", "Group Name", "Division", "Created At" };
+                string[] headers = { "ID", "Division Name", "Vendor", "Created At" };
 
                 foreach (string header in headers)
                 {
@@ -119,11 +121,11 @@ namespace data_pharm_softwere.Pages.Group
                     table.AddCell(cell);
                 }
 
-                foreach (var g in groups)
+                foreach (var g in divisions)
                 {
-                    table.AddCell(g.GroupID.ToString());
+                    table.AddCell(g.DivisionID.ToString());
                     table.AddCell(g.Name);
-                    table.AddCell(g.DivisionName);
+                    table.AddCell(g.VendorName);
                     table.AddCell(g.CreatedAt.ToString("yyyy-MM-dd"));
                 }
 
@@ -131,7 +133,7 @@ namespace data_pharm_softwere.Pages.Group
                 pdfDoc.Close();
 
                 Response.ContentType = "application/pdf";
-                Response.AddHeader("content-disposition", $"attachment;filename=Group_Report_{DateTime.Now:yyyyMMddHHmmss}.pdf");
+                Response.AddHeader("content-disposition", $"attachment;filename=Division_Report_{DateTime.Now:yyyyMMddHHmmss}.pdf");
                 Response.BinaryWrite(memoryStream.ToArray());
                 Response.End();
             }
@@ -139,29 +141,29 @@ namespace data_pharm_softwere.Pages.Group
 
         protected void btnExportExcel_Click(object sender, EventArgs e)
         {
-            string search = ViewState["GroupSearch"]?.ToString() ?? "";
-            var groups = _context.Groups
-                .Where(g => string.IsNullOrEmpty(search) || g.Name.Contains(search) || g.Division.Name.Contains(search))
+            string search = ViewState["DivisionSearch"]?.ToString() ?? "";
+            var divisions = _context.Divisions
+                .Where(g => string.IsNullOrEmpty(search) || g.Name.Contains(search) || g.Vendor.Name.Contains(search))
                 .Select(g => new
                 {
-                    g.GroupID,
+                    g.DivisionID,
                     g.Name,
-                    DivisionName = g.Division.Name,
+                    VendorName = g.Vendor.Name,
                     g.CreatedAt
                 })
                 .OrderBy(g => g.Name)
                 .ToList();
 
             var sb = new StringBuilder();
-            sb.AppendLine("GroupID,Group Name,Division,Created At");
+            sb.AppendLine("DivisionID,Division Name,Vendor,Created At");
 
-            foreach (var g in groups)
+            foreach (var g in divisions)
             {
-                sb.AppendLine($"{g.GroupID},{EscapeCsv(g.Name)},{EscapeCsv(g.DivisionName)},{g.CreatedAt:yyyy-MM-dd}");
+                sb.AppendLine($"{g.DivisionID},{EscapeCsv(g.Name)},{EscapeCsv(g.VendorName)},{g.CreatedAt:yyyy-MM-dd}");
             }
 
             Response.Clear();
-            Response.AddHeader("content-disposition", $"attachment;filename=Group_Report_{DateTime.Now:yyyyMMddHHmmss}.csv");
+            Response.AddHeader("content-disposition", $"attachment;filename=Division_Report_{DateTime.Now:yyyyMMddHHmmss}.csv");
             Response.ContentType = "text/csv";
             Response.ContentEncoding = Encoding.UTF8;
             Response.Output.Write(sb.ToString());
@@ -177,12 +179,12 @@ namespace data_pharm_softwere.Pages.Group
             return $"\"{value}\"";
         }
 
-        protected void gvGroups_RowDataBound(object sender, GridViewRowEventArgs e)
+        protected void gvDivisions_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
-                string groupId = DataBinder.Eval(e.Row.DataItem, "GroupID").ToString();
-                e.Row.Attributes["onclick"] = $"window.location='/group/edit?id={groupId}'";
+                string divisionId = DataBinder.Eval(e.Row.DataItem, "DivisionID").ToString();
+                e.Row.Attributes["onclick"] = $"window.location='/division/edit?id={divisionId}'";
                 e.Row.Style["cursor"] = "pointer";
 
                 foreach (TableCell cell in e.Row.Cells)
@@ -196,7 +198,7 @@ namespace data_pharm_softwere.Pages.Group
             }
         }
 
-        protected void gvGroups_RowCommand(object sender, GridViewCommandEventArgs e)
+        protected void gvDivisions_RowCommand(object sender, GridViewCommandEventArgs e)
         {
             // Optional: Not used because dropdown handles actions
         }

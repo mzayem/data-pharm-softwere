@@ -8,6 +8,9 @@
                 <a href="/vendor" class="btn btn-primary rounded-pill px-4 mt-4">
                     Go to Vendor Management
                 </a>
+                <a href="/division" class="btn btn-primary rounded-pill px-4 mt-4">
+                    Go to Division Management
+                </a>
                 <a href="/group" class="btn btn-primary rounded-pill px-4 mt-4">
                     Go to Group Management
                 </a>

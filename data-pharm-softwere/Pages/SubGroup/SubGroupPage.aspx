@@ -29,7 +29,8 @@
                     AutoGenerateColumns="False"
                     CssClass="table table-bordered table-hover" 
                     OnRowCommand="gvSubGroups_RowCommand" 
-                    OnRowDataBound="gvSubGroups_RowDataBound">
+                    OnRowDataBound="gvSubGroups_RowDataBound"
+                    EmptyDataText="No Sub Group Found">
 
                     <Columns>
                         <asp:BoundField DataField="SubGroupID" HeaderText="ID" />

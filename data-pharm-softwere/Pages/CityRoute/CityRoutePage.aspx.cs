@@ -21,6 +21,11 @@ namespace data_pharm_softwere.Pages.CityRoute
 
         private void LoadCityRoute(string search = "")
         {
+            if (!_context.CityRoutes.Any())
+            {
+                Response.Redirect("/city-route/create");
+                return;
+            }
             var query = _context.CityRoutes.Select(b => new
             {
                 b.CityRouteID,

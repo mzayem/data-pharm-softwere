@@ -15,19 +15,19 @@ namespace data_pharm_softwere.Pages.Group
         {
             if (!IsPostBack)
             {
-                LoadVendors();
+                LoadDivisions();
                 LoadGroup();
             }
         }
 
-        private void LoadVendors()
+        private void LoadDivisions()
         {
-            var vendors = _context.Vendors.ToList();
-            ddlVendor.DataSource = vendors;
-            ddlVendor.DataTextField = "Name";
-            ddlVendor.DataValueField = "VendorID";
-            ddlVendor.DataBind();
-            ddlVendor.Items.Insert(0, new ListItem("-- Select Vendor --", ""));
+            var divisions = _context.Divisions.ToList();
+            ddlDivision.DataSource = divisions;
+            ddlDivision.DataTextField = "Name";
+            ddlDivision.DataValueField = "DivisionID";
+            ddlDivision.DataBind();
+            ddlDivision.Items.Insert(0, new ListItem("-- Select Division --", ""));
         }
 
         private void LoadGroup()
@@ -40,7 +40,7 @@ namespace data_pharm_softwere.Pages.Group
             }
 
             txtName.Text = group.Name;
-            ddlVendor.SelectedValue = group.VendorID.ToString();
+            ddlDivision.SelectedValue = group.DivisionID.ToString();
         }
 
         protected void btnUpdate_Click(object sender, EventArgs e)
@@ -55,7 +55,7 @@ namespace data_pharm_softwere.Pages.Group
                 }
 
                 group.Name = txtName.Text.Trim();
-                group.VendorID = int.Parse(ddlVendor.SelectedValue);
+                group.DivisionID = int.Parse(ddlDivision.SelectedValue);
 
                 _context.SaveChanges();
                 Response.Redirect("/group");

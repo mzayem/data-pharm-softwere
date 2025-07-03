@@ -2,7 +2,6 @@
 using data_pharm_softwere.Models;
 using System;
 using System.Linq;
-using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Data.Entity;
 
@@ -77,9 +76,9 @@ namespace data_pharm_softwere.Pages.Product
         {
             try
             {
-                var query = _context.Groups.AsQueryable();
+                var query = _context.Groups.Include(g => g.Division).AsQueryable();
                 if (vendorId.HasValue)
-                    query = query.Where(g => g.VendorID == vendorId.Value);
+                    query = query.Where(g => g.Division.VendorID == vendorId.Value);
 
                 ddlGroup.DataSource = query.ToList();
                 ddlGroup.DataTextField = "Name";
@@ -98,9 +97,9 @@ namespace data_pharm_softwere.Pages.Product
         {
             try
             {
-                var query = _context.SubGroups.AsQueryable();
+                var query = _context.SubGroups.Include(sg => sg.Group.Division).AsQueryable();
                 if (vendorId.HasValue)
-                    query = query.Where(sg => sg.Group.VendorID == vendorId.Value);
+                    query = query.Where(sg => sg.Group.Division.VendorID == vendorId.Value);
 
                 if (groupId.HasValue)
                     query = query.Where(sg => sg.GroupID == groupId.Value);
@@ -134,7 +133,7 @@ namespace data_pharm_softwere.Pages.Product
             if (int.TryParse(ddlVendor.SelectedValue, out int vendorId))
             {
                 LoadGroups(vendorId);
-                LoadSubGroups(vendorId); // only by vendor
+                LoadSubGroups(vendorId);
             }
             else
             {

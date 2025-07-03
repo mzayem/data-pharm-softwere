@@ -29,6 +29,12 @@ namespace data_pharm_softwere.Pages.Vendor
         {
             var query = _context.Vendors.AsQueryable();
 
+            if (!_context.Vendors.Any())
+            {
+                Response.Redirect("/vendor/create");
+                return;
+            }
+
             if (!string.IsNullOrWhiteSpace(search))
             {
                 query = query.Where(v =>
