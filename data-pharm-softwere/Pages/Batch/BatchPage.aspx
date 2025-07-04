@@ -2,16 +2,15 @@
  <%@ Register TagPrefix="uc" TagName="ImportInfo" Src="~/Components/Control/ImportInfo.ascx" %>
 
     <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-    <asp:ScriptManager ID="ScriptManager1" runat="server" />
+        <asp:ScriptManager ID="ScriptManager1" runat="server" />
         <uc:ImportInfo ID="ImportInfoControl" runat="server" ImportContext="batch" />
 
 
         <div class="container mt-4">
             <h2 class="mb-3">Batch List</h2>
             <asp:Label ID="lblImportStatus" runat="server" CssClass="d-none" EnableViewState="false" />
-
             
-            <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="d-flex justify-content-between mb-3">
                 <!-- Add New Batch -->
                 <asp:HyperLink 
                     ID="btnCreateBatch" 
@@ -21,7 +20,7 @@
                     + Add New Batch
                 </asp:HyperLink>
 
-                <div class="d-flex gap-2 align-items-center">
+                <div class="d-flex gap-2 align-items-start">
                     <!-- Help Icon with Tooltip -->
                     <button type="button" 
                             class="btn btn-link p-0 m-0 border-0 text-dark" 
@@ -30,18 +29,12 @@
                         <i class="bi bi-info-circle fs-4" data-bs-toggle="tooltip" title="Need Help!"></i>
                     </button>
 
-
-                    <!-- Hidden FileUpload and Styled Import Button -->
                     <asp:FileUpload ID="fuCSV" runat="server" CssClass="d-none" onchange="submitImport()" />
                     <asp:Button ID="btnImport" runat="server" Text="Import CSV" CssClass="btn btn-success" OnClientClick="triggerFileInput(); return false;" />
                     <asp:Button ID="btnHiddenSubmit" runat="server" CssClass="d-none" OnClick="btnImport_Click" />
 
                 </div>
             </div>
-
-
-
-
 
         <asp:UpdatePanel ID="UpdatePanel1" runat="server">
             <ContentTemplate>

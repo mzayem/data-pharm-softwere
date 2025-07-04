@@ -1,6 +1,7 @@
 ﻿using data_pharm_softwere.Data;
 using Org.BouncyCastle.Tls.Crypto;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -17,6 +18,11 @@ namespace data_pharm_softwere.Pages.CityRoute
             {
                 LoadCityRoute();
             }
+        }
+
+        protected void Page_Init(object sender, EventArgs e)
+        {
+            ImportInfoControl.DownloadRequested += ImportInfoControl_DownloadRequested;
         }
 
         private void LoadCityRoute(string search = "")
@@ -104,6 +110,119 @@ namespace data_pharm_softwere.Pages.CityRoute
                         }
                     }
                 }
+            }
+        }
+
+        //Import functions
+
+        //Sample file
+        private void ImportInfoControl_DownloadRequested(object sender, EventArgs e)
+        {
+            Response.Clear();
+            Response.ContentType = "text/csv";
+            Response.AddHeader("Content-Disposition", "attachment;filename=cityRoute_sample.csv");
+
+            Response.Write("Name\r\n");
+            Response.Write("Route1\r\n");
+            Response.Write("Route2\r\n");
+
+            Response.End();
+        }
+
+        protected void btnImport_Click(object sender, EventArgs e)
+        {
+            if (!fuCSV.HasFile || !fuCSV.FileName.EndsWith(".csv"))
+            {
+                lblImportStatus.Text = "Please upload a valid CSV file.";
+                lblImportStatus.CssClass = "alert alert-danger d-block";
+                return;
+            }
+
+            try
+            {
+                using (var reader = new System.IO.StreamReader(fuCSV.FileContent))
+                {
+                    string headerLine = reader.ReadLine();
+                    if (headerLine == null)
+                    {
+                        lblImportStatus.Text = "CSV file is empty.";
+                        lblImportStatus.CssClass = "alert alert-danger d-block";
+                        return;
+                    }
+
+                    var headers = headerLine.Split(',').Select(h => h.Trim()).ToList();
+                    int colName = headers.IndexOf("Name");
+
+                    if (colName == -1)
+                    {
+                        lblImportStatus.Text = "Missing 'Name' column in CSV.";
+                        lblImportStatus.CssClass = "alert alert-danger d-block";
+                        return;
+                    }
+
+                    int lineNo = 1;
+                    int insertCount = 0;
+                    int updateCount = 0;
+                    var errorMessages = new List<string>();
+
+                    while (!reader.EndOfStream)
+                    {
+                        string line = reader.ReadLine();
+                        lineNo++;
+
+                        if (string.IsNullOrWhiteSpace(line)) continue;
+
+                        var values = line.Split(',');
+
+                        try
+                        {
+                            string name = values[colName].Trim();
+
+                            if (string.IsNullOrWhiteSpace(name))
+                                throw new Exception("Route Name cannot be empty.");
+
+                            var existing = _context.CityRoutes.FirstOrDefault(r => r.Name == name);
+
+                            if (existing != null)
+                            {
+                                updateCount++;
+                            }
+                            else
+                            {
+                                var route = new Models.CityRoute
+                                {
+                                    Name = name,
+                                    CreatedAt = DateTime.Now
+                                };
+
+                                _context.CityRoutes.Add(route);
+                                insertCount++;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            errorMessages.Add($"Line {lineNo}: {ex.Message}");
+                        }
+                    }
+
+                    _context.SaveChanges();
+
+                    lblImportStatus.Text = $"Import completed: {insertCount} added, {updateCount} duplicates skipped.";
+                    lblImportStatus.CssClass = "alert alert-success mt-3 d-block";
+
+                    if (errorMessages.Any())
+                    {
+                        lblImportStatus.Text += "<br>Errors:<br>" +
+                            string.Join("<br>", errorMessages.Take(10)) +
+                            (errorMessages.Count > 10 ? "<br>...and more." : "");
+                    }
+                    LoadCityRoute();
+                }
+            }
+            catch (Exception ex)
+            {
+                lblImportStatus.Text = $"Import failed: {ex.Message}";
+                lblImportStatus.CssClass = "alert alert-danger mt-3 d-block";
             }
         }
 

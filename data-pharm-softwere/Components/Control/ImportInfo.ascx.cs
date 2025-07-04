@@ -5,7 +5,12 @@ namespace data_pharm_softwere.Components.Control
 {
     public partial class ImportInfo : System.Web.UI.UserControl
     {
-        public string ImportContext { get; set; }
+        public string ImportContext
+        {
+            get => ViewState["ImportContext"]?.ToString()?.ToLower();
+            set => ViewState["ImportContext"] = value?.ToLower();
+        }
+
 
         public event EventHandler DownloadRequested;
 
@@ -61,7 +66,7 @@ namespace data_pharm_softwere.Components.Control
                                    "Ensure that the DivisionID you provide is valid and already exists in the system.";
                     break;
 
-                case "subGroup":
+                case "subgroup":
                     litHeader.Text = "SubGroup Import Guide";
                     litBody.Text = "Upload a CSV file with the following columns:<br><ul>" +
                                    "<li><b>Name</b> (required)</li>" +
@@ -103,12 +108,12 @@ namespace data_pharm_softwere.Components.Control
                                    "<li><b>CartonQty</b></li></ul>";
                     break;
 
-                case "cityRoute":
+                case "cityroute":
                     litHeader.Text = "City Route Import Guide";
-                    litBody.Text = "Upload a CSV file with the following columns:<br><ul>" +
+                    litBody.Text = "Upload a CSV file with the following column:<br><ul>" +
                                    "<li><b>Name</b> (required)</li>" +
                                    "</ul>" +
-                                   "Each City Route must have a unique name. Avoid duplicates.";
+                                   "Each row should contain a unique route name.";
                     break;
 
                 case "town":
