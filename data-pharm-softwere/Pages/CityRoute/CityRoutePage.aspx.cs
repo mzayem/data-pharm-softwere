@@ -162,7 +162,7 @@ namespace data_pharm_softwere.Pages.CityRoute
 
                     int lineNo = 1;
                     int insertCount = 0;
-                    int updateCount = 0;
+                    int skipCount = 0;
                     var errorMessages = new List<string>();
 
                     while (!reader.EndOfStream)
@@ -185,7 +185,7 @@ namespace data_pharm_softwere.Pages.CityRoute
 
                             if (existing != null)
                             {
-                                updateCount++;
+                                skipCount++;
                             }
                             else
                             {
@@ -207,7 +207,7 @@ namespace data_pharm_softwere.Pages.CityRoute
 
                     _context.SaveChanges();
 
-                    lblImportStatus.Text = $"Import completed: {insertCount} added, {updateCount} duplicates skipped.";
+                    lblImportStatus.Text = $"Import completed: {insertCount} added, {skipCount} duplicates skipped.";
                     lblImportStatus.CssClass = "alert alert-success mt-3 d-block";
 
                     if (errorMessages.Any())
@@ -225,6 +225,5 @@ namespace data_pharm_softwere.Pages.CityRoute
                 lblImportStatus.CssClass = "alert alert-danger mt-3 d-block";
             }
         }
-
     }
 }

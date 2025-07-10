@@ -1,5 +1,6 @@
 ﻿using data_pharm_softwere.Data;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -18,6 +19,11 @@ namespace data_pharm_softwere.Pages.SubGroup
             }
         }
 
+        protected void Page_Init(object sender, EventArgs e)
+        {
+            ImportInfoControl.DownloadRequested += ImportInfoControl_DownloadRequested;
+        }
+
         private void LoadSubGroups(string search = "")
         {
             if (!_context.SubGroups.Any())
@@ -25,7 +31,7 @@ namespace data_pharm_softwere.Pages.SubGroup
                 Response.Redirect("/subgroup/create");
                 return;
             }
-              var query = _context.SubGroups.Select(sg => new
+            var query = _context.SubGroups.Select(sg => new
             {
                 sg.SubGroupID,
                 sg.Name,
@@ -42,7 +48,6 @@ namespace data_pharm_softwere.Pages.SubGroup
                     sg.VendorName.Contains(search)
                 );
             }
-          
 
             gvSubGroups.DataSource = query.OrderByDescending(sg => sg.CreatedAt).ToList();
             gvSubGroups.DataBind();
@@ -102,6 +107,129 @@ namespace data_pharm_softwere.Pages.SubGroup
         protected void gvSubGroups_RowCommand(object sender, GridViewCommandEventArgs e)
         {
             // Not used because dropdown handles commands
+        }
+
+        //Import System
+        //Sample file
+        private void ImportInfoControl_DownloadRequested(object sender, EventArgs e)
+        {
+            Response.Clear();
+            Response.ContentType = "text/csv";
+            Response.AddHeader("Content-Disposition", "attachment;filename=subgroup_sample.csv");
+
+            Response.Write("Name,GroupID\r\n");
+            Response.Write("SubGroup A,1\r\n");
+            Response.Write("SubGroup B,2\r\n");
+
+            Response.End();
+        }
+
+        protected void btnImport_Click(object sender, EventArgs e)
+        {
+            if (!fuCSV.HasFile || !fuCSV.FileName.EndsWith(".csv"))
+            {
+                lblImportStatus.Text = "Please upload a valid CSV file.";
+                lblImportStatus.CssClass = "alert alert-danger d-block";
+                return;
+            }
+
+            try
+            {
+                using (var reader = new System.IO.StreamReader(fuCSV.FileContent))
+                {
+                    string headerLine = reader.ReadLine();
+                    if (headerLine == null)
+                    {
+                        lblImportStatus.Text = "CSV file is empty.";
+                        lblImportStatus.CssClass = "alert alert-danger d-block";
+                        return;
+                    }
+
+                    var headers = headerLine.Split(',').Select(h => h.Trim()).ToList();
+                    int colName = headers.IndexOf("Name");
+                    int colGroupID = headers.IndexOf("GroupID");
+
+                    if (colName == -1 || colGroupID == -1)
+                    {
+                        lblImportStatus.Text = "Missing required columns in CSV.";
+                        lblImportStatus.CssClass = "alert alert-danger d-block";
+                        return;
+                    }
+
+                    int insertCount = 0;
+                    int skipCount = 0;
+                    int lineNo = 1;
+                    var errorMessages = new List<string>();
+
+                    while (!reader.EndOfStream)
+                    {
+                        string line = reader.ReadLine();
+                        lineNo++;
+
+                        if (string.IsNullOrWhiteSpace(line)) continue;
+
+                        var values = line.Split(',');
+
+                        try
+                        {
+                            string rawName = values[colName].Trim();
+                            string rawGroupID = values[colGroupID].Trim();
+
+                            if (string.IsNullOrWhiteSpace(rawName))
+                                throw new Exception("SubGroup Name is required.");
+
+                            if (!int.TryParse(rawGroupID, out int groupId))
+                                throw new Exception($"Invalid GroupID '{rawGroupID}'.");
+
+                            if (!_context.Groups.Any(g => g.GroupID == groupId))
+                                throw new Exception($"GroupID '{groupId}' not found in database.");
+
+                            var existing = _context.SubGroups
+                                .FirstOrDefault(sg => sg.Name == rawName && sg.GroupID == groupId);
+
+                            if (existing != null)
+                            {
+                                // Already exists – skip or update
+                                skipCount++;
+                                continue;
+                            }
+
+                            var subGroup = new Models.SubGroup
+                            {
+                                Name = rawName,
+                                GroupID = groupId,
+                                CreatedAt = DateTime.Now
+                            };
+
+                            _context.SubGroups.Add(subGroup);
+                            insertCount++;
+                        }
+                        catch (Exception ex)
+                        {
+                            errorMessages.Add($"Line {lineNo}: {ex.Message}");
+                        }
+                    }
+
+                    _context.SaveChanges();
+
+                    lblImportStatus.Text = $"Import completed: {insertCount} added, {skipCount} duplicates skipped.";
+                    lblImportStatus.CssClass = "alert alert-success mt-3 d-block";
+
+                    if (errorMessages.Any())
+                    {
+                        lblImportStatus.Text += "<br><b>Errors:</b><br>" +
+                            string.Join("<br>", errorMessages.Take(10)) +
+                            (errorMessages.Count > 10 ? "<br>...and more." : "");
+                    }
+
+                    LoadSubGroups(txtSearch.Text.Trim());
+                }
+            }
+            catch (Exception ex)
+            {
+                lblImportStatus.Text = $"Import failed: {ex.Message}";
+                lblImportStatus.CssClass = "alert alert-danger mt-3 d-block";
+            }
         }
     }
 }

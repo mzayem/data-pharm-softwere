@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Web.Services.Description;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -22,6 +23,7 @@ namespace data_pharm_softwere.Pages.Division
                 LoadDivisions();
             }
         }
+
         protected void Page_Init(object sender, EventArgs e)
         {
             ImportInfoControl.DownloadRequested += ImportInfoControl_DownloadRequested;
@@ -205,8 +207,7 @@ namespace data_pharm_softwere.Pages.Division
             // Optional: Not used because dropdown handles actions
         }
 
-        //Import functions
-
+        //Import System
         //Sample file
         private void ImportInfoControl_DownloadRequested(object sender, EventArgs e)
         {
@@ -242,10 +243,9 @@ namespace data_pharm_softwere.Pages.Division
                         return;
                     }
 
-                    var headers = headerLine.Split(',').Select(h => h.Trim().ToLower()).ToList();
-
-                    int colName = headers.IndexOf("name");
-                    int colVendorID = headers.IndexOf("vendorid");
+                    var headers = headerLine.Split(',').Select(h => h.Trim()).ToList();
+                    int colName = headers.IndexOf("Name");
+                    int colVendorID = headers.IndexOf("VendorID");
 
                     if (colName == -1 || colVendorID == -1)
                     {
@@ -254,9 +254,9 @@ namespace data_pharm_softwere.Pages.Division
                         return;
                     }
 
-                    int lineNo = 1;
                     int insertCount = 0;
-                    int updateCount = 0;
+                    int skipCount = 0;
+                    int lineNo = 1;
                     var errorMessages = new List<string>();
 
                     while (!reader.EndOfStream)
@@ -270,38 +270,37 @@ namespace data_pharm_softwere.Pages.Division
 
                         try
                         {
-                            string name = values[colName].Trim();
-                            string rawVendorId = values[colVendorID].Trim();
+                            string rawName = values[colName].Trim();
+                            string rawVendorID = values[colVendorID].Trim();
 
-                            if (string.IsNullOrWhiteSpace(name))
+                            if (string.IsNullOrWhiteSpace(rawName))
                                 throw new Exception("Division Name is required.");
 
-                            if (!int.TryParse(rawVendorId, out int vendorId))
-                                throw new Exception($"Invalid VendorID '{rawVendorId}'.");
+                            if (!int.TryParse(rawVendorID, out int vendorId))
+                                throw new Exception($"Invalid VendorID '{rawVendorID}'.");
 
                             if (!_context.Vendors.Any(v => v.VendorID == vendorId))
-                                throw new Exception($"VendorID '{vendorId}' not found in DB.");
+                                throw new Exception($"VendorID '{vendorId}' not found in database.");
 
-                            var existing = _context.Divisions.FirstOrDefault(d => d.Name == name && d.VendorID == vendorId);
+                            var existing = _context.Divisions
+                                .FirstOrDefault(d => d.Name == rawName && d.VendorID == vendorId);
 
                             if (existing != null)
                             {
-                                // Update existing (optional)
-                                existing.Name = name;
-                                updateCount++;
+                                // Already exists – skip or update logic
+                                skipCount++;
+                                continue;
                             }
-                            else
-                            {
-                                var division = new Models.Division
-                                {
-                                    Name = name,
-                                    VendorID = vendorId,
-                                    CreatedAt = DateTime.Now
-                                };
 
-                                _context.Divisions.Add(division);
-                                insertCount++;
-                            }
+                            var division = new Models.Division
+                            {
+                                Name = rawName,
+                                VendorID = vendorId,
+                                CreatedAt = DateTime.Now
+                            };
+
+                            _context.Divisions.Add(division);
+                            insertCount++;
                         }
                         catch (Exception ex)
                         {
@@ -311,17 +310,17 @@ namespace data_pharm_softwere.Pages.Division
 
                     _context.SaveChanges();
 
-                    lblImportStatus.Text = $"Import completed: {insertCount} added, {updateCount} updated.";
+                    lblImportStatus.Text = $"Import completed: {insertCount} added, {skipCount} duplicates skipped.";
                     lblImportStatus.CssClass = "alert alert-success mt-3 d-block";
 
                     if (errorMessages.Any())
                     {
-                        lblImportStatus.Text += "<br>Errors:<br>" +
+                        lblImportStatus.Text += "<br><b>Errors:</b><br>" +
                             string.Join("<br>", errorMessages.Take(10)) +
                             (errorMessages.Count > 10 ? "<br>...and more." : "");
                     }
 
-                    LoadDivisions(); // If you have a method to reload the list
+                    LoadDivisions(txtSearch.Text.Trim());
                 }
             }
             catch (Exception ex)
