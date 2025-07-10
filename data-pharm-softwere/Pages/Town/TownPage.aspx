@@ -98,21 +98,21 @@
         </ContentTemplate>
     </asp:UpdatePanel>
 </div>
-            <script>
+    <script>
         function triggerFileInput() {
             document.getElementById('<%= fuCSV.ClientID %>').click();
-}
+        }
 
         function submitImport() {
             document.getElementById('<%= btnHiddenSubmit.ClientID %>').click();
-                }
+         }
 
-                // Enable Bootstrap Tooltip
-                document.addEventListener('DOMContentLoaded', function () {
-                    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-                    tooltipTriggerList.forEach(function (tooltipTriggerEl) {
-                        new bootstrap.Tooltip(tooltipTriggerEl);
-                    });
+         // Enable Bootstrap Tooltip
+         document.addEventListener('DOMContentLoaded', function () {
+             var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+             tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+              new bootstrap.Tooltip(tooltipTriggerEl);
+             });
          });
-            </script>
+     </script>
 </asp:Content>

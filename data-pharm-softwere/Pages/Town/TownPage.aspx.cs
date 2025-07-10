@@ -19,10 +19,12 @@ namespace data_pharm_softwere.Pages.Town
                 LoadCityRoutes();
             }
         }
+
         protected void Page_Init(object sender, EventArgs e)
         {
             ImportInfoControl.DownloadRequested += ImportInfoControl_DownloadRequested;
         }
+
         private void LoadCityRoutes()
         {
             var routes = _context.CityRoutes
@@ -77,7 +79,6 @@ namespace data_pharm_softwere.Pages.Town
             gvBatches.DataSource = sortedList;
             gvBatches.DataBind();
         }
-
 
         protected void txtSearch_TextChanged(object sender, EventArgs e)
         {
@@ -142,6 +143,7 @@ namespace data_pharm_softwere.Pages.Town
                 }
             }
         }
+
         //Import functions
 
         //Sample file
