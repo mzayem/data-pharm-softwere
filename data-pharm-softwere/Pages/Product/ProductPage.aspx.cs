@@ -2,6 +2,7 @@
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
@@ -24,6 +25,11 @@ namespace data_pharm_softwere.Pages.Product
                 LoadSubGroups();
                 LoadProducts();
             }
+        }
+
+        protected void Page_Init(object sender, EventArgs e)
+        {
+            ImportInfoControl.DownloadRequested += ImportInfoControl_DownloadRequested;
         }
 
         private void LoadProducts(string search = "")
@@ -417,7 +423,7 @@ namespace data_pharm_softwere.Pages.Product
                     table.AddCell(new Phrase(p.UnReqGST.ToString() + "%", bodyFont));
                     table.AddCell(new Phrase(p.IsAdvTaxExempted ? "Yes" : "No", bodyFont));
                     table.AddCell(new Phrase(p.IsGSTExempted ? "Yes" : "No", bodyFont));
-                    table.AddCell(new Phrase(p.SubGroup?.Group ?.Division?.Vendor?.Name ?? "-", bodyFont));
+                    table.AddCell(new Phrase(p.SubGroup?.Group?.Division?.Vendor?.Name ?? "-", bodyFont));
                     table.AddCell(new Phrase(p.SubGroup?.Group?.Name ?? "-", bodyFont));
                     table.AddCell(new Phrase(p.SubGroup?.Name ?? "-", bodyFont));
                 }
@@ -455,8 +461,175 @@ namespace data_pharm_softwere.Pages.Product
             }
         }
 
-        protected void gvProducts_RowCommand(object sender, GridViewCommandEventArgs e)
+        private void ImportInfoControl_DownloadRequested(object sender, EventArgs e)
         {
+            Response.Clear();
+            Response.ContentType = "text/csv";
+            Response.AddHeader("Content-Disposition", "attachment;filename=product_sample.csv");
+
+            Response.Write("Name,SubGroupID,ProductCode,HSCode,PackingType,ProductType,PackingSize,CartonSize,UOM,PurchaseDiscount,ReqGST,UnReqGST,IsAdvTaxExempted,IsGSTExempted\r\n");
+            Response.Write("Aspirin,2,1234,5678,Bottle,Tablet,500mg,20,Box,5,17,0,Yes,No\r\n");
+
+            Response.End();
+        }
+
+        protected void btnImport_Click(object sender, EventArgs e)
+        {
+            if (!fuCSV.HasFile || !fuCSV.FileName.EndsWith(".csv"))
+            {
+                lblImportStatus.Text = "Please upload a valid CSV file.";
+                lblImportStatus.CssClass = "alert alert-danger d-block";
+                return;
+            }
+            try
+            {
+                using (var reader = new StreamReader(fuCSV.FileContent))
+                {
+                    string headerLine = reader.ReadLine();
+                    if (string.IsNullOrWhiteSpace(headerLine))
+                    {
+                        lblImportStatus.Text = "CSV file is empty.";
+                        lblImportStatus.CssClass = "alert alert-danger d-block";
+                        return;
+                    }
+
+                    var headers = headerLine.Split(',').Select(h => h.Trim()).ToList();
+
+                    // Required fields
+                    int colName = headers.IndexOf("Name");
+                    int colSubGroupID = headers.IndexOf("SubGroupID");
+                    int colProductCode = headers.IndexOf("ProductCode");
+                    int colHSCode = headers.IndexOf("HSCode");
+                    int colPackingType = headers.IndexOf("PackingType");
+                    int colProductType = headers.IndexOf("ProductType");
+                    int colPackingSize = headers.IndexOf("PackingSize");
+                    int colCartonSize = headers.IndexOf("CartonSize");
+                    int colUOM = headers.IndexOf("UOM");
+                    int colPurchaseDiscount = headers.IndexOf("PurchaseDiscount");
+                    int colReqGST = headers.IndexOf("ReqGST");
+                    int colUnReqGST = headers.IndexOf("UnReqGST");
+                    int colIsAdvTaxExempted = headers.IndexOf("IsAdvTaxExempted");
+                    int colIsGSTExempted = headers.IndexOf("IsGSTExempted");
+
+                    if (colName == -1 || colSubGroupID == -1)
+                    {
+                        lblImportStatus.Text = "Missing required columns: Name and SubGroupID.";
+                        lblImportStatus.CssClass = "alert alert-danger d-block";
+                        return;
+                    }
+
+                    int insertCount = 0;
+                    int updateCount = 0;
+                    var errorMessages = new List<string>();
+                    int lineNo = 1;
+
+                    while (!reader.EndOfStream)
+                    {
+                        string line = reader.ReadLine();
+                        lineNo++;
+                        if (string.IsNullOrWhiteSpace(line)) continue;
+
+                        var fields = line.Split(',');
+
+                        try
+                        {
+                            string rawName = SafeGet(fields, colName);
+                            string rawSubGroupID = SafeGet(fields, colSubGroupID);
+
+                            if (string.IsNullOrWhiteSpace(rawName))
+                                throw new Exception("Name is required.");
+
+                            if (!int.TryParse(rawSubGroupID, out int subGroupId))
+                                throw new Exception("SubGroupID is invalid.");
+
+                            if (!_context.SubGroups.Any(sg => sg.SubGroupID == subGroupId))
+                                throw new Exception($"SubGroupID '{subGroupId}' does not exist.");
+
+                            var existing = _context.Products
+                                .FirstOrDefault(p => p.Name == rawName && p.SubGroupID == subGroupId);
+
+                            if (existing != null)
+                            {
+                                if (colProductCode != -1 && long.TryParse(SafeGet(fields, colProductCode), out long code)) existing.ProductCode = code;
+                                if (colHSCode != -1 && int.TryParse(SafeGet(fields, colHSCode), out int hs)) existing.HSCode = hs;
+                                if (colPackingType != -1 && Enum.TryParse(SafeGet(fields, colPackingType), true, out Models.PackingType packing)) existing.PackingType = packing;
+                                if (colProductType != -1 && Enum.TryParse(SafeGet(fields, colProductType), true, out Models.ProductType type)) existing.Type = type;
+                                if (colPackingSize != -1) existing.PackingSize = SafeGet(fields, colPackingSize);
+                                if (colCartonSize != -1 && int.TryParse(SafeGet(fields, colCartonSize), out int carton)) existing.CartonSize = carton;
+                                if (colUOM != -1) existing.Uom = SafeGet(fields, colUOM);
+                                if (colPurchaseDiscount != -1 && decimal.TryParse(SafeGet(fields, colPurchaseDiscount), out decimal disc)) existing.PurchaseDiscount = disc;
+                                if (colReqGST != -1 && decimal.TryParse(SafeGet(fields, colReqGST), out decimal reqgst)) existing.ReqGST = reqgst;
+                                if (colUnReqGST != -1 && decimal.TryParse(SafeGet(fields, colUnReqGST), out decimal unreqgst)) existing.UnReqGST = unreqgst;
+                                if (colIsAdvTaxExempted != -1) existing.IsAdvTaxExempted = ParseBool(SafeGet(fields, colIsAdvTaxExempted));
+                                if (colIsGSTExempted != -1) existing.IsGSTExempted = ParseBool(SafeGet(fields, colIsGSTExempted));
+
+                                existing.UpdatedAt = DateTime.Now;
+                                updateCount++;
+                            }
+                            else
+                            {
+                                var newProduct = new Models.Product
+                                {
+                                    Name = rawName,
+                                    SubGroupID = subGroupId,
+                                    CreatedAt = DateTime.Now,
+                                    ProductCode = (colProductCode != -1 && long.TryParse(SafeGet(fields, colProductCode), out long code)) ? code : 0,
+                                    HSCode = (colHSCode != -1 && int.TryParse(SafeGet(fields, colHSCode), out int hs)) ? hs : 0,
+                                    PackingType = (colPackingType != -1 && Enum.TryParse(SafeGet(fields, colPackingType), true, out Models.PackingType packing)) ? packing : Models.PackingType.Tablet,
+                                    Type = (colProductType != -1 && Enum.TryParse(SafeGet(fields, colProductType), true, out Models.ProductType type)) ? type : Models.ProductType.Medicine,
+                                    PackingSize = colPackingSize != -1 ? SafeGet(fields, colPackingSize) : "-",
+                                    CartonSize = (colCartonSize != -1 && int.TryParse(SafeGet(fields, colCartonSize), out int carton)) ? carton : 0,
+                                    Uom = colUOM != -1 ? SafeGet(fields, colUOM) : "-",
+                                    PurchaseDiscount = (colPurchaseDiscount != -1 && decimal.TryParse(SafeGet(fields, colPurchaseDiscount), out decimal disc)) ? disc : 0,
+                                    ReqGST = (colReqGST != -1 && decimal.TryParse(SafeGet(fields, colReqGST), out decimal reqgst)) ? reqgst : 0,
+                                    UnReqGST = (colUnReqGST != -1 && decimal.TryParse(SafeGet(fields, colUnReqGST), out decimal unreqgst)) ? unreqgst : 0,
+                                    IsAdvTaxExempted = (colIsAdvTaxExempted != -1) && ParseBool(SafeGet(fields, colIsAdvTaxExempted)),
+                                    IsGSTExempted = (colIsGSTExempted != -1) && ParseBool(SafeGet(fields, colIsGSTExempted))
+                                };
+
+                                _context.Products.Add(newProduct);
+                                insertCount++;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            errorMessages.Add($"Line {lineNo}: {ex.Message}");
+                        }
+                    }
+
+                    _context.SaveChanges();
+
+                    lblImportStatus.Text = $"Import completed: {insertCount} added, {updateCount} updated.";
+                    lblImportStatus.CssClass = "alert alert-success mt-3 d-block";
+
+                    if (errorMessages.Any())
+                    {
+                        lblImportStatus.Text += "<br><b>Errors:</b><br>" +
+                            string.Join("<br>", errorMessages.Take(10)) +
+                            (errorMessages.Count > 10 ? "<br>...and more." : "");
+                    }
+
+                    LoadProducts(txtSearch.Text.Trim());
+                }
+            }
+            catch (Exception ex)
+            {
+                lblImportStatus.Text = $"Import failed: {ex.Message}";
+                lblImportStatus.CssClass = "alert alert-danger mt-3 d-block";
+            }
+        }
+
+        private string SafeGet(string[] arr, int index)
+        {
+            return index >= 0 && index < arr.Length ? arr[index].Trim() : null;
+        }
+
+        private bool ParseBool(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input)) return false;
+
+            input = input.Trim().ToLower();
+            return input == "yes" || input == "true" || input == "1";
         }
     }
 }

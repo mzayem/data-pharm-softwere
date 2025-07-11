@@ -1,31 +1,55 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Pages/Layout.Master" EnableEventValidation="false" AutoEventWireup="true" CodeBehind="ProductPage.aspx.cs" Inherits="data_pharm_softwere.Pages.Product.ProductPage" %>
+<%@ Register TagPrefix="uc" TagName="ImportInfo" Src="~/Components/Control/ImportInfo.ascx" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <asp:ScriptManager ID="ScriptManager1" runat="server" />
+    <uc:ImportInfo ID="ImportInfoControl" runat="server" ImportContext="product" />
+
+
     <div class="container mt-4">
         <h2 class="mb-3">Product List</h2>
+        <asp:Label ID="lblImportStatus" runat="server" CssClass="d-none" EnableViewState="false" />
 
-        <asp:HyperLink 
-            ID="btnCreateProduct" 
-            runat="server" 
-            NavigateUrl="/product/create"
-            CssClass="btn btn-primary mb-3">
-            + Add New Product
-        </asp:HyperLink>
-        
-        <asp:Button 
-            ID="btnExportExcel" 
-            runat="server" 
-            CssClass="btn btn-success mb-3 ms-2" 
-            Text="Export to Excel" 
-            OnClick="btnExportExcel_Click" />
-        <asp:Button 
-            ID="btnExportPdf" 
-            runat="server" 
-            CssClass="btn btn-danger mb-3 ms-2" 
-            Text="Export to PDF" 
-            OnClick="btnExportPdf_Click" />
+        <div class="d-flex justify-content-between mb-3">
+            <!-- Add New Batch -->
+            <div>
+                <asp:HyperLink 
+                    ID="btnCreateProduct" 
+                    runat="server" 
+                    NavigateUrl="/product/create"
+                    CssClass="btn btn-primary mb-3">
+                    + Add New Product
+               </asp:HyperLink>
 
+                <asp:Button 
+                    ID="btnExportExcel" 
+                    runat="server" 
+                    CssClass="btn btn-success mb-3 ms-2" 
+                    Text="Export to Excel" 
+                    OnClick="btnExportExcel_Click" />
+                <asp:Button 
+                    ID="btnExportPdf" 
+                    runat="server" 
+                    CssClass="btn btn-danger mb-3 ms-2" 
+                    Text="Export to PDF" 
+                    OnClick="btnExportPdf_Click" />
+            </div>
 
+            <div class="d-flex gap-2 align-items-start">
+                <!-- Help Icon with Tooltip -->
+                <button type="button" 
+                        class="btn btn-link p-0 m-0 border-0 text-dark" 
+                        data-bs-toggle="modal" 
+                        data-bs-target="#ImportInfo">
+                    <i class="bi bi-info-circle fs-4" data-bs-toggle="tooltip" title="Need Help!"></i>
+                </button>
+
+                <asp:FileUpload ID="fuCSV" runat="server" CssClass="d-none" onchange="submitImport()" accept=".csv"/>
+                <asp:Button ID="btnImport" runat="server" Text="Import CSV" CssClass="btn btn-success" OnClientClick="triggerFileInput(); return false;" />
+                <asp:Button ID="btnHiddenSubmit" runat="server" CssClass="d-none" OnClick="btnImport_Click" />
+
+            </div>
+        </div>
 
         <asp:UpdatePanel ID="UpdatePanel1" runat="server">
             <ContentTemplate>
@@ -75,7 +99,7 @@
                     runat="server" 
                     AutoGenerateColumns="False"
                     CssClass="table table-bordered table-hover" 
-                    OnRowCommand="gvProducts_RowCommand" 
+                  
                     OnRowDataBound="gvProducts_RowDataBound"
                     EmptyDataText="No Product Found">
 
@@ -114,7 +138,22 @@
                 </asp:GridView>
             </ContentTemplate>
         </asp:UpdatePanel>
-        
-
     </div>
+    <script>
+        function triggerFileInput() {
+            document.getElementById('<%= fuCSV.ClientID %>').click();
+        }
+
+        function submitImport() {
+            document.getElementById('<%= btnHiddenSubmit.ClientID %>').click();
+         }
+
+         // Enable Bootstrap Tooltip
+         document.addEventListener('DOMContentLoaded', function () {
+             var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+             tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+              new bootstrap.Tooltip(tooltipTriggerEl);
+             });
+         });
+    </script>
 </asp:Content>
