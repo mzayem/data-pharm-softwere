@@ -29,6 +29,11 @@ namespace data_pharm_softwere.Pages.Customer
             }
         }
 
+        protected void Page_Init(object sender, EventArgs e)
+        {
+            ImportInfoControl.DownloadRequested += ImportInfoControl_DownloadRequested;
+        }
+
         private void LoadCityRoutes()
         {
             ddlCityRoute.DataSource = _context.CityRoutes.OrderBy(r => r.Name).ToList();
@@ -424,6 +429,220 @@ namespace data_pharm_softwere.Pages.Customer
                 Response.BinaryWrite(memoryStream.ToArray());
                 Response.End();
             }
+        }
+
+        //Import System
+
+        //sample data
+        private void ImportInfoControl_DownloadRequested(object sender, EventArgs e)
+        {
+            Response.Clear();
+            Response.ContentType = "text/csv";
+            Response.AddHeader("Content-Disposition", "attachment;filename=customer_sample.csv");
+
+            Response.Write("Name,Email,Contact,CNIC,Address,TownID,LicenceNo,PartyType,NtnNo,NorcoticsSaleAllowed,InActive,IsAdvTaxExempted,FbrInActiveGST,FBRInActiveTax236H\r\n");
+            Response.Write("Customer 1,ali@example.com,03001234567,31234-1234567-1,123 Street,2,LN-1023,Pharmacy,1234567-8,false,yes,no,no,yes\r\n");
+
+            Response.End();
+        }
+
+        protected void btnImport_Click(object sender, EventArgs e)
+        {
+            if (!fuCSV.HasFile || !fuCSV.FileName.EndsWith(".csv"))
+            {
+                lblImportStatus.Text = "Please upload a valid CSV file.";
+                lblImportStatus.CssClass = "alert alert-danger d-block";
+                return;
+            }
+
+            try
+            {
+                using (var reader = new StreamReader(fuCSV.FileContent))
+                {
+                    string headerLine = reader.ReadLine();
+                    if (string.IsNullOrWhiteSpace(headerLine))
+                    {
+                        lblImportStatus.Text = "CSV file is empty.";
+                        lblImportStatus.CssClass = "alert alert-danger d-block";
+                        return;
+                    }
+
+                    var headers = headerLine.Split(',').Select(h => h.Trim()).ToList();
+
+                    // Required
+                    int colName = headers.IndexOf("Name");
+                    int colContact = headers.IndexOf("Contact");
+                    int colCNIC = headers.IndexOf("CNIC");
+                    int colAddress = headers.IndexOf("Address");
+                    int colTownID = headers.IndexOf("TownID");
+                    int colPartyType = headers.IndexOf("PartyType");
+                    int colNtnNo = headers.IndexOf("NtnNo");
+                    int colEmail = headers.IndexOf("Email");
+                    int colLicenceNo = headers.IndexOf("LicenceNo");
+                    int colNorcoticsSaleAllowed = headers.IndexOf("NorcoticsSaleAllowed");
+                    int colInActive = headers.IndexOf("InActive");
+                    int colIsAdvTaxExempted = headers.IndexOf("IsAdvTaxExempted");
+                    int colFbrInActiveGST = headers.IndexOf("FbrInActiveGST");
+                    int colFBRInActiveTax236H = headers.IndexOf("FBRInActiveTax236H");
+
+                    if (colName == -1 || colContact == -1 || colCNIC == -1 || colAddress == -1 || colTownID == -1 || colPartyType == -1 || colNtnNo == -1)
+                    {
+                        lblImportStatus.Text = "Missing required columns.";
+                        lblImportStatus.CssClass = "alert alert-danger d-block";
+                        return;
+                    }
+
+                    int insertCount = 0, updateCount = 0, lineNo = 1;
+                    var errorMessages = new List<string>();
+
+                    while (!reader.EndOfStream)
+                    {
+                        string line = reader.ReadLine();
+                        lineNo++;
+                        if (string.IsNullOrWhiteSpace(line)) continue;
+
+                        var fields = line.Split(',');
+
+                        try
+                        {
+                            string name = SafeGet(fields, colName);
+                            string contact = SafeGet(fields, colContact);
+                            string cnic = SafeGet(fields, colCNIC);
+                            string address = SafeGet(fields, colAddress);
+                            string rawTownID = SafeGet(fields, colTownID);
+                            string rawPartyType = SafeGet(fields, colPartyType);
+                            string ntnNo = SafeGet(fields, colNtnNo);
+
+                            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(contact) ||
+                                string.IsNullOrWhiteSpace(cnic) || string.IsNullOrWhiteSpace(address) ||
+                                string.IsNullOrWhiteSpace(rawTownID) || string.IsNullOrWhiteSpace(rawPartyType) ||
+                                string.IsNullOrWhiteSpace(ntnNo))
+                                throw new Exception("One or more required fields are missing.");
+
+                            if (!int.TryParse(rawTownID, out int townId) || !_context.Towns.Any(t => t.TownID == townId))
+                                throw new Exception("Invalid or non-existing TownID.");
+
+                            PartyType partyType = ParsePartyType(rawPartyType);
+
+                            // Check if customer exists
+                            var existing = _context.Customers
+                                .FirstOrDefault(c => c.Name == name && c.CNIC == cnic && c.TownID == townId);
+
+                            if (existing != null)
+                            {
+                                existing.Contact = contact;
+                                existing.Address = address;
+                                existing.NtnNo = ntnNo;
+                                existing.PartyType = partyType;
+
+                                if (colEmail != -1) existing.Email = SafeGet(fields, colEmail);
+                                if (colLicenceNo != -1) existing.LicenceNo = SafeGet(fields, colLicenceNo);
+                                if (colNorcoticsSaleAllowed != -1) existing.NorcoticsSaleAllowed = ParseBool(SafeGet(fields, colNorcoticsSaleAllowed));
+                                if (colInActive != -1) existing.InActive = ParseBool(SafeGet(fields, colInActive));
+                                if (colIsAdvTaxExempted != -1) existing.IsAdvTaxExempted = ParseBool(SafeGet(fields, colIsAdvTaxExempted));
+                                if (colFbrInActiveGST != -1) existing.FbrInActiveGST = ParseBool(SafeGet(fields, colFbrInActiveGST));
+                                if (colFBRInActiveTax236H != -1) existing.FBRInActiveTax236H = ParseBool(SafeGet(fields, colFBRInActiveTax236H));
+
+                                updateCount++;
+                            }
+                            else
+                            {
+                                var newCustomer = new Models.Customer
+                                {
+                                    Name = name,
+                                    Contact = contact,
+                                    CNIC = cnic,
+                                    Address = address,
+                                    TownID = townId,
+                                    PartyType = partyType,
+                                    NtnNo = ntnNo,
+                                    Email = colEmail != -1 ? SafeGet(fields, colEmail) : null,
+                                    LicenceNo = colLicenceNo != -1 ? SafeGet(fields, colLicenceNo) : null,
+                                    NorcoticsSaleAllowed = colNorcoticsSaleAllowed != -1 && ParseBool(SafeGet(fields, colNorcoticsSaleAllowed)),
+                                    InActive = colInActive != -1 && ParseBool(SafeGet(fields, colInActive)),
+                                    IsAdvTaxExempted = colIsAdvTaxExempted != -1 && ParseBool(SafeGet(fields, colIsAdvTaxExempted)),
+                                    FbrInActiveGST = colFbrInActiveGST != -1 && ParseBool(SafeGet(fields, colFbrInActiveGST)),
+                                    FBRInActiveTax236H = colFBRInActiveTax236H != -1 && ParseBool(SafeGet(fields, colFBRInActiveTax236H)),
+                                    CreatedAt = DateTime.Now
+                                };
+
+                                _context.Customers.Add(newCustomer);
+                                insertCount++;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            errorMessages.Add($"Line {lineNo}: {ex.Message}");
+                        }
+                    }
+
+                    _context.SaveChanges();
+
+                    lblImportStatus.Text = $"Import completed: {insertCount} added, {updateCount} updated.";
+                    lblImportStatus.CssClass = "alert alert-success mt-3 d-block";
+
+                    if (errorMessages.Any())
+                    {
+                        lblImportStatus.Text += "<br><b>Errors:</b><br>" +
+                            string.Join("<br>", errorMessages.Take(10)) +
+                            (errorMessages.Count > 10 ? "<br>...and more." : "");
+                    }
+
+                    LoadCustomers(txtSearch.Text.Trim());
+                }
+            }
+            catch (Exception ex)
+            {
+                lblImportStatus.Text = $"Import failed: {ex.Message}";
+                lblImportStatus.CssClass = "alert alert-danger mt-3 d-block";
+            }
+        }
+
+        private string SafeGet(string[] arr, int index)
+        {
+            return index >= 0 && index < arr.Length ? arr[index].Trim() : null;
+        }
+
+        private bool ParseBool(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input)) return false;
+            input = input.Trim().ToLower();
+            return input == "yes" || input == "true" || input == "1";
+        }
+
+        private PartyType ParsePartyType(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+                throw new Exception("PartyType is required.");
+
+            // Normalize: lowercase, remove spaces, slashes, hyphens
+            string normalizedInput = input.Trim().ToLower()
+                .Replace(" ", "")
+                .Replace("/", "")
+                .Replace("-", "");
+
+            foreach (PartyType pt in Enum.GetValues(typeof(PartyType)))
+            {
+                string enumName = pt.ToString().ToLower();
+
+                if (normalizedInput == enumName.ToLower())
+                {
+                    return pt;
+                }
+
+                // Also normalize enum name
+                string normalizedEnum = enumName
+                    .Replace(" ", "")
+                    .Replace("/", "")
+                    .Replace("-", "");
+
+                if (normalizedInput == normalizedEnum)
+                {
+                    return pt;
+                }
+            }
+
+            throw new Exception($"Invalid PartyType: '{input}'");
         }
     }
 }

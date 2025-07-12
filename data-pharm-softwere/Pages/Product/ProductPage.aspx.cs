@@ -461,6 +461,9 @@ namespace data_pharm_softwere.Pages.Product
             }
         }
 
+        //Import System
+
+        //sample data
         private void ImportInfoControl_DownloadRequested(object sender, EventArgs e)
         {
             Response.Clear();

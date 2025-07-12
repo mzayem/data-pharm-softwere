@@ -11,13 +11,28 @@
 
         <div class="d-flex justify-content-between mb-3">
             <!-- Add New Batch -->
-            <asp:HyperLink 
-                ID="btnCreateVendor" 
-                runat="server" 
-                NavigateUrl="/vendor/create"
-                CssClass="btn btn-primary mb-3">
-                + Add New Vendor
-            </asp:HyperLink>
+            <div>
+                <asp:HyperLink 
+                    ID="btnCreateVendor" 
+                    runat="server" 
+                    NavigateUrl="/vendor/create"
+                    CssClass="btn btn-primary mb-3">
+                    + Add New Vendor
+                </asp:HyperLink>
+
+                <asp:Button 
+                    ID="btnExportExcel" 
+                    runat="server"  
+                    CssClass="btn btn-success mb-3 ms-2" 
+                    Text="Export as Excel" 
+                    OnClick="btnExportExcel_Click" />
+                <asp:Button 
+                    ID="btnExportPdf" 
+                    runat="server" 
+                    CssClass="btn btn-danger mb-3 ms-2"
+                    Text="Export as PDF" 
+                    OnClick="btnExportPdf_Click"/>
+            </div>
 
             <div class="d-flex gap-2 align-items-start">
                 <!-- Help Icon with Tooltip -->
@@ -85,20 +100,6 @@
                         </asp:TemplateField>
                     </Columns>
                 </asp:GridView>
-
-                <asp:Button 
-                    ID="btnExportPdf" 
-                    runat="server" 
-                    CssClass="btn btn-dark mt-3"
-                    Text="Export as PDF" 
-                    OnClick="btnExportPdf_Click" />
-
-                <asp:Button 
-                    ID="btnExportExcel" 
-                    runat="server" 
-                    CssClass="btn btn-success mt-3 ms-2"
-                    Text="Export as Excel" 
-                    OnClick="btnExportExcel_Click" />
 
             </ContentTemplate>
 

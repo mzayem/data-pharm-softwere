@@ -24,6 +24,24 @@ namespace data_pharm_softwere.Pages.Customer
         protected global::System.Web.UI.ScriptManager ScriptManager1;
 
         /// <summary>
+        /// ImportInfoControl control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::data_pharm_softwere.Components.Control.ImportInfo ImportInfoControl;
+
+        /// <summary>
+        /// lblImportStatus control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblImportStatus;
+
+        /// <summary>
         /// btnCreateProduct control.
         /// </summary>
         /// <remarks>
@@ -49,6 +67,33 @@ namespace data_pharm_softwere.Pages.Customer
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnExportPdf;
+
+        /// <summary>
+        /// fuCSV control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.FileUpload fuCSV;
+
+        /// <summary>
+        /// btnImport control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnImport;
+
+        /// <summary>
+        /// btnHiddenSubmit control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnHiddenSubmit;
 
         /// <summary>
         /// UpdatePanel1 control.

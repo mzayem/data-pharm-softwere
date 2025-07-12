@@ -51,6 +51,24 @@ namespace data_pharm_softwere.Pages.Vendor
         protected global::System.Web.UI.WebControls.HyperLink btnCreateVendor;
 
         /// <summary>
+        /// btnExportExcel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnExportExcel;
+
+        /// <summary>
+        /// btnExportPdf control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnExportPdf;
+
+        /// <summary>
         /// fuCSV control.
         /// </summary>
         /// <remarks>
@@ -103,23 +121,5 @@ namespace data_pharm_softwere.Pages.Vendor
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.GridView gvVendors;
-
-        /// <summary>
-        /// btnExportPdf control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnExportPdf;
-
-        /// <summary>
-        /// btnExportExcel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnExportExcel;
     }
 }
