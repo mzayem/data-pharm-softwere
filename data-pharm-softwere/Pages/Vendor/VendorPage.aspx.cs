@@ -418,14 +418,18 @@ namespace data_pharm_softwere.Pages.Vendor
 
                     _context.SaveChanges();
 
-                    lblImportStatus.Text = $"Import complete: {insertCount} added, {updateCount} updated.";
-                    lblImportStatus.CssClass = "alert alert-success d-block";
-
                     if (errorMessages.Any())
                     {
-                        lblImportStatus.Text += "<br><b>Errors:</b><br>" +
+                        lblImportStatus.Text = $"Import completed: {insertCount} added, {updateCount} updated." +
+                            "<br><b>Errors:</b><br>" +
                             string.Join("<br>", errorMessages.Take(10)) +
                             (errorMessages.Count > 10 ? "<br>...and more." : "");
+                        lblImportStatus.CssClass = "alert alert-danger d-block";
+                    }
+                    else
+                    {
+                        lblImportStatus.Text = $"Import completed: {insertCount} added, {updateCount} updated.";
+                        lblImportStatus.CssClass = "alert alert-success mt-3 d-block";
                     }
 
                     LoadVendors(ViewState["VendorSearch"]?.ToString() ?? "");

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -578,14 +579,18 @@ namespace data_pharm_softwere.Pages.Customer
 
                     _context.SaveChanges();
 
-                    lblImportStatus.Text = $"Import completed: {insertCount} added, {updateCount} updated.";
-                    lblImportStatus.CssClass = "alert alert-success mt-3 d-block";
-
                     if (errorMessages.Any())
                     {
-                        lblImportStatus.Text += "<br><b>Errors:</b><br>" +
+                        lblImportStatus.Text = $"Import completed: {insertCount} added, {updateCount} updated." +
+                            "<br><b>Errors:</b><br>" +
                             string.Join("<br>", errorMessages.Take(10)) +
                             (errorMessages.Count > 10 ? "<br>...and more." : "");
+                        lblImportStatus.CssClass = "alert alert-danger d-block"; 
+                    }
+                    else
+                    {
+                        lblImportStatus.Text = $"Import completed: {insertCount} added, {updateCount} updated.";
+                        lblImportStatus.CssClass = "alert alert-success mt-3 d-block";
                     }
 
                     LoadCustomers(txtSearch.Text.Trim());
@@ -613,36 +618,20 @@ namespace data_pharm_softwere.Pages.Customer
         private PartyType ParsePartyType(string input)
         {
             if (string.IsNullOrWhiteSpace(input))
-                throw new Exception("PartyType is required.");
+                throw new ArgumentException("PartyType value is required.");
 
             // Normalize: lowercase, remove spaces, slashes, hyphens
-            string normalizedInput = input.Trim().ToLower()
-                .Replace(" ", "")
-                .Replace("/", "")
-                .Replace("-", "");
+            string cleaned = Regex.Replace(input, @"[\s\-_\/]", "", RegexOptions.Compiled).ToLowerInvariant();
 
-            foreach (PartyType pt in Enum.GetValues(typeof(PartyType)))
+            foreach (PartyType type in Enum.GetValues(typeof(PartyType)))
             {
-                string enumName = pt.ToString().ToLower();
-
-                if (normalizedInput == enumName.ToLower())
-                {
-                    return pt;
-                }
-
-                // Also normalize enum name
-                string normalizedEnum = enumName
-                    .Replace(" ", "")
-                    .Replace("/", "")
-                    .Replace("-", "");
-
-                if (normalizedInput == normalizedEnum)
-                {
-                    return pt;
-                }
+                string normalized = Regex.Replace(type.ToString(), @"[\s\-_\/]", "", RegexOptions.Compiled).ToLowerInvariant();
+                if (normalized == cleaned)
+                    return type;
             }
 
-            throw new Exception($"Invalid PartyType: '{input}'");
+            var validOptions = string.Join(", ", Enum.GetNames(typeof(PartyType)));
+            throw new ArgumentException($"Invalid PartyType: '{input}'. Valid values are: {validOptions}");
         }
     }
 }

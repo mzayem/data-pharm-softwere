@@ -1,4 +1,5 @@
 ﻿using data_pharm_softwere.Data;
+using data_pharm_softwere.Models;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System;
@@ -6,6 +7,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using WebListItem = System.Web.UI.WebControls.ListItem;
@@ -471,7 +473,7 @@ namespace data_pharm_softwere.Pages.Product
             Response.AddHeader("Content-Disposition", "attachment;filename=product_sample.csv");
 
             Response.Write("Name,SubGroupID,ProductCode,HSCode,PackingType,ProductType,PackingSize,CartonSize,UOM,PurchaseDiscount,ReqGST,UnReqGST,IsAdvTaxExempted,IsGSTExempted\r\n");
-            Response.Write("Aspirin,2,1234,5678,Bottle,Tablet,500mg,20,Box,5,17,0,Yes,No\r\n");
+            Response.Write("Aspirin,2,1234,5678,Syrup,Medicine,500mg,20,Box,5,17,0,Yes,No\r\n");
 
             Response.End();
         }
@@ -555,8 +557,10 @@ namespace data_pharm_softwere.Pages.Product
                             {
                                 if (colProductCode != -1 && long.TryParse(SafeGet(fields, colProductCode), out long code)) existing.ProductCode = code;
                                 if (colHSCode != -1 && int.TryParse(SafeGet(fields, colHSCode), out int hs)) existing.HSCode = hs;
-                                if (colPackingType != -1 && Enum.TryParse(SafeGet(fields, colPackingType), true, out Models.PackingType packing)) existing.PackingType = packing;
-                                if (colProductType != -1 && Enum.TryParse(SafeGet(fields, colProductType), true, out Models.ProductType type)) existing.Type = type;
+                                if (colPackingType != -1)
+                                    existing.PackingType = (PackingType)ParseProductEnum(SafeGet(fields, colPackingType), typeof(PackingType));
+                                if (colProductType != -1)
+                                    existing.Type = (ProductType)ParseProductEnum(SafeGet(fields, colProductType), typeof(ProductType));
                                 if (colPackingSize != -1) existing.PackingSize = SafeGet(fields, colPackingSize);
                                 if (colCartonSize != -1 && int.TryParse(SafeGet(fields, colCartonSize), out int carton)) existing.CartonSize = carton;
                                 if (colUOM != -1) existing.Uom = SafeGet(fields, colUOM);
@@ -578,8 +582,8 @@ namespace data_pharm_softwere.Pages.Product
                                     CreatedAt = DateTime.Now,
                                     ProductCode = (colProductCode != -1 && long.TryParse(SafeGet(fields, colProductCode), out long code)) ? code : 0,
                                     HSCode = (colHSCode != -1 && int.TryParse(SafeGet(fields, colHSCode), out int hs)) ? hs : 0,
-                                    PackingType = (colPackingType != -1 && Enum.TryParse(SafeGet(fields, colPackingType), true, out Models.PackingType packing)) ? packing : Models.PackingType.Tablet,
-                                    Type = (colProductType != -1 && Enum.TryParse(SafeGet(fields, colProductType), true, out Models.ProductType type)) ? type : Models.ProductType.Medicine,
+                                    PackingType = (colPackingType != -1) ? (PackingType)ParseProductEnum(SafeGet(fields, colPackingType), typeof(PackingType)) : PackingType.Tablet,
+                                    Type = (colProductType != -1) ? (ProductType)ParseProductEnum(SafeGet(fields, colProductType), typeof(ProductType)) : ProductType.Medicine,
                                     PackingSize = colPackingSize != -1 ? SafeGet(fields, colPackingSize) : "-",
                                     CartonSize = (colCartonSize != -1 && int.TryParse(SafeGet(fields, colCartonSize), out int carton)) ? carton : 0,
                                     Uom = colUOM != -1 ? SafeGet(fields, colUOM) : "-",
@@ -602,14 +606,18 @@ namespace data_pharm_softwere.Pages.Product
 
                     _context.SaveChanges();
 
-                    lblImportStatus.Text = $"Import completed: {insertCount} added, {updateCount} updated.";
-                    lblImportStatus.CssClass = "alert alert-success mt-3 d-block";
-
                     if (errorMessages.Any())
                     {
-                        lblImportStatus.Text += "<br><b>Errors:</b><br>" +
+                        lblImportStatus.Text = $"Import completed: {insertCount} added, {updateCount} updated." +
+                            "<br><b>Errors:</b><br>" +
                             string.Join("<br>", errorMessages.Take(10)) +
                             (errorMessages.Count > 10 ? "<br>...and more." : "");
+                        lblImportStatus.CssClass = "alert alert-danger d-block";
+                    }
+                    else
+                    {
+                        lblImportStatus.Text = $"Import completed: {insertCount} added, {updateCount} updated.";
+                        lblImportStatus.CssClass = "alert alert-success mt-3 d-block";
                     }
 
                     LoadProducts(txtSearch.Text.Trim());
@@ -633,6 +641,27 @@ namespace data_pharm_softwere.Pages.Product
 
             input = input.Trim().ToLower();
             return input == "yes" || input == "true" || input == "1";
+        }
+
+        private object ParseProductEnum(string input, Type enumType)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+                throw new ArgumentException("Enum value is required.");
+
+            if (enumType != typeof(PackingType) && enumType != typeof(ProductType))
+                throw new ArgumentException("Only PackingType or ProductType are supported.");
+
+            // Normalize input: remove spaces, slashes, dashes, underscores
+            string cleanedInput = Regex.Replace(input, @"[\s\-_\/]", "", RegexOptions.Compiled).ToLowerInvariant();
+
+            foreach (var value in Enum.GetValues(enumType))
+            {
+                string normalizedEnum = Regex.Replace(value.ToString(), @"[\s\-_\/]", "", RegexOptions.Compiled).ToLowerInvariant();
+                if (cleanedInput == normalizedEnum)
+                    return value;
+            }
+
+            throw new ArgumentException($"Invalid {enumType.Name}: '{input}'");
         }
     }
 }

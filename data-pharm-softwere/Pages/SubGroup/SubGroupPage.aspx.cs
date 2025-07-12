@@ -212,14 +212,18 @@ namespace data_pharm_softwere.Pages.SubGroup
 
                     _context.SaveChanges();
 
-                    lblImportStatus.Text = $"Import completed: {insertCount} added, {skipCount} duplicates skipped.";
-                    lblImportStatus.CssClass = "alert alert-success mt-3 d-block";
-
                     if (errorMessages.Any())
                     {
-                        lblImportStatus.Text += "<br><b>Errors:</b><br>" +
+                        lblImportStatus.Text = $"Import completed: {insertCount} added, {skipCount} duplicates skipped." +
+                            "<br><b>Errors:</b><br>" +
                             string.Join("<br>", errorMessages.Take(10)) +
                             (errorMessages.Count > 10 ? "<br>...and more." : "");
+                        lblImportStatus.CssClass = "alert alert-danger d-block";
+                    }
+                    else
+                    {
+                        lblImportStatus.Text = $"Import completed: {insertCount} added, {skipCount} duplicates skipped.";
+                        lblImportStatus.CssClass = "alert alert-success mt-3 d-block";
                     }
 
                     LoadSubGroups(txtSearch.Text.Trim());
