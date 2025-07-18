@@ -25,7 +25,7 @@ namespace data_pharm_softwere.Pages.Customer
             {
                 LoadCityRoutes();
                 LoadTowns();
-                LoadPartyTypes();
+                LoadCustomerTypes();
                 LoadCustomers();
             }
         }
@@ -60,11 +60,11 @@ namespace data_pharm_softwere.Pages.Customer
             ddlTown.Items.Insert(0, new ListItem("-- Select Town --", ""));
         }
 
-        private void LoadPartyTypes()
+        private void LoadCustomerTypes()
         {
-            ddlPartyType.DataSource = Enum.GetValues(typeof(PartyType));
-            ddlPartyType.DataBind();
-            ddlPartyType.Items.Insert(0, new ListItem("-- Select Part Type --", ""));
+            ddlCustomerType.DataSource = Enum.GetValues(typeof(CustomerType));
+            ddlCustomerType.DataBind();
+            ddlCustomerType.Items.Insert(0, new ListItem("-- Select Customer Type --", ""));
         }
 
         private void LoadCustomers(string search = "")
@@ -83,7 +83,7 @@ namespace data_pharm_softwere.Pages.Customer
                     c.CNIC,
                     TownName = c.Town.Name,
                     CityRouteName = c.Town.CityRoute.Name,
-                    c.PartyType,
+                    c.CustomerType,
                     c.NtnNo,
                     c.InActive,
                     c.CreatedAt
@@ -112,10 +112,10 @@ namespace data_pharm_softwere.Pages.Customer
                 query = query.Where(c => c.TownName != null && c.TownName == ddlTown.SelectedItem.Text);
             }
 
-            // Filter: Party Type
-            if (Enum.TryParse(ddlPartyType.SelectedValue, out PartyType partyType))
+            // Filter: Customer Type
+            if (Enum.TryParse(ddlCustomerType.SelectedValue, out CustomerType CustomerType))
             {
-                query = query.Where(c => c.PartyType == partyType);
+                query = query.Where(c => c.CustomerType == CustomerType);
             }
 
             // Filter: Status
@@ -153,7 +153,7 @@ namespace data_pharm_softwere.Pages.Customer
             LoadCustomers(txtSearch.Text.Trim());
         }
 
-        protected void ddlPartyType_SelectedIndexChanged(object sender, EventArgs e)
+        protected void ddlCustomerType_SelectedIndexChanged(object sender, EventArgs e)
         {
             LoadCustomers(txtSearch.Text.Trim());
         }
@@ -233,7 +233,8 @@ namespace data_pharm_softwere.Pages.Customer
                     TownName = c.Town.Name,
                     CityRouteName = c.Town.CityRoute.Name,
                     c.LicenceNo,
-                    c.PartyType,
+                    c.ExpiryDate,
+                    c.CustomerType,
                     c.NtnNo,
                     c.NorcoticsSaleAllowed,
                     c.InActive,
@@ -266,10 +267,10 @@ namespace data_pharm_softwere.Pages.Customer
                 query = query.Where(c => c.TownName == ddlTown.SelectedItem.Text);
             }
 
-            // PartyType Filter
-            if (Enum.TryParse(ddlPartyType.SelectedValue, out PartyType partyType))
+            // CustomerType Filter
+            if (Enum.TryParse(ddlCustomerType.SelectedValue, out CustomerType CustomerType))
             {
-                query = query.Where(c => c.PartyType == partyType);
+                query = query.Where(c => c.CustomerType == CustomerType);
             }
 
             // Status Filter
@@ -302,7 +303,8 @@ namespace data_pharm_softwere.Pages.Customer
                     c.CityRouteName,
                     c.TownName,
                     c.LicenceNo,
-                    PartyType = c.PartyType.ToString(),
+                    c.ExpiryDate,
+                    CustomerType = c.CustomerType.ToString(),
                     c.NtnNo,
                     NorcoticsSaleAllowed = c.NorcoticsSaleAllowed ? "Yes" : "No",
                     InActive = c.InActive ? "Yes" : "No",
@@ -329,7 +331,7 @@ namespace data_pharm_softwere.Pages.Customer
             var customers = GetFilteredCustomerList(txtSearch.Text.Trim());
 
             var sb = new System.Text.StringBuilder();
-            sb.AppendLine("Code,Name,Email,Contact,CNIC,Address,Route,Town,Licence No,Party Type,NTN,Norcotics Allowed,Inactive,AdvTax Exempt,GST Inactive,Tax236H Inactive,Created At");
+            sb.AppendLine("Code,Name,Email,Contact,CNIC,Address,Route,Town,Licence No,Expiry Date,Customer Type,NTN,Norcotics Allowed,Inactive,AdvTax Exempt,GST Inactive,Tax236H Inactive,Created At");
 
             foreach (var c in customers)
             {
@@ -343,7 +345,8 @@ namespace data_pharm_softwere.Pages.Customer
                     EscapeCsv(c.CityRouteName),
                     EscapeCsv(c.TownName),
                     EscapeCsv(c.LicenceNo),
-                    c.PartyType.ToString(),
+                    c.ExpiryDate.ToString("yyyy-MM-dd"),
+                    c.CustomerType.ToString(),
                     EscapeCsv(c.NtnNo),
                     c.NorcoticsSaleAllowed,
                     c.InActive,
@@ -384,7 +387,7 @@ namespace data_pharm_softwere.Pages.Customer
                 pdfDoc.Add(new Paragraph("Generated on: " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), bodyFont));
                 pdfDoc.Add(new Paragraph(" "));
 
-                PdfPTable table = new PdfPTable(16)
+                PdfPTable table = new PdfPTable(17)
                 {
                     WidthPercentage = 100,
                     HeaderRows = 1
@@ -392,7 +395,7 @@ namespace data_pharm_softwere.Pages.Customer
 
                 string[] headers = {
                     "Code", "Name", "Email", "Contact", "CNIC", "Address", "Route", "Town",
-                    "Licence No", "Party Type", "NTN", "Norcotics", "Dead", "AdvTax Ex",
+                    "Licence No","Expiry Date" ,"Customer Type", "NTN", "Norcotics", "Dead", "AdvTax Ex",
                     "GST Inactive", "236H Inactive"
                 };
 
@@ -413,7 +416,8 @@ namespace data_pharm_softwere.Pages.Customer
                     table.AddCell(new Phrase(c.CityRouteName, bodyFont));
                     table.AddCell(new Phrase(c.TownName, bodyFont));
                     table.AddCell(new Phrase(c.LicenceNo, bodyFont));
-                    table.AddCell(new Phrase(c.PartyType.ToString(), bodyFont));
+                    table.AddCell(new Phrase(c.ExpiryDate.ToString("yyyy-MM-dd"), bodyFont));
+                    table.AddCell(new Phrase(c.CustomerType.ToString(), bodyFont));
                     table.AddCell(new Phrase(c.NtnNo, bodyFont));
                     table.AddCell(new Phrase(c.NorcoticsSaleAllowed, bodyFont));
                     table.AddCell(new Phrase(c.InActive, bodyFont));
@@ -441,8 +445,8 @@ namespace data_pharm_softwere.Pages.Customer
             Response.ContentType = "text/csv";
             Response.AddHeader("Content-Disposition", "attachment;filename=customer_sample.csv");
 
-            Response.Write("Name,Email,Contact,CNIC,Address,TownID,LicenceNo,PartyType,NtnNo,NorcoticsSaleAllowed,InActive,IsAdvTaxExempted,FbrInActiveGST,FBRInActiveTax236H\r\n");
-            Response.Write("Customer 1,ali@example.com,03001234567,31234-1234567-1,123 Street,2,LN-1023,Pharmacy,1234567-8,false,yes,no,no,yes\r\n");
+            Response.Write("Name,Email,Contact,CNIC,Address,TownID,LicenceNo,ExpiryDate,CustomerType,NtnNo,NorcoticsSaleAllowed,InActive,IsAdvTaxExempted,FbrInActiveGST,FBRInActiveTax236H\r\n");
+            Response.Write("Customer 1,ali@example.com,03001234567,31234-1234567-1,123 Street,2,LN-1023,2026-12-31,Pharmacy,1234567-8,false,yes,no,no,yes\r\n");
 
             Response.End();
         }
@@ -476,17 +480,18 @@ namespace data_pharm_softwere.Pages.Customer
                     int colCNIC = headers.IndexOf("CNIC");
                     int colAddress = headers.IndexOf("Address");
                     int colTownID = headers.IndexOf("TownID");
-                    int colPartyType = headers.IndexOf("PartyType");
+                    int colCustomerType = headers.IndexOf("CustomerType");
                     int colNtnNo = headers.IndexOf("NtnNo");
                     int colEmail = headers.IndexOf("Email");
                     int colLicenceNo = headers.IndexOf("LicenceNo");
+                    int colExpiryDate = headers.IndexOf("ExpiryDate");
                     int colNorcoticsSaleAllowed = headers.IndexOf("NorcoticsSaleAllowed");
                     int colInActive = headers.IndexOf("InActive");
                     int colIsAdvTaxExempted = headers.IndexOf("IsAdvTaxExempted");
                     int colFbrInActiveGST = headers.IndexOf("FbrInActiveGST");
                     int colFBRInActiveTax236H = headers.IndexOf("FBRInActiveTax236H");
 
-                    if (colName == -1 || colContact == -1 || colCNIC == -1 || colAddress == -1 || colTownID == -1 || colPartyType == -1 || colNtnNo == -1)
+                    if (colName == -1 || colContact == -1 || colCNIC == -1 || colAddress == -1 || colTownID == -1 || colCustomerType == -1 || colNtnNo == -1)
                     {
                         lblImportStatus.Text = "Missing required columns.";
                         lblImportStatus.CssClass = "alert alert-danger d-block";
@@ -511,19 +516,19 @@ namespace data_pharm_softwere.Pages.Customer
                             string cnic = SafeGet(fields, colCNIC);
                             string address = SafeGet(fields, colAddress);
                             string rawTownID = SafeGet(fields, colTownID);
-                            string rawPartyType = SafeGet(fields, colPartyType);
+                            string rawCustomerType = SafeGet(fields, colCustomerType);
                             string ntnNo = SafeGet(fields, colNtnNo);
 
                             if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(contact) ||
                                 string.IsNullOrWhiteSpace(cnic) || string.IsNullOrWhiteSpace(address) ||
-                                string.IsNullOrWhiteSpace(rawTownID) || string.IsNullOrWhiteSpace(rawPartyType) ||
+                                string.IsNullOrWhiteSpace(rawTownID) || string.IsNullOrWhiteSpace(rawCustomerType) ||
                                 string.IsNullOrWhiteSpace(ntnNo))
                                 throw new Exception("One or more required fields are missing.");
 
                             if (!int.TryParse(rawTownID, out int townId) || !_context.Towns.Any(t => t.TownID == townId))
                                 throw new Exception("Invalid or non-existing TownID.");
 
-                            PartyType partyType = ParsePartyType(rawPartyType);
+                            CustomerType CustomerType = ParseCustomerType(rawCustomerType);
 
                             // Check if customer exists
                             var existing = _context.Customers
@@ -534,10 +539,12 @@ namespace data_pharm_softwere.Pages.Customer
                                 existing.Contact = contact;
                                 existing.Address = address;
                                 existing.NtnNo = ntnNo;
-                                existing.PartyType = partyType;
+                                existing.CustomerType = CustomerType;
 
                                 if (colEmail != -1) existing.Email = SafeGet(fields, colEmail);
                                 if (colLicenceNo != -1) existing.LicenceNo = SafeGet(fields, colLicenceNo);
+                                if (colExpiryDate != -1 && DateTime.TryParse(SafeGet(fields, colExpiryDate), out DateTime expiry))
+                                    existing.ExpiryDate = expiry;
                                 if (colNorcoticsSaleAllowed != -1) existing.NorcoticsSaleAllowed = ParseBool(SafeGet(fields, colNorcoticsSaleAllowed));
                                 if (colInActive != -1) existing.InActive = ParseBool(SafeGet(fields, colInActive));
                                 if (colIsAdvTaxExempted != -1) existing.IsAdvTaxExempted = ParseBool(SafeGet(fields, colIsAdvTaxExempted));
@@ -555,10 +562,12 @@ namespace data_pharm_softwere.Pages.Customer
                                     CNIC = cnic,
                                     Address = address,
                                     TownID = townId,
-                                    PartyType = partyType,
+                                    CustomerType = CustomerType,
                                     NtnNo = ntnNo,
                                     Email = colEmail != -1 ? SafeGet(fields, colEmail) : null,
                                     LicenceNo = colLicenceNo != -1 ? SafeGet(fields, colLicenceNo) : null,
+                                    ExpiryDate = (colExpiryDate != -1 && DateTime.TryParse(SafeGet(fields, colExpiryDate), out DateTime expiryDate))
+                                       ? expiryDate : DateTime.Now.AddYears(1),
                                     NorcoticsSaleAllowed = colNorcoticsSaleAllowed != -1 && ParseBool(SafeGet(fields, colNorcoticsSaleAllowed)),
                                     InActive = colInActive != -1 && ParseBool(SafeGet(fields, colInActive)),
                                     IsAdvTaxExempted = colIsAdvTaxExempted != -1 && ParseBool(SafeGet(fields, colIsAdvTaxExempted)),
@@ -585,7 +594,7 @@ namespace data_pharm_softwere.Pages.Customer
                             "<br><b>Errors:</b><br>" +
                             string.Join("<br>", errorMessages.Take(10)) +
                             (errorMessages.Count > 10 ? "<br>...and more." : "");
-                        lblImportStatus.CssClass = "alert alert-danger d-block"; 
+                        lblImportStatus.CssClass = "alert alert-danger d-block";
                     }
                     else
                     {
@@ -615,23 +624,23 @@ namespace data_pharm_softwere.Pages.Customer
             return input == "yes" || input == "true" || input == "1";
         }
 
-        private PartyType ParsePartyType(string input)
+        private CustomerType ParseCustomerType(string input)
         {
             if (string.IsNullOrWhiteSpace(input))
-                throw new ArgumentException("PartyType value is required.");
+                throw new ArgumentException("CustomerType value is required.");
 
             // Normalize: lowercase, remove spaces, slashes, hyphens
             string cleaned = Regex.Replace(input, @"[\s\-_\/]", "", RegexOptions.Compiled).ToLowerInvariant();
 
-            foreach (PartyType type in Enum.GetValues(typeof(PartyType)))
+            foreach (CustomerType type in Enum.GetValues(typeof(CustomerType)))
             {
                 string normalized = Regex.Replace(type.ToString(), @"[\s\-_\/]", "", RegexOptions.Compiled).ToLowerInvariant();
                 if (normalized == cleaned)
                     return type;
             }
 
-            var validOptions = string.Join(", ", Enum.GetNames(typeof(PartyType)));
-            throw new ArgumentException($"Invalid PartyType: '{input}'. Valid values are: {validOptions}");
+            var validOptions = string.Join(", ", Enum.GetNames(typeof(CustomerType)));
+            throw new ArgumentException($"Invalid CustomerType: '{input}'. Valid values are: {validOptions}");
         }
     }
 }

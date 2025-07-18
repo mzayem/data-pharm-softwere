@@ -141,13 +141,13 @@ namespace data_pharm_softwere.Pages.Customer
         protected global::System.Web.UI.WebControls.DropDownList ddlTown;
 
         /// <summary>
-        /// ddlPartyType control.
+        /// ddlCustomerType control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlPartyType;
+        protected global::System.Web.UI.WebControls.DropDownList ddlCustomerType;
 
         /// <summary>
         /// ddlStatus control.

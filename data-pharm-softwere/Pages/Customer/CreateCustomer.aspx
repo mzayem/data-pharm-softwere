@@ -131,6 +131,18 @@
 
                         </div>
 
+                        <!-- Expiry Date -->
+                        <div>
+                            <label for="txtExpiryDate" class="form-label fw-semibold mt-3">Expiry Date</label>
+                            <asp:TextBox ID="txtExpiryDate" runat="server" CssClass="form-control rounded-pill" TextMode="Date" />
+                            <asp:RequiredFieldValidator ID="rfvExpiryDate" runat="server"
+                                ControlToValidate="txtExpiryDate"
+                                ErrorMessage="Expiry Date is required"
+                                CssClass="text-danger"
+                                Display="Dynamic"
+                                ValidationGroup="VendorForm" />
+                        </div>
+
                         <!-- NTN -->
                         <div class="col-md-6">
                             <label class="form-label fw-semibold">NTN No</label>
@@ -143,14 +155,14 @@
                                                         ValidationGroup="CustomerForm" />
                         </div>
 
-                        <!-- Party Type -->
+                        <!-- Customer Type -->
                         <div class="col-md-12">
-                            <label class="form-label fw-semibold">Party Type</label>
-                            <asp:DropDownList ID="ddlPartyType" runat="server" CssClass="form-select rounded-pill" />
-                            <asp:RequiredFieldValidator ID="rfvPartyType" runat="server"
-                                                        ControlToValidate="ddlPartyType"
+                            <label class="form-label fw-semibold">Customer Type</label>
+                            <asp:DropDownList ID="ddlCustomerType" runat="server" CssClass="form-select rounded-pill" />
+                            <asp:RequiredFieldValidator ID="rfvCustomerType" runat="server"
+                                                        ControlToValidate="ddlCustomerType"
                                                         InitialValue=""
-                                                        ErrorMessage="Party Type is required"
+                                                        ErrorMessage="Customer Type is required"
                                                         CssClass="text-danger"
                                                         Display="Dynamic"
                                                         ValidationGroup="CustomerForm" />

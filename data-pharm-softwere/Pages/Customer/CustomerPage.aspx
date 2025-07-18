@@ -81,14 +81,14 @@
                         OnSelectedIndexChanged="ddlTown_SelectedIndexChanged" />
                 </div>
 
-                <!-- PartyType Dropdown -->
+                <!-- CustomerType Dropdown -->
                 <div class="col-md-3">
                     <asp:DropDownList 
-                        ID="ddlPartyType" 
+                        ID="ddlCustomerType" 
                         runat="server" 
                         CssClass="form-select"
                         AutoPostBack="true"
-                        OnSelectedIndexChanged="ddlPartyType_SelectedIndexChanged" />
+                        OnSelectedIndexChanged="ddlCustomerType_SelectedIndexChanged" />
                 </div>
                 <div class="col-md-3">
                     <asp:DropDownList 
@@ -125,7 +125,7 @@
                     <asp:BoundField DataField="NtnNo" HeaderText="NtnNo" />
                     <asp:BoundField DataField="CityRouteName" HeaderText="Route" />
                     <asp:BoundField DataField="TownName" HeaderText="Town" />
-                    <asp:BoundField DataField="PartyType" HeaderText="Party Type" />
+                    <asp:BoundField DataField="CustomerType" HeaderText="Customer Type" />
 
                     <asp:TemplateField HeaderText="Actions">
                         <ItemTemplate>

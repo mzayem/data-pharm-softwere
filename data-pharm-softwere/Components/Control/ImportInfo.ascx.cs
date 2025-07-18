@@ -135,6 +135,7 @@ namespace data_pharm_softwere.Components.Control
                                    "<li><b>Address</b> (required)</li>" +
                                    "<li><b>TownID</b> (required) — must reference an existing Town</li>" +
                                    "<li><b>LicenceNo</b> (optional)</li>" +
+                                   "<li><b>ExpiryDate</b> (required, format: yyyy-MM-dd)</li>" +
                                    "<li><b>PartyType</b> (required) — one of: Doctor, Pharmacy, RetailerWholesaler, Dispenser, MedicalStore, Distributor, Institute</li>" +
                                    "<li><b>NtnNo</b> (required)</li>" +
                                    "<li><b>NorcoticsSaleAllowed</b> (true/false)</li>" +

@@ -17,7 +17,7 @@ namespace data_pharm_softwere.Pages.Customer
             {
                 LoadCityRoutes();
                 LoadTowns();
-                LoadPartyTypes();
+                LoadCustomerTypes();
             }
         }
 
@@ -46,11 +46,11 @@ namespace data_pharm_softwere.Pages.Customer
             ddlTown.Items.Insert(0, new ListItem("-- Select Town --", ""));
         }
 
-        private void LoadPartyTypes()
+        private void LoadCustomerTypes()
         {
-            ddlPartyType.DataSource = Enum.GetValues(typeof(PartyType));
-            ddlPartyType.DataBind();
-            ddlPartyType.Items.Insert(0, new ListItem("-- Select Part Type --", ""));
+            ddlCustomerType.DataSource = Enum.GetValues(typeof(CustomerType));
+            ddlCustomerType.DataBind();
+            ddlCustomerType.Items.Insert(0, new ListItem("-- Select Part Type --", ""));
         }
 
         protected void ddlCityRoute_SelectedIndexChanged(object sender, EventArgs e)
@@ -80,8 +80,9 @@ namespace data_pharm_softwere.Pages.Customer
                         Address = txtAddress.Text.Trim(),
                         TownID = int.Parse(ddlTown.SelectedValue),
                         LicenceNo = txtLicenceNo.Text.Trim(),
+                        ExpiryDate = DateTime.Parse(txtExpiryDate.Text.Trim()),
                         NtnNo = txtNtnNo.Text.Trim(),
-                        PartyType = (PartyType)Enum.Parse(typeof(PartyType), ddlPartyType.SelectedValue),
+                        CustomerType = (CustomerType)Enum.Parse(typeof(CustomerType), ddlCustomerType.SelectedValue),
                         NorcoticsSaleAllowed = chkNorcoticsSaleAllowed.Checked,
                         InActive = chkInActive.Checked,
                         IsAdvTaxExempted = chkAdvTaxExempted.Checked,

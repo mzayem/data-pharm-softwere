@@ -204,6 +204,24 @@ namespace data_pharm_softwere.Pages.Customer
         protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvLicenceNo;
 
         /// <summary>
+        /// txtExpiryDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtExpiryDate;
+
+        /// <summary>
+        /// rfvExpiryDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvExpiryDate;
+
+        /// <summary>
         /// txtNtnNo control.
         /// </summary>
         /// <remarks>
@@ -222,22 +240,22 @@ namespace data_pharm_softwere.Pages.Customer
         protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvNtnNo;
 
         /// <summary>
-        /// ddlPartyType control.
+        /// ddlCustomerType control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlPartyType;
+        protected global::System.Web.UI.WebControls.DropDownList ddlCustomerType;
 
         /// <summary>
-        /// rfvPartyType control.
+        /// rfvCustomerType control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvPartyType;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvCustomerType;
 
         /// <summary>
         /// chkNorcoticsSaleAllowed control.

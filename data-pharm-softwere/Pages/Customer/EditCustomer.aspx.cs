@@ -18,7 +18,7 @@ namespace data_pharm_softwere.Pages.Customer
             {
                 LoadCityRoutes();
                 LoadTowns();
-                LoadPartyTypes();
+                LoadCustomerTypes();
                 if (CutomerId > 0)
                 {
                     LoadCustomer();
@@ -55,11 +55,11 @@ namespace data_pharm_softwere.Pages.Customer
             ddlTown.Items.Insert(0, new ListItem("-- Select Town --", ""));
         }
 
-        private void LoadPartyTypes()
+        private void LoadCustomerTypes()
         {
-            ddlPartyType.DataSource = Enum.GetValues(typeof(PartyType));
-            ddlPartyType.DataBind();
-            ddlPartyType.Items.Insert(0, new ListItem("-- Select Part Type --", ""));
+            ddlCustomerType.DataSource = Enum.GetValues(typeof(CustomerType));
+            ddlCustomerType.DataBind();
+            ddlCustomerType.Items.Insert(0, new ListItem("-- Select Part Type --", ""));
         }
 
         protected void ddlCityRoute_SelectedIndexChanged(object sender, EventArgs e)
@@ -103,8 +103,9 @@ namespace data_pharm_softwere.Pages.Customer
 
                 ddlTown.SelectedValue = customer.TownID.ToString();
                 txtLicenceNo.Text = customer.LicenceNo;
+                txtExpiryDate.Text = customer.ExpiryDate.ToString("yyyy-MM-dd");
                 txtNtnNo.Text = customer.NtnNo;
-                ddlPartyType.SelectedValue = customer.PartyType.ToString();
+                ddlCustomerType.SelectedValue = customer.CustomerType.ToString();
 
                 chkNorcoticsSaleAllowed.Checked = customer.NorcoticsSaleAllowed;
                 chkInActive.Checked = customer.InActive;
@@ -117,7 +118,6 @@ namespace data_pharm_softwere.Pages.Customer
                 ShowError("Error loading customer: " + ex.Message);
             }
         }
-
 
         public TextBox TxtAddress
         {
@@ -144,14 +144,14 @@ namespace data_pharm_softwere.Pages.Customer
                     customer.Address = txtAddress.Text.Trim();
                     customer.TownID = int.Parse(ddlTown.SelectedValue);
                     customer.LicenceNo = txtLicenceNo.Text.Trim();
+                    customer.ExpiryDate = DateTime.Parse(txtExpiryDate.Text.Trim());
                     customer.NtnNo = txtNtnNo.Text.Trim();
-                    customer.PartyType = (PartyType)Enum.Parse(typeof(PartyType), ddlPartyType.SelectedValue);
+                    customer.CustomerType = (CustomerType)Enum.Parse(typeof(CustomerType), ddlCustomerType.SelectedValue);
                     customer.NorcoticsSaleAllowed = chkNorcoticsSaleAllowed.Checked;
                     customer.InActive = chkInActive.Checked;
                     customer.IsAdvTaxExempted = chkAdvTaxExempted.Checked;
                     customer.FbrInActiveGST = chkFbrInActiveGST.Checked;
                     customer.FBRInActiveTax236H = chkFBRInActiveTax236H.Checked;
-                       
 
                     _context.SaveChanges();
 
