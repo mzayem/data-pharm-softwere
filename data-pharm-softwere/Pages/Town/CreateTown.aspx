@@ -2,7 +2,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
      <asp:ScriptManager ID="ScriptManager1" runat="server" />
     
-    <div class="container mt-5">
+    <div class="container my-5">
     <div class="card shadow-sm rounded-4 p-4 mx-auto" style="max-width: 900px;">
 
      <h3 class="mb-4 text-center fw-semibold">Create Town</h3>
@@ -17,7 +17,7 @@
 
 
                      <div class="col-md-12">
-                         <label class="form-label">Town Name</label>
+                         <label class="form-label fw-semibold">Town Name</label>
                          <asp:TextBox ID="txtName" runat="server" CssClass="form-control rounded-pill" />
                          <asp:RequiredFieldValidator ID="rfvName" runat="server"
                              ControlToValidate="txtName"
@@ -27,7 +27,7 @@
                              ValidationGroup="TownForm" />
                      </div> 
                      <div class="col-md-12">
-                             <label class="form-label">City Routes</label>
+                             <label class="form-label fw-semibold">City Routes</label>
                              <asp:DropDownList ID="ddlCityRoute" runat="server" CssClass="form-select rounded-pill"
                                  AutoPostBack="true" OnSelectedIndexChanged="ddlCityRoute_SelectedIndexChanged" />
                          </div>

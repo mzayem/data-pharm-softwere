@@ -1,19 +1,26 @@
 ﻿using data_pharm_softwere.Data;
-using data_pharm_softwere.Models;
-using Org.BouncyCastle.Tls.Crypto;
 using System;
-using System.Configuration;
-using System.Data.Entity;
 using System.Linq;
 using System.Web.UI.WebControls;
-using static System.Net.WebRequestMethods;
 
 namespace data_pharm_softwere.Pages.Batch
 {
     public partial class EditBatch : System.Web.UI.Page
     {
         private readonly DataPharmaContext _context = new DataPharmaContext();
-        private int BatchId => int.TryParse(Request.QueryString["id"], out int id) ? id : 0;
+
+        private int BatchId
+        {
+            get
+            {
+                int id;
+                if (int.TryParse(Request.QueryString["id"], out id))
+                {
+                    return id;
+                }
+                return 0;
+            }
+        }
 
         protected void Page_Load(object sender, EventArgs e)
         {

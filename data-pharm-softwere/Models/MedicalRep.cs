@@ -2,28 +2,36 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Web;
 
 namespace data_pharm_softwere.Models
 {
-    [Table("SubGroups")]
-    public class SubGroup
+    public enum RepType
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int SubGroupID { get; set; }
+        DFM = 1,
+        MedicalRep = 2
+    }
+
+    [Table("MedicalReps")]
+    public class MedicalRep
+    {
+        public int ID { get; set; }
 
         [Required]
-        [StringLength(100)]
         public string Name { get; set; }
 
-        [Required]
-        public int GroupID { get; set; }
+        [EmailAddress]
+        public string Email { get; set; }
 
-        [ForeignKey("GroupID")]
-        public virtual Group Group { get; set; }
+        [Required]
+        public string Contact { get; set; }
+
+        [Required]
+        public RepType Type { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
-        public virtual ICollection<Product> Products { get; set; }
+
         public virtual ICollection<MedicalRepSubGroup> MedicalRepSubGroups { get; set; }
     }
 }

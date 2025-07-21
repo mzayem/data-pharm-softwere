@@ -6,7 +6,7 @@
         <uc:ImportInfo ID="ImportInfoControl" runat="server" ImportContext="batch" />
 
 
-        <div class="container mt-4">
+        <div class="container my-4">
             <h2 class="mb-3">Batch List</h2>
             <asp:Label ID="lblImportStatus" runat="server" CssClass="d-none" EnableViewState="false" />
             

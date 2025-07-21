@@ -1,38 +1,26 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Pages/Layout.Master" AutoEventWireup="true" CodeBehind="VendorPage.aspx.cs" Inherits="data_pharm_softwere.Pages.Vendor.VendorPage" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Pages/Layout.Master" AutoEventWireup="true" CodeBehind="SalesmanPage.aspx.cs" Inherits="data_pharm_softwere.Pages.Salesman.SalesmanPage" %>
 <%@ Register TagPrefix="uc" TagName="ImportInfo" Src="~/Components/Control/ImportInfo.ascx" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <asp:ScriptManager ID="ScriptManager1" runat="server" />
-    <uc:ImportInfo ID="ImportInfoControl" runat="server" ImportContext="vendor" />
+    <uc:ImportInfo ID="ImportInfoControl" runat="server" ImportContext="town" />
 
     <div class="container my-4">
-        <h2 class="mb-3">Vendor List</h2>
+        <h2 class="mb-3">Salesman List</h2>
         <asp:Label ID="lblImportStatus" runat="server" CssClass="d-none" EnableViewState="false" />
 
-        <div class="d-flex justify-content-between mb-3">
-            <!-- Add New Batch -->
+        <!-- Header actions -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
             <div>
                 <asp:HyperLink 
-                    ID="btnCreateVendor" 
+                    ID="btnCreateSalesman" 
                     runat="server" 
-                    NavigateUrl="/vendor/create"
-                    CssClass="btn btn-primary mb-3">
-                    + Add New Vendor
+                    NavigateUrl="/salesman/create"
+                    CssClass="btn btn-primary">
+                    + Add New Salesman
                 </asp:HyperLink>
-
-                <asp:Button 
-                    ID="btnExportExcel" 
-                    runat="server"  
-                    CssClass="btn btn-success mb-3 ms-2" 
-                    Text="Export as Excel" 
-                    OnClick="btnExportExcel_Click" />
-                <asp:Button 
-                    ID="btnExportPdf" 
-                    runat="server" 
-                    CssClass="btn btn-danger mb-3 ms-2"
-                    Text="Export as PDF" 
-                    OnClick="btnExportPdf_Click"/>
-            </div>
+               
+                </div>
 
             <div class="d-flex gap-2 align-items-start">
                 <!-- Help Icon with Tooltip -->
@@ -50,33 +38,51 @@
             </div>
         </div>
 
+        <!-- Filters and grid -->
         <asp:UpdatePanel ID="UpdatePanel1" runat="server">
             <ContentTemplate>
-
                 <asp:TextBox 
                     ID="txtSearch" 
                     runat="server" 
                     CssClass="form-control mb-3"
-                    Placeholder="Search by any keyword" 
+                    Placeholder="Search by name, code, NTN..." 
                     AutoPostBack="true" 
                     OnTextChanged="txtSearch_TextChanged" />
 
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <asp:DropDownList 
+                            ID="ddlTown" 
+                            runat="server" 
+                            CssClass="form-select"
+                            AutoPostBack="true"
+                            OnSelectedIndexChanged="ddlTown_SelectedIndexChanged" />
+                    </div>
+                </div>
+
                 <asp:GridView 
-                    ID="gvVendors" 
+                    ID="gvSalesmen" 
                     runat="server" 
                     AutoGenerateColumns="False"
-                    CssClass="table table-bordered table-hover" 
-                    OnRowCommand="gvVendors_RowCommand" 
-                    OnRowDataBound="gvVendors_RowDataBound"
-                    EmptyDataText="No Vendor Found">
+                    CssClass="table table-bordered table-hover"
+                    EmptyDataText="No Salesman Found"
+                    OnRowCommand="gvSalesmen_RowCommand"
+                    OnRowDataBound="gvSalesmen_RowDataBound">
 
                     <Columns>
-                        <asp:BoundField DataField="VendorID" HeaderText="ID" />
-                        <asp:BoundField DataField="Name" HeaderText="Name" />
-                        <asp:BoundField DataField="City" HeaderText="City" />
-                        <asp:BoundField DataField="CompanyCode" HeaderText="Company Code" />
-                        <asp:BoundField DataField="GstNo" HeaderText="GST No" />
-                        <asp:BoundField DataField="ExpiryDate" HeaderText="Expiry Date" DataFormatString="{0:yyyy-MM-dd}" />
+                        <asp:BoundField DataField="SalesmanID" HeaderText="Code" DataFormatString="{0:D4}" HtmlEncode="false" />
+                        <asp:BoundField DataField="Name" HeaderText="Salesman Name" />
+                        <asp:BoundField DataField="Email" HeaderText="Email" />
+                        <asp:BoundField DataField="Contact" HeaderText="Contact" />
+
+   
+                        <asp:TemplateField HeaderText="Towns">
+                            <ItemTemplate>
+                                <%# GetLimitedTownNames((int)Eval("SalesmanID")) %>
+                                <span class="text-muted"><%# GetTownOverflowText((int)Eval("SalesmanID")) %></span>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+
 
                         <asp:TemplateField HeaderText="Actions">
                             <ItemTemplate>
@@ -86,27 +92,21 @@
                                     CssClass="form-select form-select-sm border-0 bg-transparent custom-dropdown"
                                     AutoPostBack="true" 
                                     OnSelectedIndexChanged="ddlActions_SelectedIndexChanged">
-                                    
+
                                     <asp:ListItem Value="">• • •</asp:ListItem>
                                     <asp:ListItem Text="Edit" Value="Edit" />
                                     <asp:ListItem Text="Delete" Value="Delete" />
                                 </asp:DropDownList>
 
                                 <asp:HiddenField 
-                                    ID="hfVendorID" 
+                                    ID="hfSalesmanId" 
                                     runat="server" 
-                                    Value='<%# Eval("VendorID") %>' />
+                                    Value='<%# Eval("SalesmanID") %>' />
                             </ItemTemplate>
                         </asp:TemplateField>
                     </Columns>
                 </asp:GridView>
-
             </ContentTemplate>
-
-            <Triggers>
-                <asp:PostBackTrigger ControlID="btnExportPdf" />
-                <asp:PostBackTrigger ControlID="btnExportExcel" />
-            </Triggers>
         </asp:UpdatePanel>
     </div>
     <script>

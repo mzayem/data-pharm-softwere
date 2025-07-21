@@ -1,7 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Pages/Layout.Master" AutoEventWireup="true" CodeBehind="CreateProduct.aspx.cs" Inherits="data_pharm_softwere.Pages.Product.CreateProduct" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-   <div class="container mt-5">
+   <div class="container my-5">
     <div class="card shadow-sm rounded-4 p-4 mx-auto" style="max-width: 1200px;">
         <h3 class="mb-4 text-center fw-semibold">Add New Product</h3>
 

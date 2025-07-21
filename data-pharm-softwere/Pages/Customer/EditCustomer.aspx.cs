@@ -10,7 +10,19 @@ namespace data_pharm_softwere.Pages.Customer
     public partial class EditCustomer : System.Web.UI.Page
     {
         private readonly DataPharmaContext _context = new DataPharmaContext();
-        private int CutomerId => Convert.ToInt32(Request.QueryString["id"]);
+
+        private int CutomerId
+        {
+            get
+            {
+                int id;
+                if (int.TryParse(Request.QueryString["id"], out id))
+                {
+                    return id;
+                }
+                return 0;
+            }
+        }
 
         protected void Page_Load(object sender, EventArgs e)
         {

@@ -1,4 +1,5 @@
 ﻿using data_pharm_softwere.Data;
+using data_pharm_softwere.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,10 +12,28 @@ namespace data_pharm_softwere.Pages.Division
     public partial class EditDivision : System.Web.UI.Page
     {
         private DataPharmaContext _context = new DataPharmaContext();
-        private int DivisionId => Convert.ToInt32(Request.QueryString["id"]);
+
+        private int DivisionId
+        {
+            get
+            {
+                int id;
+                if (int.TryParse(Request.QueryString["id"], out id))
+                {
+                    return id;
+                }
+                return 0;
+            }
+        }
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (DivisionId == 0)
+            {
+                Response.Redirect("/division");
+                return;
+            }
+
             if (!IsPostBack)
             {
                 LoadVendors();

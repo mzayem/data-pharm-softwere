@@ -9,7 +9,18 @@ namespace data_pharm_softwere.Pages.Group
     public partial class EditGroup : System.Web.UI.Page
     {
         private DataPharmaContext _context = new DataPharmaContext();
-        private int GroupId => Convert.ToInt32(Request.QueryString["id"]);
+        private int GroupId
+        {
+            get
+            {
+                int id;
+                if (int.TryParse(Request.QueryString["id"], out id))
+                {
+                    return id;
+                }
+                return 0;
+            }
+        }
 
         protected void Page_Load(object sender, EventArgs e)
         {

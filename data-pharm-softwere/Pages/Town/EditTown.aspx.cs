@@ -1,24 +1,29 @@
 ﻿using data_pharm_softwere.Data;
-using data_pharm_softwere.Models;
-using Org.BouncyCastle.Tls.Crypto;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using static System.Net.WebRequestMethods;
 
 namespace data_pharm_softwere.Pages.Town
 {
     public partial class EditTown : System.Web.UI.Page
     {
         private readonly DataPharmaContext _context = new DataPharmaContext();
-        private int TownId => int.TryParse(Request.QueryString["id"], out int id) ? id : 0;
+        private int TownId {
+            get
+            {
+                int id;
+                if (int.TryParse(Request.QueryString["id"], out id))
+                {
+                    return id;
+                }
+                return 0;
+            }
+        }
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (TownId == 0)
+            if (TownId == 0 )
             {
                 Response.Redirect("/town/create");
                 return;
@@ -33,7 +38,7 @@ namespace data_pharm_softwere.Pages.Town
 
         private void LoadCityRoutes()
         {
-            var cityRoutes = _context.CityRoutes.OrderBy(v => v.Name).ToList();
+            var cityRoutes = _context.CityRoutes.OrderBy(t => t.Name).ToList();
             ddlCityRoute.DataSource = cityRoutes;
             ddlCityRoute.DataTextField = "Name";
             ddlCityRoute.DataValueField = "CityRouteID";

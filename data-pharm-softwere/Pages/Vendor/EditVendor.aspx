@@ -1,7 +1,7 @@
 ﻿<%@ Page Title="Edit Vendor" Language="C#" MasterPageFile="~/Pages/Layout.Master" AutoEventWireup="true" CodeBehind="EditVendor.aspx.cs" Inherits="data_pharm_softwere.Pages.Vendor.EditVendor" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-    <div class="container mt-5">
+    <div class="container my-5">
         <h2 class="mb-4">Edit Vendor</h2>
 
         <asp:ValidationSummary runat="server" CssClass="text-danger" />

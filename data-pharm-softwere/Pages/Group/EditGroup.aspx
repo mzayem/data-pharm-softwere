@@ -1,7 +1,7 @@
 ﻿<%@ Page Title="Edit Group" Language="C#" MasterPageFile="~/Pages/Layout.Master" AutoEventWireup="true" CodeBehind="EditGroup.aspx.cs" Inherits="data_pharm_softwere.Pages.Group.EditGroup" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-    <div class="container mt-5">
+    <div class="container my-5">
         <h2 class="mb-4">Edit Group</h2>
 
         <asp:ValidationSummary ID="ValidationSummary1" runat="server"

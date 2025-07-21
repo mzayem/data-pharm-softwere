@@ -11,7 +11,18 @@ namespace data_pharm_softwere.Pages.SubGroup
     {
         private readonly DataPharmaContext _context = new DataPharmaContext();
 
-        private int SubGroupId => int.TryParse(Request.QueryString["id"], out int id) ? id : 0;
+        private int SubGroupId
+        {
+            get
+            {
+                int id;
+                if (int.TryParse(Request.QueryString["id"], out id))
+                {
+                    return id;
+                }
+                return 0;
+            }
+        }
 
         protected void Page_Load(object sender, EventArgs e)
         {

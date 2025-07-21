@@ -2,7 +2,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <asp:ScriptManager ID="ScriptManager1" runat="server" />
 
-    <div class="container mt-4">
+    <div class="container my-4">
         <h3>Edit Batch</h3>
 
         <asp:ValidationSummary ID="ValidationSummary1" runat="server" CssClass="alert alert-danger" />
@@ -34,7 +34,7 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label class="form-label">Product</label>
+                            <label class="form-label fw-semibold">Product</label>
                             <asp:DropDownList ID="ddlProduct" runat="server" CssClass="form-select rounded-pill"
                                 AutoPostBack="true" OnSelectedIndexChanged="ddlProduct_SelectedIndexChanged" />
                             <asp:RequiredFieldValidator ID="rfvProduct" runat="server"
@@ -47,7 +47,7 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label class="form-label">Batch No</label>
+                            <label class="form-label fw-semibold">Batch No</label>
                             <asp:TextBox ID="txtBatchNo" runat="server" CssClass="form-control rounded-pill" />
                             <asp:RequiredFieldValidator ID="rfvBatchNo" runat="server"
                                 ControlToValidate="txtBatchNo"
@@ -58,7 +58,7 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label class="form-label">MFG Date</label>
+                            <label class="form-label fw-semibold">MFG Date</label>
                             <asp:TextBox ID="txtMFGDate" runat="server" TextMode="Date" CssClass="form-control rounded-pill" />
                             <asp:RequiredFieldValidator ID="rfvMFGDate" runat="server"
                                 ControlToValidate="txtMFGDate"
@@ -69,7 +69,7 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label class="form-label">Expiry Date</label>
+                            <label class="form-label fw-semibold">Expiry Date</label>
                             <asp:TextBox ID="txtExpiryDate" runat="server" TextMode="Date" CssClass="form-control rounded-pill" />
                             <asp:RequiredFieldValidator ID="rfvExpiryDate" runat="server"
                                 ControlToValidate="txtExpiryDate"
@@ -80,7 +80,7 @@
                         </div>
 
                         <div class="col-md-4">
-                            <label class="form-label">DP (Rs.)</label>
+                            <label class="form-label fw-semibold">DP (Rs.)</label>
                             <asp:TextBox ID="txtDP" runat="server" CssClass="form-control rounded-pill" TextMode="Number"
                                 AutoPostBack="true" OnTextChanged="txtDP_TextChanged" />
                             <asp:RequiredFieldValidator ID="rfvDP" runat="server"
@@ -92,7 +92,7 @@
                         </div>
 
                         <div class="col-md-4">
-                            <label class="form-label">TP (Rs.)</label>
+                            <label class="form-label fw-semibold">TP (Rs.)</label>
                             <asp:TextBox ID="txtTP" runat="server" CssClass="form-control rounded-pill" TextMode="Number" />
                             <asp:RequiredFieldValidator ID="rfvTP" runat="server"
                                 ControlToValidate="txtTP"
@@ -103,7 +103,7 @@
                         </div>
 
                         <div class="col-md-4">
-                            <label class="form-label">MRP (Rs.)</label>
+                            <label class="form-label fw-semibold">MRP (Rs.)</label>
                             <asp:TextBox ID="txtMRP" runat="server" CssClass="form-control rounded-pill" TextMode="Number" />
                             <asp:RequiredFieldValidator ID="rfvMRP" runat="server"
                                 ControlToValidate="txtMRP"
@@ -114,7 +114,7 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label class="form-label">Carton Quantity</label>
+                            <label class="form-label fw-semibold">Carton Quantity</label>
                             <asp:TextBox ID="txtCartonQty" runat="server" CssClass="form-control rounded-pill" TextMode="Number" />
                             <asp:RequiredFieldValidator ID="rfvCartonQty" runat="server"
                                 ControlToValidate="txtCartonQty"
@@ -125,7 +125,7 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label class="form-label">Carton Price</label>
+                            <label class="form-label fw-semibold">Carton Price</label>
                             <asp:TextBox ID="txtCartonPrice" runat="server" CssClass="form-control rounded-pill"
                                 TextMode="Number" ReadOnly="true" />
                         </div>

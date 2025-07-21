@@ -5,7 +5,7 @@
        <asp:ScriptManager ID="ScriptManager1" runat="server" />
        <uc:ImportInfo ID="ImportInfoControl" runat="server" ImportContext="town" />
 
-<div class="container mt-4">
+<div class="container my-4">
     <h2 class="mb-3">Town List</h2>
     <asp:Label ID="lblImportStatus" runat="server" CssClass="d-none" EnableViewState="false" />
 
@@ -37,7 +37,6 @@
 
     <asp:UpdatePanel ID="UpdatePanel1" runat="server">
         <ContentTemplate>
-
             <asp:TextBox 
                 ID="txtSearch" 
                 runat="server" 

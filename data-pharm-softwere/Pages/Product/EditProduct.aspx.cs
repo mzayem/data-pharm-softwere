@@ -10,7 +10,19 @@ namespace data_pharm_softwere.Pages.Product
     public partial class EditProduct : System.Web.UI.Page
     {
         private readonly DataPharmaContext _context = new DataPharmaContext();
-        private int ProductId => int.TryParse(Request.QueryString["id"], out int id) ? id : 0;
+
+        private int ProductId
+        {
+            get
+            {
+                int id;
+                if (int.TryParse(Request.QueryString["id"], out id))
+                {
+                    return id;
+                }
+                return 0;
+            }
+        }
 
         protected void Page_Load(object sender, EventArgs e)
         {

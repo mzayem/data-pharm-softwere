@@ -16,7 +16,7 @@ namespace data_pharm_softwere.Models
         [StringLength(100)]
         public string Name { get; set; }
 
-        [StringLength(150)]
+        [EmailAddress]
         public string Email { get; set; }
 
         [StringLength(50)]

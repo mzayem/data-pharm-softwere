@@ -5,7 +5,7 @@
     <asp:ScriptManager ID="ScriptManager1" runat="server" />
     <uc:ImportInfo ID="ImportInfoControl" runat="server" ImportContext="subgroup" />
 
-    <div class="container mt-4">
+    <div class="container my-4">
         <h2 class="mb-3">Sub Group List</h2>
         <asp:Label ID="lblImportStatus" runat="server" CssClass="d-none" EnableViewState="false" />
 

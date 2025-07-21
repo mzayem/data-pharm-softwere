@@ -7,7 +7,18 @@ namespace data_pharm_softwere.Pages.CityRoute
     {
         private readonly DataPharmaContext _context = new DataPharmaContext();
 
-        private int CityRouteID => int.TryParse(Request.QueryString["id"], out int id) ? id : 0;
+        private int CityRouteID
+        {
+            get
+            {
+                int id;
+                if (int.TryParse(Request.QueryString["id"], out id))
+                {
+                    return id;
+                }
+                return 0;
+            }
+        }
 
         protected void Page_Load(object sender, EventArgs e)
         {

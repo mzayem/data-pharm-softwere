@@ -1,6 +1,6 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Pages/Layout.Master" AutoEventWireup="true" CodeBehind="EditProduct.aspx.cs" Inherits="data_pharm_softwere.Pages.Product.EditProduct" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-   <div class="container mt-5">
+   <div class="container my-5">
    <h3 class="mb-4 ">Edit Product</h3>
         
 

@@ -121,6 +121,9 @@
     <Content Include="Pages\Product\CreateProduct.aspx" />
     <Content Include="Pages\Product\EditProduct.aspx" />
     <Content Include="Pages\Product\ProductPage.aspx" />
+    <Content Include="Pages\Salesman\CreateSalesman.aspx" />
+    <Content Include="Pages\Salesman\EditSalesman.aspx" />
+    <Content Include="Pages\Salesman\SalesmanPage.aspx" />
     <Content Include="Pages\SubGroup\CreateSubGroup.aspx" />
     <Content Include="Pages\SubGroup\EditSubGroup.aspx" />
     <Content Include="Pages\SubGroup\SubGroupPage.aspx" />
@@ -200,6 +203,18 @@
     <Compile Include="Migrations\202507180730342_CustomerUpdate.Designer.cs">
       <DependentUpon>202507180730342_CustomerUpdate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202507180759430_SalesmanModal.cs" />
+    <Compile Include="Migrations\202507180759430_SalesmanModal.Designer.cs">
+      <DependentUpon>202507180759430_SalesmanModal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202507180851055_MedicalReps.cs" />
+    <Compile Include="Migrations\202507180851055_MedicalReps.Designer.cs">
+      <DependentUpon>202507180851055_MedicalReps.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202507181137289_MinorFixes.cs" />
+    <Compile Include="Migrations\202507181137289_MinorFixes.Designer.cs">
+      <DependentUpon>202507181137289_MinorFixes.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Batch.cs" />
     <Compile Include="Models\CityRoute.cs" />
@@ -207,7 +222,11 @@
     <Compile Include="Models\DataPharmaContext.cs" />
     <Compile Include="Models\Division.cs" />
     <Compile Include="Models\Group.cs" />
+    <Compile Include="Models\MedicalRep.cs" />
+    <Compile Include="Models\MedicalRepSubGroup.cs" />
     <Compile Include="Models\Product.cs" />
+    <Compile Include="Models\Salesman.cs" />
+    <Compile Include="Models\SalesmanTown.cs" />
     <Compile Include="Models\SubGroup.cs" />
     <Compile Include="Models\Town.cs" />
     <Compile Include="Pages\Batch\BatchPage.aspx.cs">
@@ -358,6 +377,27 @@
     <Compile Include="Pages\Product\ProductPage.aspx.designer.cs">
       <DependentUpon>ProductPage.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Salesman\CreateSalesman.aspx.cs">
+      <DependentUpon>CreateSalesman.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Salesman\CreateSalesman.aspx.designer.cs">
+      <DependentUpon>CreateSalesman.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Salesman\EditSalesman.aspx.cs">
+      <DependentUpon>EditSalesman.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Salesman\EditSalesman.aspx.designer.cs">
+      <DependentUpon>EditSalesman.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Salesman\SalesmanPage.aspx.cs">
+      <DependentUpon>SalesmanPage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Salesman\SalesmanPage.aspx.designer.cs">
+      <DependentUpon>SalesmanPage.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Pages\SubGroup\CreateSubGroup.aspx.cs">
       <DependentUpon>CreateSubGroup.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -491,8 +531,19 @@
     <EmbeddedResource Include="Migrations\202507180730342_CustomerUpdate.resx">
       <DependentUpon>202507180730342_CustomerUpdate.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202507180759430_SalesmanModal.resx">
+      <DependentUpon>202507180759430_SalesmanModal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202507180851055_MedicalReps.resx">
+      <DependentUpon>202507180851055_MedicalReps.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202507181137289_MinorFixes.resx">
+      <DependentUpon>202507181137289_MinorFixes.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Pages\MedicalRep\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

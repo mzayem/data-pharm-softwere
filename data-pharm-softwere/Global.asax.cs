@@ -182,6 +182,23 @@ namespace data_pharm_softwere
                 "customer",
                 "~/pages/Customer/CustomerPage.aspx"
             );
+
+            //Salesman routes
+            routes.MapPageRoute(
+                "Salesman Create",
+                "salesman/create",
+                "~/pages/Salesman/CreateSalesman.aspx"
+            );
+            routes.MapPageRoute(
+                "Salesman Edit",
+                "salesman/edit",
+                "~/pages/Salesman/EditSalesman.aspx"
+            );
+            routes.MapPageRoute(
+                "Salesman Management",
+                "salesman",
+                "~/pages/Salesman/SalesmanPage.aspx"
+            );
         }
 
         // Default event hooks

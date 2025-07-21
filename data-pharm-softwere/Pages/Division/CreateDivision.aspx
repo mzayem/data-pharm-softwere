@@ -1,6 +1,6 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Pages/Layout.Master" AutoEventWireup="true" CodeBehind="CreateDivision.aspx.cs" Inherits="data_pharm_softwere.Pages.Division.CreateDivision" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-        <div class="container mt-5">
+        <div class="container my-5">
         <div class="card shadow-sm rounded-4 p-4 mx-auto" style="max-width: 900px;">
             <h3 class="mb-4 text-center fw-semibold">Add New Division</h3>
 

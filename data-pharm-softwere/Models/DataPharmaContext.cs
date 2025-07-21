@@ -19,6 +19,10 @@ namespace data_pharm_softwere.Data
         public DbSet<CityRoute> CityRoutes { get; set; }
         public DbSet<Town> Towns { get; set; }
         public DbSet<Customer> Customers { get; set; }
+        public DbSet<Salesman> Salesmen { get; set; }
+        public DbSet<SalesmanTown> SalesmanTowns { get; set; }
+        public DbSet<MedicalRep> MedicalReps { get; set; }
+        public DbSet<MedicalRepSubGroup> MedicalRepSubGroups { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -80,6 +84,33 @@ namespace data_pharm_softwere.Data
                 .HasRequired(c => c.Town)
                 .WithMany(t => t.Customers)
                 .HasForeignKey(c => c.TownID)
+                .WillCascadeOnDelete(true);
+            //  SalesmanTown → Salesman
+            modelBuilder.Entity<SalesmanTown>()
+                .HasRequired(st => st.Salesman)
+                .WithMany(s => s.SalesmanTowns)
+                .HasForeignKey(st => st.SalesmanID)
+                .WillCascadeOnDelete(true);
+
+            // SalesmanTown → Town
+            modelBuilder.Entity<SalesmanTown>()
+                .HasRequired(st => st.Town)
+                .WithMany(t => t.SalesmanTowns)
+                .HasForeignKey(st => st.TownID)
+                .WillCascadeOnDelete(true);
+
+            // MedicalRepSubGroup → MedicalRep
+            modelBuilder.Entity<MedicalRepSubGroup>()
+                .HasRequired(ms => ms.MedicalRep)
+                .WithMany(m => m.MedicalRepSubGroups)
+                .HasForeignKey(ms => ms.MedicalRepID)
+                .WillCascadeOnDelete(true);
+
+            // MedicalRepSubGroup → SubGroup
+            modelBuilder.Entity<MedicalRepSubGroup>()
+                .HasRequired(ms => ms.SubGroup)
+                .WithMany(sg => sg.MedicalRepSubGroups)
+                .HasForeignKey(ms => ms.SubGroupID)
                 .WillCascadeOnDelete(true);
         }
     }
