@@ -367,5 +367,6 @@ namespace data_pharm_softwere.Pages.Salesman
 
             return d[s.Length, t.Length];
         }
+
     }
 }

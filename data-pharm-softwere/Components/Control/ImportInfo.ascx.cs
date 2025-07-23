@@ -11,6 +11,7 @@ namespace data_pharm_softwere.Components.Control
             set => ViewState["ImportContext"] = value?.ToLower();
         }
 
+
         public event EventHandler DownloadRequested;
 
         protected void Page_Load(object sender, EventArgs e)
@@ -144,17 +145,6 @@ namespace data_pharm_softwere.Components.Control
                                    "<li><b>FBRInActiveTax236H</b> (true/false)</li>" +
                                    "</ul>" +
                                    "Ensure PartyType matches exactly (case-sensitive). Boolean fields must be 'true' or 'false'.";
-                    break;
-
-                case "salesman":
-                    litHeader.Text = "Salesman Import Guide";
-                    litBody.Text = "Upload a CSV file with the following columns:<br><ul>" +
-                                   "<li><b>Name</b> (required)</li>" +
-                                   "<li><b>Email</b> (optional)</li>" +
-                                   "<li><b>Contact</b> (required)</li>" +
-                                   "<li><b>Towns</b> (required) — pipe-separated list (e.g., TownA|TownB). Town names are matched using fuzzy spelling correction.</li>" +
-                                   "</ul>" +
-                                   "<p><b>Note:</b> If a town name is misspelled but close to an existing town in the system, it will still be matched using fuzzy logic.</p>";
                     break;
 
                 default:

@@ -118,9 +118,6 @@
     <Content Include="Pages\Group\EditGroup.aspx" />
     <Content Include="Pages\Group\GroupPage.aspx" />
     <Content Include="Pages\Main.aspx" />
-    <Content Include="Pages\MedicalRep\CreateMedicalRep.aspx" />
-    <Content Include="Pages\MedicalRep\EditMedicalRep.aspx" />
-    <Content Include="Pages\MedicalRep\MedicalRepPage.aspx" />
     <Content Include="Pages\Product\CreateProduct.aspx" />
     <Content Include="Pages\Product\EditProduct.aspx" />
     <Content Include="Pages\Product\ProductPage.aspx" />
@@ -217,6 +214,14 @@
     <Compile Include="Migrations\202507181137289_MinorFixes.cs" />
     <Compile Include="Migrations\202507181137289_MinorFixes.Designer.cs">
       <DependentUpon>202507181137289_MinorFixes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202507230602575_ClassCreation.cs" />
+    <Compile Include="Migrations\202507230602575_ClassCreation.Designer.cs">
+      <DependentUpon>202507230602575_ClassCreation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202507230650094_RemoveClass.cs" />
+    <Compile Include="Migrations\202507230650094_RemoveClass.Designer.cs">
+      <DependentUpon>202507230650094_RemoveClass.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Batch.cs" />
@@ -358,27 +363,6 @@
     </Compile>
     <Compile Include="Pages\Main.aspx.designer.cs">
       <DependentUpon>Main.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\MedicalRep\CreateMedicalRep.aspx.cs">
-      <DependentUpon>CreateMedicalRep.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Pages\MedicalRep\CreateMedicalRep.aspx.designer.cs">
-      <DependentUpon>CreateMedicalRep.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\MedicalRep\EditMedicalRep.aspx.cs">
-      <DependentUpon>EditMedicalRep.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Pages\MedicalRep\EditMedicalRep.aspx.designer.cs">
-      <DependentUpon>EditMedicalRep.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\MedicalRep\MedicalRepPage.aspx.cs">
-      <DependentUpon>MedicalRepPage.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Pages\MedicalRep\MedicalRepPage.aspx.designer.cs">
-      <DependentUpon>MedicalRepPage.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\Product\CreateProduct.aspx.cs">
       <DependentUpon>CreateProduct.aspx</DependentUpon>
@@ -564,8 +548,16 @@
     <EmbeddedResource Include="Migrations\202507181137289_MinorFixes.resx">
       <DependentUpon>202507181137289_MinorFixes.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202507230602575_ClassCreation.resx">
+      <DependentUpon>202507230602575_ClassCreation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202507230650094_RemoveClass.resx">
+      <DependentUpon>202507230650094_RemoveClass.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Pages\MedicalRep\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
