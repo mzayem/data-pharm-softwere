@@ -118,6 +118,9 @@
     <Content Include="Pages\Group\EditGroup.aspx" />
     <Content Include="Pages\Group\GroupPage.aspx" />
     <Content Include="Pages\Main.aspx" />
+    <Content Include="Pages\MedicalRep\CreateMedicalRep.aspx" />
+    <Content Include="Pages\MedicalRep\EditMedicalRep.aspx" />
+    <Content Include="Pages\MedicalRep\MedicalRepPage.aspx" />
     <Content Include="Pages\Product\CreateProduct.aspx" />
     <Content Include="Pages\Product\EditProduct.aspx" />
     <Content Include="Pages\Product\ProductPage.aspx" />
@@ -356,6 +359,27 @@
     <Compile Include="Pages\Main.aspx.designer.cs">
       <DependentUpon>Main.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Pages\MedicalRep\CreateMedicalRep.aspx.cs">
+      <DependentUpon>CreateMedicalRep.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\MedicalRep\CreateMedicalRep.aspx.designer.cs">
+      <DependentUpon>CreateMedicalRep.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\MedicalRep\EditMedicalRep.aspx.cs">
+      <DependentUpon>EditMedicalRep.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\MedicalRep\EditMedicalRep.aspx.designer.cs">
+      <DependentUpon>EditMedicalRep.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\MedicalRep\MedicalRepPage.aspx.cs">
+      <DependentUpon>MedicalRepPage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\MedicalRep\MedicalRepPage.aspx.designer.cs">
+      <DependentUpon>MedicalRepPage.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Product\CreateProduct.aspx.cs">
       <DependentUpon>CreateProduct.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -541,9 +565,7 @@
       <DependentUpon>202507181137289_MinorFixes.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Pages\MedicalRep\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
