@@ -155,6 +155,170 @@ namespace data_pharm_softwere.Pages.Salesman
         {
         }
 
+        //Excel Export
+
+        private string EscapeCsv(string input)
+        {
+            if (string.IsNullOrEmpty(input)) return "";
+
+            if (input.Contains(",") || input.Contains("\"") || input.Contains("\n"))
+            {
+                input = input.Replace("\"", "\"\"");
+                return $"\"{input}\"";
+            }
+
+            return input;
+        }
+
+        protected void btnExportExcel_Click(object sender, EventArgs e)
+        {
+            var search = txtSearch.Text.Trim();
+            int.TryParse(ddlTown.SelectedValue, out int townId);
+
+            var query = _context.Salesmen
+                .Include(s => s.SalesmanTowns.Select(st => st.Town))
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(s =>
+                    s.Name.Contains(search) ||
+                    s.SalesmanID.ToString().Contains(search) ||
+                    s.Contact.Contains(search));
+            }
+
+            if (townId > 0)
+            {
+                query = query.Where(s => s.SalesmanTowns.Any(st => st.TownID == townId));
+            }
+
+            var salesmen = query.OrderBy(s => s.SalesmanID).ToList();
+
+            var sb = new System.Text.StringBuilder();
+            sb.AppendLine("ID,Name,Email,Contact,Towns,Created At");
+
+            foreach (var s in salesmen)
+            {
+                var townNames = string.Join(" | ", s.SalesmanTowns
+                    .Select(st => st.Town?.Name)
+                    .Where(t => !string.IsNullOrEmpty(t)));
+
+                sb.AppendLine(string.Join(",", new string[] {
+            s.SalesmanID.ToString("D4"),
+            EscapeCsv(s.Name),
+            EscapeCsv(s.Email),
+            EscapeCsv(s.Contact),
+            EscapeCsv(townNames),
+            "=\"" + s.CreatedAt.ToString("yyyy-MM-dd HH:mm") + "\""
+        }));
+            }
+
+            Response.Clear();
+            Response.Buffer = true;
+            Response.AddHeader("content-disposition", $"attachment;filename=Salesman_Report_{DateTime.Now:yyyyMMdd}.csv");
+            Response.ContentType = "text/csv";
+            Response.ContentEncoding = System.Text.Encoding.UTF8;
+            Response.Output.Write(sb.ToString());
+            Response.Flush();
+            Response.End();
+        }
+
+        //PDF Export
+        protected void btnExportPdf_Click(object sender, EventArgs e)
+        {
+            Document pdfDoc = new Document(PageSize.A4, 10f, 10f, 20f, 10f);
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                PdfWriter.GetInstance(pdfDoc, memoryStream);
+                pdfDoc.Open();
+
+                var titleFont = FontFactory.GetFont("Arial", 14, iTextSharp.text.Font.BOLD);
+                var headerFont = FontFactory.GetFont("Arial", 9, iTextSharp.text.Font.BOLD);
+                var bodyFont = FontFactory.GetFont("Arial", 8);
+
+                pdfDoc.Add(new Paragraph("Data Pharma - Salesman Report", titleFont));
+                pdfDoc.Add(new Paragraph("Generated on: " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), bodyFont));
+
+                // Filter summary
+                string searchText = string.IsNullOrWhiteSpace(txtSearch.Text) ? "All Salesmen" : $"Search: \"{txtSearch.Text}\"";
+                string townText = string.IsNullOrEmpty(ddlTown.SelectedValue) || ddlTown.SelectedValue == "0"
+                    ? "All Towns"
+                    : ddlTown.SelectedItem.Text;
+                string filterSummary = $"This report includes data for {searchText}, filtered by {townText}.";
+                pdfDoc.Add(new Paragraph(filterSummary, bodyFont));
+                pdfDoc.Add(new Paragraph(" "));
+
+                PdfPTable table = new PdfPTable(4) { WidthPercentage = 100 };
+                table.SetWidths(new float[] { 2f, 3f, 2f, 5f });
+
+                string[] headers = { "Name", "Email", "Contact", "Towns" };
+
+                foreach (var h in headers)
+                {
+                    PdfPCell headerCell = new PdfPCell(new Phrase(h, headerFont))
+                    {
+                        BackgroundColor = BaseColor.LIGHT_GRAY,
+                        Padding = 5,
+                        HorizontalAlignment = Element.ALIGN_CENTER,
+                        VerticalAlignment = Element.ALIGN_MIDDLE
+                    };
+                    table.AddCell(headerCell);
+                }
+
+                var search = txtSearch.Text.Trim();
+                int.TryParse(ddlTown.SelectedValue, out int townId);
+
+                var query = _context.Salesmen
+                    .Include(s => s.SalesmanTowns.Select(st => st.Town))
+                    .AsQueryable();
+
+                if (!string.IsNullOrWhiteSpace(search))
+                {
+                    query = query.Where(s =>
+                        s.Name.Contains(search) ||
+                        s.SalesmanID.ToString().Contains(search) ||
+                        s.Contact.Contains(search));
+                }
+
+                if (townId > 0)
+                {
+                    query = query.Where(s => s.SalesmanTowns.Any(st => st.TownID == townId));
+                }
+
+                var salesmen = query.OrderBy(s => s.SalesmanID).ToList();
+
+                foreach (var s in salesmen)
+                {
+                    var townNames = s.SalesmanTowns.Select(st => st.Town.Name).ToList();
+                    string townsFormatted = string.Join(" | ", townNames);
+
+                    table.AddCell(CreateWrappedCell(s.Name, bodyFont));
+                    table.AddCell(CreateWrappedCell(s.Email, bodyFont));
+                    table.AddCell(CreateWrappedCell(s.Contact, bodyFont));
+                    table.AddCell(CreateWrappedCell(townsFormatted, bodyFont));
+                }
+
+                pdfDoc.Add(table);
+                pdfDoc.Close();
+
+                Response.ContentType = "application/pdf";
+                Response.AddHeader("content-disposition", $"attachment;filename=Salesman_Report_{DateTime.Now:dd_MMMM_yyyy}.pdf");
+                Response.BinaryWrite(memoryStream.ToArray());
+                Response.End();
+            }
+        }
+
+        private PdfPCell CreateWrappedCell(string text, Font font)
+        {
+            return new PdfPCell(new Phrase(text, font))
+            {
+                NoWrap = false,
+                Padding = 5,
+                HorizontalAlignment = Element.ALIGN_LEFT,
+                VerticalAlignment = Element.ALIGN_TOP
+            };
+        }
+
         //Import functions
 
         //Sample file

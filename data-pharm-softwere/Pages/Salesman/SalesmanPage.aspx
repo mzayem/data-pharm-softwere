@@ -19,7 +19,18 @@
                     CssClass="btn btn-primary">
                     + Add New Salesman
                 </asp:HyperLink>
-               
+                <asp:Button 
+                    ID="btnExportExcel" 
+                    runat="server" 
+                    CssClass="btn btn-success ms-2" 
+                    Text="Export to Excel" 
+                    OnClick="btnExportExcel_Click" />
+                <asp:Button 
+                    ID="btnExportPdf" 
+                    runat="server" 
+                    CssClass="btn btn-danger ms-2" 
+                    Text="Export to PDF" 
+                    OnClick="btnExportPdf_Click" />
                 </div>
 
             <div class="d-flex gap-2 align-items-start">

@@ -325,7 +325,6 @@ namespace data_pharm_softwere.Pages.Customer
         }
 
         //Excel Export
-
         protected void btnExportExcel_Click(object sender, EventArgs e)
         {
             var customers = GetFilteredCustomerList(txtSearch.Text.Trim());
