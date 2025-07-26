@@ -1,5 +1,5 @@
 ﻿using data_pharm_softwere.Data;
-
+using System.Data.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,12 +31,23 @@ namespace data_pharm_softwere.Pages.Batch
 
         private void LoadVendors()
         {
-            var vendors = _context.Vendors.OrderBy(v => v.Name).ToList();
-            ddlVendor.DataSource = vendors;
-            ddlVendor.DataTextField = "Name";
-            ddlVendor.DataValueField = "VendorID";
-            ddlVendor.DataBind();
-            ddlVendor.Items.Insert(0, new ListItem("All Vendors", ""));
+                var vendors = _context.Vendors
+               .Include(v => v.Account)
+               .OrderBy(v => v.Account.AccountName)
+               .Select(v => new
+               {
+                   v.AccountId,
+                   AccountName = v.Account.AccountName
+               })
+               .ToList();
+
+                ddlVendor.DataSource = vendors;
+                ddlVendor.DataTextField = "AccountName";
+                ddlVendor.DataValueField = "AccountId";
+                ddlVendor.DataBind();
+                ddlVendor.Items.Insert(0, new ListItem("-- Select Vendor --", ""));
+            
+            
         }
 
         private void LoadGroups()
@@ -46,7 +57,7 @@ namespace data_pharm_softwere.Pages.Batch
 
             if (int.TryParse(ddlVendor.SelectedValue, out vendorId))
             {
-                groups = groups.Where(g => g.Division.VendorID == vendorId);
+                groups = groups.Where(g => g.Division.AccountId == vendorId);
             }
 
             ddlGroup.DataSource = groups.OrderBy(g => g.Name).ToList();
@@ -115,7 +126,7 @@ namespace data_pharm_softwere.Pages.Batch
                     b.DP,
                     ProductID = (int?)b.Product.ProductID,
                     GroupID = (int?)b.Product.SubGroup.Group.GroupID,
-                    VendorID = (int?)b.Product.SubGroup.Group.Division.Vendor.VendorID,
+                    VendorID = (int?)b.Product.SubGroup.Group.Division.Vendor.AccountId,
                     SubGroupID = (int?)b.Product.SubGroup.SubGroupID
                 });
 

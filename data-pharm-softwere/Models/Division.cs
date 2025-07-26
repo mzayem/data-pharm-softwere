@@ -18,9 +18,9 @@ namespace data_pharm_softwere.Models
 
         // Foreign key to Vendor
         [Required]
-        public int VendorID { get; set; }
+        public int AccountId { get; set; }
 
-        [ForeignKey("VendorID")]
+        [ForeignKey("AccountId")]
         public virtual Vendor Vendor { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;

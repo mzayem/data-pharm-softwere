@@ -24,12 +24,29 @@ namespace data_pharm_softwere.Pages.Batch
 
         private void LoadVendors()
         {
-            var vendors = _context.Vendors.OrderBy(v => v.Name).ToList();
-            ddlVendor.DataSource = vendors;
-            ddlVendor.DataTextField = "Name";
-            ddlVendor.DataValueField = "VendorID";
-            ddlVendor.DataBind();
-            ddlVendor.Items.Insert(0, new ListItem("-- Select Vendor --", ""));
+            try
+            {
+                var vendors = _context.Vendors
+               .Include(v => v.Account)
+               .OrderBy(v => v.Account.AccountName)
+               .Select(v => new
+               {
+                   v.AccountId,
+                   AccountName = v.Account.AccountName
+               })
+               .ToList();
+
+                ddlVendor.DataSource = vendors;
+                ddlVendor.DataTextField = "AccountName";
+                ddlVendor.DataValueField = "AccountId";
+                ddlVendor.DataBind();
+                ddlVendor.Items.Insert(0, new ListItem("-- Select Vendor --", ""));
+            }
+            catch (Exception ex)
+            {
+                lblMessage.Text = "Error loading vendors: " + ex.Message;
+                lblMessage.CssClass = "alert alert-danger mt-3";
+            }
         }
 
         private void LoadGroups(int? vendorId = null)
@@ -38,7 +55,7 @@ namespace data_pharm_softwere.Pages.Batch
 
             if (vendorId.HasValue && vendorId.Value > 0)
             {
-                query = query.Where(g => g.Division.VendorID == vendorId.Value);
+                query = query.Where(g => g.Division.AccountId == vendorId.Value);
             }
 
             ddlGroup.DataSource = query.OrderBy(g => g.Name).ToList();
@@ -54,7 +71,7 @@ namespace data_pharm_softwere.Pages.Batch
 
             if (vendorId.HasValue && vendorId.Value > 0)
             {
-                query = query.Where(sg => sg.Group.Division.VendorID == vendorId.Value);
+                query = query.Where(sg => sg.Group.Division.AccountId == vendorId.Value);
             }
 
             // Filter by Group if valid
@@ -105,7 +122,7 @@ namespace data_pharm_softwere.Pages.Batch
             }
             else if (int.TryParse(ddlVendor.SelectedValue, out int vendorId))
             {
-                query = query.Where(p => p.SubGroup.Group.Division.VendorID == vendorId);
+                query = query.Where(p => p.SubGroup.Group.Division.AccountId == vendorId);
             }
 
             var products = query

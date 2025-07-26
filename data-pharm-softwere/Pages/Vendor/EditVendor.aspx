@@ -6,61 +6,67 @@
 
         <asp:ValidationSummary runat="server" CssClass="text-danger" />
 
+        <asp:Label ID="lblMessage" runat="server" CssClass="text-success fw-semibold"></asp:Label>
+
         <asp:Panel ID="pnlForm" runat="server" CssClass="card shadow-sm p-4 rounded-4">
             <div class="row g-3">
 
-                <!-- Left Column -->
                 <div class="col-md-6">
-                    <div>
-                        <label for="txtName" class="form-label fw-semibold">Vendor Name</label>
-                        <asp:TextBox ID="txtName" runat="server" CssClass="form-control rounded-pill" />
-                        <asp:RequiredFieldValidator ControlToValidate="txtName" runat="server" ErrorMessage="Vendor Name is required" CssClass="text-danger" Display="Dynamic" />
+                    <label for="txtID" class="form-label fw-semibold">Account ID</label>
+                   <div class="d-flex gap-2 align-items-end">
+                        <asp:TextBox ID="txtID" runat="server" CssClass="form-control rounded-pill" />
+                        <asp:Button ID="btnFetchAccount" runat="server" Text="Get Account" OnClick="btnFetchAccount_Click" CssClass="btn btn-outline-primary" />
+                        <asp:RequiredFieldValidator ID="revID" runat="server"
+                            ControlToValidate="txtID"
+                            ErrorMessage="ID is required"
+                            CssClass="text-danger"
+                            Display="Dynamic"
+                            ValidationGroup="VendorForm" 
+                            />
+                        </div>
                     </div>
 
-                    <div>
+                    <div class="col-md-6">
+                        <label for="txtName" class="form-label fw-semibold">Vendor Name</label>
+                        <asp:TextBox ID="txtName" runat="server" CssClass="form-control rounded-pill bg-light text-secondary" ReadOnly="true" />
+                    </div>
+        
+
+                    <div class="col-md-6">
                         <label for="txtEmail" class="form-label fw-semibold mt-3">Email</label>
                         <asp:TextBox ID="txtEmail" runat="server" CssClass="form-control rounded-pill" TextMode="Email" />
                     </div>
 
-                    <div>
+                    <div class="col-md-6">
                         <label for="txtAddress" class="form-label fw-semibold mt-3">Address</label>
                         <asp:TextBox ID="txtAddress" runat="server" CssClass="form-control rounded-pill" />
                         <asp:RequiredFieldValidator ControlToValidate="txtAddress" runat="server" ErrorMessage="Address is required" CssClass="text-danger" Display="Dynamic" />
                     </div>
 
-                    <div>
+                    <div class="col-md-6">
                         <label for="txtTown" class="form-label fw-semibold mt-3">Town</label>
                         <asp:TextBox ID="txtTown" runat="server" CssClass="form-control rounded-pill" />
                         <asp:RequiredFieldValidator ControlToValidate="txtTown" runat="server" ErrorMessage="Town is required" CssClass="text-danger" Display="Dynamic" />
                     </div>
 
-                    <div>
+                    <div class="col-md-6">
                         <label for="txtCity" class="form-label fw-semibold mt-3">City</label>
                         <asp:TextBox ID="txtCity" runat="server" CssClass="form-control rounded-pill" />
                         <asp:RequiredFieldValidator ControlToValidate="txtCity" runat="server" ErrorMessage="City is required" CssClass="text-danger" Display="Dynamic" />
                     </div>
 
-                    <div>
+                    <div class="col-md-6">
                         <label for="txtLicenceNo" class="form-label fw-semibold mt-3">Licence No</label>
                         <asp:TextBox ID="txtLicenceNo" runat="server" CssClass="form-control rounded-pill" />
                     </div>
 
-                    <div>
+                    <div class="col-md-6">
                         <label for="txtExpiryDate" class="form-label fw-semibold mt-3">Expiry Date</label>
                         <asp:TextBox ID="txtExpiryDate" runat="server" CssClass="form-control rounded-pill" TextMode="Date" />
                         <asp:RequiredFieldValidator ControlToValidate="txtExpiryDate" runat="server" ErrorMessage="Expiry Date is required" CssClass="text-danger" Display="Dynamic" />
                     </div>
-                </div>
 
-                <!-- Right Column -->
-                <div class="col-md-6">
-                    <div>
-                        <label for="txtSraCode" class="form-label fw-semibold">SRA Code</label>
-                        <asp:TextBox ID="txtSraCode" runat="server" CssClass="form-control rounded-pill" />
-                        <asp:RequiredFieldValidator ControlToValidate="txtSraCode" runat="server" ErrorMessage="SRA Code is required" CssClass="text-danger" Display="Dynamic" />
-                    </div>
-
-                    <div>
+                    <div class="col-md-6">
                         <label for="txtContact" class="form-label fw-semibold mt-3">Contact</label>
                         <asp:TextBox ID="txtContact" runat="server" CssClass="form-control rounded-pill" />
                         <asp:RegularExpressionValidator 
@@ -73,47 +79,33 @@
                             Display="Dynamic" />
                     </div>
 
-                    <div>
+                    <div class="col-md-6">
                         <label for="txtGstNo" class="form-label fw-semibold mt-3">GST No</label>
                         <asp:TextBox ID="txtGstNo" runat="server" CssClass="form-control rounded-pill" />
                     </div>
 
-                    <div>
+                    <div class="col-md-6">
                         <label for="txtNtnNo" class="form-label fw-semibold mt-3">NTN No</label>
                         <asp:TextBox ID="txtNtnNo" runat="server" CssClass="form-control rounded-pill" />
                         <asp:RequiredFieldValidator ControlToValidate="txtNtnNo" runat="server" ErrorMessage="NTN No is required" CssClass="text-danger" Display="Dynamic" />
                     </div>
 
-                    <div>
+                    <div class="col-md-6">
                         <label for="txtCompanyCode" class="form-label fw-semibold mt-3">Company Code</label>
                         <asp:TextBox ID="txtCompanyCode" runat="server" CssClass="form-control rounded-pill" />
                         <asp:RequiredFieldValidator ControlToValidate="txtCompanyCode" runat="server" ErrorMessage="Company Code is required" CssClass="text-danger" Display="Dynamic" />
                     </div>
 
-                    <div>
-                        <label for="txtDiscount" class="form-label fw-semibold mt-3">Max Discount Allowed (%)</label>
-                        <asp:TextBox ID="txtDiscount" runat="server" CssClass="form-control rounded-pill" TextMode="Number" />
-                        <asp:RequiredFieldValidator 
-                            ControlToValidate="txtDiscount" 
-                            runat="server" 
-                            ErrorMessage="Max Discount is required" 
-                            CssClass="text-danger" 
-                            Display="Dynamic" />
-                        <asp:RegularExpressionValidator 
-                            ID="revDiscount" 
-                            runat="server" 
-                            ControlToValidate="txtDiscount"
-                            ValidationExpression="^(100(\.0{1,2})?|[0-9]{1,2}(\.[0-9]{1,2})?)$"
-                            ErrorMessage="Enter a valid discount (0 to 100%)"
-                            CssClass="text-danger"
-                            Display="Dynamic" />
+                     <div class="col-md-6">
+                        <label for="txtSraCode" class="form-label fw-semibold">SRA Code</label>
+                        <asp:TextBox ID="txtSraCode" runat="server" CssClass="form-control rounded-pill" />
+                        <asp:RequiredFieldValidator ControlToValidate="txtSraCode" runat="server" ErrorMessage="SRA Code is required" CssClass="text-danger" Display="Dynamic" />
                     </div>
 
-                    <div>
-                        <label for="txtRemarks" class="form-label fw-semibold mt-3">Remarks</label>
+                    <div class="col-md-6">
+                        <label for="txtRemarks" class="form-label fw-semibold">Remarks</label>
                         <asp:TextBox ID="txtRemarks" runat="server" CssClass="form-control rounded-pill"/>
                     </div>
-                </div>
             </div>
 
             <div class="d-flex flex-wrap gap-2 justify-content-between mt-4">

@@ -1,9 +1,7 @@
 ﻿using data_pharm_softwere.Data;
-using data_pharm_softwere.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using System.Data.Entity;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -43,12 +41,29 @@ namespace data_pharm_softwere.Pages.Division
 
         private void LoadVendors()
         {
-            var vendors = _context.Vendors.ToList();
-            ddlVendor.DataSource = vendors;
-            ddlVendor.DataTextField = "Name";
-            ddlVendor.DataValueField = "VendorID";
-            ddlVendor.DataBind();
-            ddlVendor.Items.Insert(0, new ListItem("-- Select Vendor --", ""));
+            try
+            {
+                var vendors = _context.Vendors
+               .Include(v => v.Account)
+               .OrderBy(v => v.Account.AccountName)
+               .Select(v => new
+               {
+                   v.AccountId,
+                   AccountName = v.Account.AccountName
+               })
+               .ToList();
+
+                ddlVendor.DataSource = vendors;
+                ddlVendor.DataTextField = "AccountName";
+                ddlVendor.DataValueField = "AccountId";
+                ddlVendor.DataBind();
+                ddlVendor.Items.Insert(0, new ListItem("-- Select Vendor --", ""));
+            }
+            catch (Exception ex)
+            {
+                lblMessage.Text = "Error loading vendors: " + ex.Message;
+                lblMessage.CssClass = "alert alert-danger mt-3";
+            }
         }
 
         private void LoadDivision()
@@ -61,7 +76,7 @@ namespace data_pharm_softwere.Pages.Division
             }
 
             txtName.Text = division.Name;
-            ddlVendor.SelectedValue = division.VendorID.ToString();
+            ddlVendor.SelectedValue = division.AccountId.ToString();
         }
 
         protected void btnUpdate_Click(object sender, EventArgs e)
@@ -76,7 +91,7 @@ namespace data_pharm_softwere.Pages.Division
                 }
 
                 division.Name = txtName.Text.Trim();
-                division.VendorID = int.Parse(ddlVendor.SelectedValue);
+                division.AccountId = int.Parse(ddlVendor.SelectedValue);
 
                 _context.SaveChanges();
                 Response.Redirect("/division");

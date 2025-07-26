@@ -50,7 +50,7 @@ namespace data_pharm_softwere.Pages.Product
             catch (Exception ex)
             {
                 lblMessage.Text = "Error fetching Product ID: " + ex.Message;
-                lblMessage.CssClass = "text-danger fw-semibold";
+                lblMessage.CssClass = "alert alert-danger mt-3";
             }
         }
 
@@ -58,19 +58,29 @@ namespace data_pharm_softwere.Pages.Product
         {
             try
             {
-                var vendors = _context.Vendors.ToList();
+                var vendors = _context.Vendors
+               .Include(v => v.Account)
+               .OrderBy(v => v.Account.AccountName)
+               .Select(v => new
+               {
+                   v.AccountId,
+                   AccountName = v.Account.AccountName
+               })
+               .ToList();
+
                 ddlVendor.DataSource = vendors;
-                ddlVendor.DataTextField = "Name";
-                ddlVendor.DataValueField = "VendorID";
+                ddlVendor.DataTextField = "AccountName";
+                ddlVendor.DataValueField = "AccountId";
                 ddlVendor.DataBind();
                 ddlVendor.Items.Insert(0, new ListItem("-- Select Vendor --", ""));
             }
             catch (Exception ex)
             {
                 lblMessage.Text = "Error loading vendors: " + ex.Message;
-                lblMessage.CssClass = "text-danger fw-semibold";
+                lblMessage.CssClass = "alert alert-danger mt-3";
             }
         }
+
 
         private void LoadGroups(int? vendorId = null)
         {
@@ -78,7 +88,7 @@ namespace data_pharm_softwere.Pages.Product
             {
                 var query = _context.Groups.Include(g => g.Division).AsQueryable();
                 if (vendorId.HasValue)
-                    query = query.Where(g => g.Division.VendorID == vendorId.Value);
+                    query = query.Where(g => g.Division.AccountId == vendorId.Value);
 
                 ddlGroup.DataSource = query.ToList();
                 ddlGroup.DataTextField = "Name";
@@ -89,7 +99,7 @@ namespace data_pharm_softwere.Pages.Product
             catch (Exception ex)
             {
                 lblMessage.Text = "Error loading groups: " + ex.Message;
-                lblMessage.CssClass = "text-danger fw-semibold";
+                lblMessage.CssClass = "alert alert-danger mt-3";
             }
         }
 
@@ -99,7 +109,7 @@ namespace data_pharm_softwere.Pages.Product
             {
                 var query = _context.SubGroups.Include(sg => sg.Group.Division).AsQueryable();
                 if (vendorId.HasValue)
-                    query = query.Where(sg => sg.Group.Division.VendorID == vendorId.Value);
+                    query = query.Where(sg => sg.Group.Division.AccountId == vendorId.Value);
 
                 if (groupId.HasValue)
                     query = query.Where(sg => sg.GroupID == groupId.Value);
@@ -113,7 +123,7 @@ namespace data_pharm_softwere.Pages.Product
             catch (Exception ex)
             {
                 lblMessage.Text = "Error loading subgroups: " + ex.Message;
-                lblMessage.CssClass = "text-danger fw-semibold";
+                lblMessage.CssClass = "alert alert-danger mt-3";
             }
         }
 
@@ -235,14 +245,14 @@ namespace data_pharm_softwere.Pages.Product
                     _context.SaveChanges();
 
                     lblMessage.Text = "Product saved successfully!";
-                    lblMessage.CssClass = "text-success fw-semibold";
+                    lblMessage.CssClass = "alert alert-success mt-3";
                     ClearForm();
                     ShowNextProductId();
                 }
                 catch (Exception ex)
                 {
                     lblMessage.Text = "Error: " + ex.Message;
-                    lblMessage.CssClass = "text-danger fw-semibold";
+                    lblMessage.CssClass = "alert alert-danger mt-3";
                 }
             }
         }

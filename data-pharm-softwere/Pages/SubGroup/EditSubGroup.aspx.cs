@@ -47,18 +47,26 @@ namespace data_pharm_softwere.Pages.SubGroup
         {
             try
             {
-                var vendors = _context.Vendors.ToList();
-                ddlVendor.DataSource = vendors;
-                ddlVendor.DataTextField = "Name";
-                ddlVendor.DataValueField = "VendorID";
-                ddlVendor.DataBind();
+                var vendors = _context.Vendors
+               .Include(v => v.Account)
+               .OrderBy(v => v.Account.AccountName)
+               .Select(v => new
+               {
+                   v.AccountId,
+                   AccountName = v.Account.AccountName
+               })
+               .ToList();
 
+                ddlVendor.DataSource = vendors;
+                ddlVendor.DataTextField = "AccountName";
+                ddlVendor.DataValueField = "AccountId";
+                ddlVendor.DataBind();
                 ddlVendor.Items.Insert(0, new ListItem("-- Select Vendor --", ""));
             }
             catch (Exception ex)
             {
                 lblMessage.Text = "Error loading vendors: " + ex.Message;
-                lblMessage.CssClass = "text-danger fw-semibold";
+                lblMessage.CssClass = "alert alert-danger mt-3";
             }
         }
 
@@ -70,7 +78,7 @@ namespace data_pharm_softwere.Pages.SubGroup
 
                 if (vendorId.HasValue && vendorId.Value > 0)
                 {
-                    groupsQuery = groupsQuery.Where(g => g.Division.VendorID == vendorId.Value);
+                    groupsQuery = groupsQuery.Where(g => g.Division.AccountId == vendorId.Value);
                 }
 
                 var groups = groupsQuery.ToList();
@@ -107,8 +115,8 @@ namespace data_pharm_softwere.Pages.SubGroup
                 var group = _context.Groups.FirstOrDefault(g => g.GroupID == subGroup.GroupID);
                 if (group != null)
                 {
-                    ddlVendor.SelectedValue = group.Division.VendorID.ToString();
-                    LoadGroupsByVendor(group.Division.VendorID);
+                    ddlVendor.SelectedValue = group.Division.AccountId.ToString();
+                    LoadGroupsByVendor(group.Division.AccountId);
                     ddlGroup.SelectedValue = subGroup.GroupID.ToString();
                 }
                 else

@@ -52,10 +52,10 @@ namespace data_pharm_softwere.Pages.Product
                     p.PackingType,
                     SubGroupID = p.SubGroup.SubGroupID,
                     GroupID = p.SubGroup.Group.GroupID,
-                    VendorID = p.SubGroup.Group.Division.Vendor.VendorID,
+                    VendorID = p.SubGroup.Group.Division.Vendor.AccountId,
                     SubGroupName = p.SubGroup.Name,
                     GroupName = p.SubGroup.Group.Name,
-                    VendorName = p.SubGroup.Group.Division.Vendor.Name,
+                    VendorName = p.SubGroup.Group.Division.Vendor.Account.AccountName,
                     p.CreatedAt
                 });
 
@@ -102,12 +102,18 @@ namespace data_pharm_softwere.Pages.Product
         private void LoadVendors()
         {
             var vendors = _context.Vendors
-                .OrderBy(v => v.Name)
-                .ToList();
+               .Include(v => v.Account)
+               .OrderBy(v => v.Account.AccountName)
+               .Select(v => new
+               {
+                   v.AccountId,
+                   AccountName = v.Account.AccountName
+               })
+               .ToList();
 
             ddlVendor.DataSource = vendors;
-            ddlVendor.DataTextField = "Name";
-            ddlVendor.DataValueField = "VendorID";
+            ddlVendor.DataTextField = "AccountName";
+            ddlVendor.DataValueField = "AccountId";
             ddlVendor.DataBind();
             ddlVendor.Items.Insert(0, new WebListItem("All Vendors", ""));
         }
@@ -119,7 +125,7 @@ namespace data_pharm_softwere.Pages.Product
 
             if (!string.IsNullOrEmpty(ddlVendor.SelectedValue) && int.TryParse(ddlVendor.SelectedValue, out vendorId))
             {
-                allGroups = allGroups.Where(g => g.Division.VendorID == vendorId);
+                allGroups = allGroups.Where(g => g.Division.AccountId == vendorId);
             }
 
             var groups = allGroups
@@ -163,13 +169,13 @@ namespace data_pharm_softwere.Pages.Product
 
         protected void ddlVendor_SelectedIndexChanged(object sender, EventArgs e)
         {
-            LoadGroups(); // optionally reload groups based on vendor
+            LoadGroups(); 
             LoadProducts(txtSearch.Text.Trim());
         }
 
         protected void ddlGroup_SelectedIndexChanged(object sender, EventArgs e)
         {
-            LoadSubGroups(); // optionally reload subgroups based on group
+            LoadSubGroups(); 
             LoadProducts(txtSearch.Text.Trim());
         }
 
@@ -226,7 +232,7 @@ namespace data_pharm_softwere.Pages.Product
                     p.PackingType.ToString().Contains(search) ||
                     p.SubGroup.Name.Contains(search) ||
                     p.SubGroup.Group.Name.Contains(search) ||
-                    p.SubGroup.Group.Division.Vendor.Name.Contains(search)
+                    p.SubGroup.Group.Division.Vendor.Account.AccountName.Contains(search)
                 );
             }
 
@@ -234,7 +240,7 @@ namespace data_pharm_softwere.Pages.Product
             if (!string.IsNullOrEmpty(ddlVendor.SelectedValue))
             {
                 int vendorId = int.Parse(ddlVendor.SelectedValue);
-                query = query.Where(p => p.SubGroup.Group.Division.Vendor.VendorID == vendorId);
+                query = query.Where(p => p.SubGroup.Group.Division.Vendor.AccountId == vendorId);
             }
 
             string vendorText = string.IsNullOrEmpty(ddlVendor.SelectedValue)
@@ -282,7 +288,7 @@ namespace data_pharm_softwere.Pages.Product
             p.UnReqGST.ToString(),
             p.IsAdvTaxExempted ? "Yes" : "No",
             p.IsGSTExempted ? "Yes" : "No",
-            EscapeCsv(p.SubGroup?.Group?.Division?.Vendor?.Name ?? "-"),
+            EscapeCsv(p.SubGroup?.Group?.Division?.Vendor?.Account.AccountName ?? "-"),
             EscapeCsv(p.SubGroup?.Group?.Name ?? "-"),
             EscapeCsv(p.SubGroup?.Name ?? "-"),
             "=\"" + p.CreatedAt.ToString("dd MMMM, yyyy") + "\"",
@@ -329,14 +335,14 @@ namespace data_pharm_softwere.Pages.Product
                     p.PackingType.ToString().Contains(search) ||
                     p.SubGroup.Name.Contains(search) ||
                     p.SubGroup.Group.Name.Contains(search) ||
-                    p.SubGroup.Group.Division.Vendor.Name.Contains(search)
+                    p.SubGroup.Group.Division.Vendor.Account.AccountName.Contains(search)
                 );
             }
 
             if (!string.IsNullOrEmpty(ddlVendor.SelectedValue))
             {
                 int vendorId = int.Parse(ddlVendor.SelectedValue);
-                query = query.Where(p => p.SubGroup.Group.Division.Vendor.VendorID == vendorId);
+                query = query.Where(p => p.SubGroup.Group.Division.Vendor.AccountId == vendorId);
             }
 
             if (!string.IsNullOrEmpty(ddlGroup.SelectedValue))
@@ -425,7 +431,7 @@ namespace data_pharm_softwere.Pages.Product
                     table.AddCell(new Phrase(p.UnReqGST.ToString() + "%", bodyFont));
                     table.AddCell(new Phrase(p.IsAdvTaxExempted ? "Yes" : "No", bodyFont));
                     table.AddCell(new Phrase(p.IsGSTExempted ? "Yes" : "No", bodyFont));
-                    table.AddCell(new Phrase(p.SubGroup?.Group?.Division?.Vendor?.Name ?? "-", bodyFont));
+                    table.AddCell(new Phrase(p.SubGroup?.Group?.Division?.Vendor?.Account.AccountName ?? "-", bodyFont));
                     table.AddCell(new Phrase(p.SubGroup?.Group?.Name ?? "-", bodyFont));
                     table.AddCell(new Phrase(p.SubGroup?.Name ?? "-", bodyFont));
                 }

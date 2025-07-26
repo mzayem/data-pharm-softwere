@@ -3,7 +3,6 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web.UI.WebControls;
 using data_pharm_softwere.Data;
-using data_pharm_softwere.Models;
 
 namespace data_pharm_softwere.Pages.SubGroup
 {
@@ -17,7 +16,7 @@ namespace data_pharm_softwere.Pages.SubGroup
             {
                 lblMessage.Text = string.Empty;
                 LoadVendors();
-                LoadGroupsByVendor(); // Load all groups initially
+                LoadGroupsByVendor(); 
             }
         }
 
@@ -25,18 +24,26 @@ namespace data_pharm_softwere.Pages.SubGroup
         {
             try
             {
-                var vendors = _context.Vendors.ToList();
-                ddlVendor.DataSource = vendors;
-                ddlVendor.DataTextField = "Name";
-                ddlVendor.DataValueField = "VendorID";
-                ddlVendor.DataBind();
+                var vendors = _context.Vendors
+               .Include(v => v.Account)
+               .OrderBy(v => v.Account.AccountName)
+               .Select(v => new
+               {
+                   v.AccountId,
+                   AccountName = v.Account.AccountName
+               })
+               .ToList();
 
+                ddlVendor.DataSource = vendors;
+                ddlVendor.DataTextField = "AccountName";
+                ddlVendor.DataValueField = "AccountId";
+                ddlVendor.DataBind();
                 ddlVendor.Items.Insert(0, new ListItem("-- Select Vendor --", ""));
             }
             catch (Exception ex)
             {
                 lblMessage.Text = "Error loading vendors: " + ex.Message;
-                lblMessage.CssClass = "text-danger fw-semibold";
+                lblMessage.CssClass = "alert alert-danger mt-3";
             }
         }
 
@@ -48,7 +55,7 @@ namespace data_pharm_softwere.Pages.SubGroup
 
                 if (vendorId.HasValue && vendorId.Value > 0)
                 {
-                    groupsQuery = groupsQuery.Where(g => g.Division.VendorID == vendorId.Value);
+                    groupsQuery = groupsQuery.Where(g => g.Division.AccountId == vendorId.Value);
                 }
 
                 var groups = groupsQuery.ToList();
@@ -63,7 +70,7 @@ namespace data_pharm_softwere.Pages.SubGroup
             catch (Exception ex)
             {
                 lblMessage.Text = "Error loading groups: " + ex.Message;
-                lblMessage.CssClass = "text-danger fw-semibold";
+                lblMessage.CssClass = "alert alert-danger mt-3";
             }
         }
 
@@ -95,14 +102,14 @@ namespace data_pharm_softwere.Pages.SubGroup
                     _context.SubGroups.Add(subGroup);
                     _context.SaveChanges();
 
-                    lblMessage.CssClass = "text-success fw-semibold";
+                    lblMessage.CssClass = "alert alert-success mt-3"; 
                     lblMessage.Text = "Sub Group saved successfully.";
                     ClearForm();
                 }
                 catch (Exception ex)
                 {
                     lblMessage.Text = "Error: " + ex.Message;
-                    lblMessage.CssClass = "text-danger fw-semibold";
+                    lblMessage.CssClass = "alert alert-danger mt-3";
                 }
             }
         }

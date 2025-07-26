@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Data.Entity;
 
 namespace data_pharm_softwere.Pages.Vendor
 {
@@ -29,7 +30,9 @@ namespace data_pharm_softwere.Pages.Vendor
 
         private void LoadVendors(string search = "")
         {
-            var query = _context.Vendors.AsQueryable();
+            var query = _context.Vendors
+                .Include(v => v.Account)
+                .AsQueryable();
 
             if (!_context.Vendors.Any())
             {
@@ -40,8 +43,8 @@ namespace data_pharm_softwere.Pages.Vendor
             if (!string.IsNullOrWhiteSpace(search))
             {
                 query = query.Where(v =>
-                    v.VendorID.ToString().Contains(search) ||
-                    v.Name.Contains(search) ||
+                    v.AccountId.ToString().Contains(search) ||
+                    v.Account.AccountName.Contains(search) ||
                     v.City.Contains(search) ||
                     v.CompanyCode.Contains(search) ||
                     v.Email.Contains(search) ||
@@ -66,18 +69,18 @@ namespace data_pharm_softwere.Pages.Vendor
         {
             DropDownList ddl = (DropDownList)sender;
             GridViewRow row = (GridViewRow)ddl.NamingContainer;
-            HiddenField hf = (HiddenField)row.FindControl("hfVendorID");
+            HiddenField hf = (HiddenField)row.FindControl("hfAccountId");
 
-            int vendorId = int.Parse(hf.Value);
+            int accountId = int.Parse(hf.Value);
             string action = ddl.SelectedValue;
 
             if (action == "Edit")
             {
-                Response.Redirect($"/vendor/edit?id={vendorId}");
+                Response.Redirect($"/vendor/edit?id={accountId}");
             }
             else if (action == "Delete")
             {
-                var vendor = _context.Vendors.Find(vendorId);
+                var vendor = _context.Vendors.Find(accountId);
                 if (vendor != null)
                 {
                     _context.Vendors.Remove(vendor);
@@ -90,13 +93,12 @@ namespace data_pharm_softwere.Pages.Vendor
         protected void btnExportPdf_Click(object sender, EventArgs e)
         {
             string search = ViewState["VendorSearch"]?.ToString() ?? "";
-            var query = _context.Vendors.AsQueryable();
+            var query = _context.Vendors.Include(v => v.Account).AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(search))
             {
                 query = query.Where(v =>
-                    v.VendorID.ToString().Contains(search) ||
-                    v.Name.Contains(search) ||
+                    v.AccountId.ToString().Contains(search) ||
                     v.City.Contains(search) ||
                     v.CompanyCode.Contains(search) ||
                     v.Email.Contains(search) ||
@@ -106,7 +108,7 @@ namespace data_pharm_softwere.Pages.Vendor
                 );
             }
 
-            var vendors = query.OrderBy(v => v.Name).ToList();
+            var vendors = query.ToList();
 
             // Use landscape orientation for more width
             Document pdfDoc = new Document(PageSize.A4.Rotate(), 10f, 10f, 20f, 10f);
@@ -127,7 +129,7 @@ namespace data_pharm_softwere.Pages.Vendor
                 pdfDoc.Add(new Paragraph(" "));
 
                 // Table with all columns
-                PdfPTable table = new PdfPTable(16)
+                PdfPTable table = new PdfPTable(15)
                 {
                     WidthPercentage = 100,
                     HeaderRows = 1
@@ -135,7 +137,7 @@ namespace data_pharm_softwere.Pages.Vendor
 
                 string[] headers = {
             "ID", "Name", "Email", "Contact", "Address", "Town", "City", "License No",
-            "Expiry", "SRA Code", "GST No", "NTN No", "Company Code", "Max Discount", "Remarks", "Created"
+            "Expiry", "SRA Code", "GST No", "NTN No", "Company Code", "Remarks", "Created"
                 };
 
                 foreach (string header in headers)
@@ -147,8 +149,8 @@ namespace data_pharm_softwere.Pages.Vendor
 
                 foreach (var v in vendors)
                 {
-                    table.AddCell(new Phrase(v.VendorID.ToString(), bodyFont));
-                    table.AddCell(new Phrase(v.Name, bodyFont));
+                    table.AddCell(new Phrase(v.AccountId.ToString(), bodyFont));
+                    table.AddCell(new Phrase(v.Account.AccountName ,bodyFont));
                     table.AddCell(new Phrase(v.Email ?? "-", bodyFont));
                     table.AddCell(new Phrase(v.Contact ?? "-", bodyFont));
                     table.AddCell(new Phrase(v.Address, bodyFont));
@@ -160,7 +162,6 @@ namespace data_pharm_softwere.Pages.Vendor
                     table.AddCell(new Phrase(v.GstNo, bodyFont));
                     table.AddCell(new Phrase(v.NtnNo, bodyFont));
                     table.AddCell(new Phrase(v.CompanyCode, bodyFont));
-                    table.AddCell(new Phrase($"{v.MaxDiscountAllowed}%", bodyFont));
                     table.AddCell(new Phrase(v.Remarks ?? "-", bodyFont));
                     table.AddCell(new Phrase(v.CreatedAt.ToString("yyyy-MM-dd"), bodyFont));
                 }
@@ -178,13 +179,12 @@ namespace data_pharm_softwere.Pages.Vendor
         protected void btnExportExcel_Click(object sender, EventArgs e)
         {
             string search = ViewState["VendorSearch"]?.ToString() ?? "";
-            var query = _context.Vendors.AsQueryable();
+            var query = _context.Vendors.Include(v => v.Account).AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(search))
             {
                 query = query.Where(v =>
-                    v.VendorID.ToString().Contains(search) ||
-                    v.Name.Contains(search) ||
+                    v.AccountId.ToString().Contains(search) ||
                     v.City.Contains(search) ||
                     v.CompanyCode.Contains(search) ||
                     v.Email.Contains(search) ||
@@ -194,20 +194,20 @@ namespace data_pharm_softwere.Pages.Vendor
                 );
             }
 
-            var vendors = query.OrderBy(v => v.Name).ToList();
+            var vendors = query.ToList();
 
             // Build CSV content
             var sb = new System.Text.StringBuilder();
 
             // Header
-            sb.AppendLine("VendorID,Name,Email,Contact,Address,Town,City,LicenceNo,Expiry,SRACode,GstNo,NtnNo,CompanyCode,MaxDiscount,Remarks,Created");
+            sb.AppendLine("ID,Name,Email,Contact,Address,Town,City,LicenceNo,Expiry,SRACode,GstNo,NtnNo,CompanyCode,Remarks,Created");
 
             // Rows
             foreach (var v in vendors)
             {
                 sb.AppendLine(string.Join(",",
-                    v.VendorID,
-                    EscapeCsv(v.Name),
+                    v.AccountId,
+                    EscapeCsv(v.Account.AccountName ?? "-"),
                     EscapeCsv(v.Email ?? "-"),
                     EscapeCsv(v.Contact ?? "-"),
                     EscapeCsv(v.Address),
@@ -219,7 +219,6 @@ namespace data_pharm_softwere.Pages.Vendor
                     EscapeCsv(v.GstNo),
                     EscapeCsv(v.NtnNo),
                     EscapeCsv(v.CompanyCode),
-                    $"{v.MaxDiscountAllowed}%",
                     EscapeCsv(v.Remarks ?? "-"),
                     v.CreatedAt.ToString("yyyy-MM-dd")
                 ));
@@ -253,10 +252,10 @@ namespace data_pharm_softwere.Pages.Vendor
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
                 // Get the vendor ID from the data item
-                string vendorId = DataBinder.Eval(e.Row.DataItem, "VendorID").ToString();
+                string AccountId = DataBinder.Eval(e.Row.DataItem, "AccountId").ToString();
 
                 // Add the onclick event to the row
-                e.Row.Attributes["onclick"] = $"window.location='/vendor/edit?id={vendorId}'";
+                e.Row.Attributes["onclick"] = $"window.location='/vendor/edit?id={AccountId}'";
                 e.Row.Style["cursor"] = "pointer";
 
                 // Prevent dropdown click from triggering the row click
@@ -287,8 +286,8 @@ namespace data_pharm_softwere.Pages.Vendor
             Response.ContentType = "text/csv";
             Response.AddHeader("Content-Disposition", "attachment;filename=vendor_sample.csv");
 
-            Response.Write("Name,Email,Contact,Address,Town,City,LicenceNo,ExpiryDate,SRACode,GstNo,NtnNo,CompanyCode,MaxDiscountAllowed,Remarks\r\n");
-            Response.Write("ABC Pharma,abc@email.com,03001234567,Main Street,Town1,City1,LIC123,2025-12-31,SRA001,GST123,NTN789,CODE123,15,Trusted vendor\r\n");
+            Response.Write("ID,Email,Contact,Address,Town,City,LicenceNo,ExpiryDate,SRACode,GstNo,NtnNo,CompanyCode,MaxDiscountAllowed,Remarks\r\n");
+            Response.Write("10001,abc@email.com,03001234567,Main Street,Town1,City1,LIC123,2025-12-31,SRA001,GST123,NTN789,CODE123,15,Trusted vendor\r\n");
 
             Response.End();
         }
@@ -316,7 +315,7 @@ namespace data_pharm_softwere.Pages.Vendor
 
                     var headers = headerLine.Split(',').Select(h => h.Trim()).ToList();
 
-                    int colName = headers.IndexOf("Name");
+                    int colID = headers.IndexOf("ID");
                     int colCompanyCode = headers.IndexOf("CompanyCode");
                     int colEmail = headers.IndexOf("Email");
                     int colContact = headers.IndexOf("Contact");
@@ -331,9 +330,9 @@ namespace data_pharm_softwere.Pages.Vendor
                     int colMaxDiscount = headers.IndexOf("MaxDiscountAllowed");
                     int colRemarks = headers.IndexOf("Remarks");
 
-                    if (colName == -1 || colCompanyCode == -1)
+                    if (colID == -1)
                     {
-                        lblImportStatus.Text = "Missing required columns: 'Name' and 'CompanyCode'.";
+                        lblImportStatus.Text = "Missing required column: 'ID'.";
                         lblImportStatus.CssClass = "alert alert-danger d-block";
                         return;
                     }
@@ -352,21 +351,27 @@ namespace data_pharm_softwere.Pages.Vendor
                         try
                         {
                             var fields = line.Split(',');
+                            string rawID = SafeGet(fields, colID);
 
-                            string rawName = fields[colName].Trim();
-                            string rawCompanyCode = fields[colCompanyCode].Trim();
+                            if (string.IsNullOrWhiteSpace(rawID) || !int.TryParse(rawID, out int accountId))
+                                throw new Exception("Invalid or missing 'ID'.");
 
-                            if (string.IsNullOrWhiteSpace(rawName))
-                                throw new Exception("Name is required.");
-                            if (string.IsNullOrWhiteSpace(rawCompanyCode))
-                                throw new Exception("CompanyCode is required.");
+                            var account = _context.Accounts.FirstOrDefault(a => a.AccountId == accountId);
 
-                            var existingVendor = _context.Vendors
-                                .FirstOrDefault(v => v.Name == rawName && v.CompanyCode == rawCompanyCode);
+                            if (account == null)
+                                throw new Exception("Account not found for ID: " + accountId);
+
+                            if (!string.Equals(account.AccountType, "VENDORS", StringComparison.OrdinalIgnoreCase))
+                                throw new Exception("Account ID " + accountId + " is not of type 'VENDORS'.");
+
+                            if (!string.Equals(account.Status, "ACTIVE", StringComparison.OrdinalIgnoreCase))
+                                throw new Exception("Account ID " + accountId + " is not ACTIVE.");
+
+                            var existingVendor = _context.Vendors.FirstOrDefault(v => v.AccountId == accountId);
 
                             if (existingVendor != null)
                             {
-                                // Only update provided columns
+                                if (colCompanyCode != -1) existingVendor.CompanyCode = SafeGet(fields, colCompanyCode);
                                 if (colEmail != -1) existingVendor.Email = SafeGet(fields, colEmail);
                                 if (colContact != -1) existingVendor.Contact = SafeGet(fields, colContact);
                                 if (colAddress != -1) existingVendor.Address = SafeGet(fields, colAddress);
@@ -378,37 +383,34 @@ namespace data_pharm_softwere.Pages.Vendor
                                 if (colSraCode != -1) existingVendor.SRACode = SafeGet(fields, colSraCode);
                                 if (colGstNo != -1) existingVendor.GstNo = SafeGet(fields, colGstNo);
                                 if (colNtnNo != -1) existingVendor.NtnNo = SafeGet(fields, colNtnNo);
-                                if (colMaxDiscount != -1 && decimal.TryParse(SafeGet(fields, colMaxDiscount), out decimal maxDisc))
-                                    existingVendor.MaxDiscountAllowed = maxDisc;
                                 if (colRemarks != -1) existingVendor.Remarks = SafeGet(fields, colRemarks);
 
                                 updateCount++;
-                                continue;
                             }
-
-                            var newVendor = new Models.Vendor
+                            else
                             {
-                                Name = rawName,
-                                CompanyCode = rawCompanyCode,
-                                Email = SafeGet(fields, colEmail),
-                                Contact = SafeGet(fields, colContact),
-                                Address = SafeGet(fields, colAddress),
-                                Town = SafeGet(fields, colTown),
-                                City = SafeGet(fields, colCity),
-                                LicenceNo = SafeGet(fields, colLicenceNo),
-                                ExpiryDate = (colExpiry != -1 && DateTime.TryParse(SafeGet(fields, colExpiry), out DateTime expiryDate))
-                            ? expiryDate : DateTime.Now.AddYears(1),
-                                SRACode = SafeGet(fields, colSraCode),
-                                GstNo = SafeGet(fields, colGstNo),
-                                NtnNo = SafeGet(fields, colNtnNo),
-                                MaxDiscountAllowed = (colMaxDiscount != -1 && decimal.TryParse(SafeGet(fields, colMaxDiscount), out decimal disc))
-                            ? disc : 0,
-                                Remarks = SafeGet(fields, colRemarks),
-                                CreatedAt = DateTime.Now
-                            };
+                                var newVendor = new Models.Vendor
+                                {
+                                    AccountId = accountId,
+                                    CompanyCode = SafeGet(fields, colCompanyCode),
+                                    Email = SafeGet(fields, colEmail),
+                                    Contact = SafeGet(fields, colContact),
+                                    Address = SafeGet(fields, colAddress),
+                                    Town = SafeGet(fields, colTown),
+                                    City = SafeGet(fields, colCity),
+                                    LicenceNo = SafeGet(fields, colLicenceNo),
+                                    ExpiryDate = (colExpiry != -1 && DateTime.TryParse(SafeGet(fields, colExpiry), out DateTime expiryDate))
+                                        ? expiryDate : DateTime.Now.AddYears(1),
+                                    SRACode = SafeGet(fields, colSraCode),
+                                    GstNo = SafeGet(fields, colGstNo),
+                                    NtnNo = SafeGet(fields, colNtnNo),
+                                    Remarks = SafeGet(fields, colRemarks),
+                                    CreatedAt = DateTime.Now
+                                };
 
-                            _context.Vendors.Add(newVendor);
-                            insertCount++;
+                                _context.Vendors.Add(newVendor);
+                                insertCount++;
+                            }
                         }
                         catch (Exception ex)
                         {
@@ -420,10 +422,7 @@ namespace data_pharm_softwere.Pages.Vendor
 
                     if (errorMessages.Any())
                     {
-                        lblImportStatus.Text = $"Import completed: {insertCount} added, {updateCount} updated." +
-                            "<br><b>Errors:</b><br>" +
-                            string.Join("<br>", errorMessages.Take(10)) +
-                            (errorMessages.Count > 10 ? "<br>...and more." : "");
+                        lblImportStatus.Text = $"Import completed: {insertCount} added, {updateCount} updated.<br><b>Errors:</b><br>{string.Join("<br>", errorMessages.Take(10))}{(errorMessages.Count > 10 ? "<br>...and more." : "")}";
                         lblImportStatus.CssClass = "alert alert-danger d-block";
                     }
                     else

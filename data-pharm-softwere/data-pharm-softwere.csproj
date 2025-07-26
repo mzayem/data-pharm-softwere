@@ -63,6 +63,8 @@
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -218,7 +220,16 @@
     <Compile Include="Migrations\202507181137289_MinorFixes.Designer.cs">
       <DependentUpon>202507181137289_MinorFixes.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202507250749241_InitialMigration.cs" />
+    <Compile Include="Migrations\202507250749241_InitialMigration.Designer.cs">
+      <DependentUpon>202507250749241_InitialMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202507251302472_AccountChartUpdate.cs" />
+    <Compile Include="Migrations\202507251302472_AccountChartUpdate.Designer.cs">
+      <DependentUpon>202507251302472_AccountChartUpdate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Account.cs" />
     <Compile Include="Models\Batch.cs" />
     <Compile Include="Models\CityRoute.cs" />
     <Compile Include="Models\Customer.cs" />
@@ -565,8 +576,16 @@
     <EmbeddedResource Include="Migrations\202507181137289_MinorFixes.resx">
       <DependentUpon>202507181137289_MinorFixes.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202507250749241_InitialMigration.resx">
+      <DependentUpon>202507250749241_InitialMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202507251302472_AccountChartUpdate.resx">
+      <DependentUpon>202507251302472_AccountChartUpdate.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

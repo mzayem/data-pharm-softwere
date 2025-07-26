@@ -1,4 +1,5 @@
 ﻿using data_pharm_softwere.Data;
+using System.Data.Entity;
 using System;
 using System.Linq;
 using System.Web.UI.WebControls;
@@ -24,11 +25,11 @@ namespace data_pharm_softwere.Pages.Batch
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (BatchId == 0)
-            {
-                Response.Redirect("/batch/create");
-                return;
-            }
+            //if (BatchId == 0)
+            //{
+            //    Response.Redirect("/batch/create");
+            //    return;
+            //}
 
             if (!IsPostBack)
             {
@@ -42,11 +43,29 @@ namespace data_pharm_softwere.Pages.Batch
 
         private void LoadVendors()
         {
-            ddlVendor.DataSource = _context.Vendors.OrderBy(v => v.Name).ToList();
-            ddlVendor.DataTextField = "Name";
-            ddlVendor.DataValueField = "VendorID";
-            ddlVendor.DataBind();
-            ddlVendor.Items.Insert(0, new ListItem("-- Select Vendor --", ""));
+            try
+            {
+                var vendors = _context.Vendors
+               .Include(v => v.Account)
+               .OrderBy(v => v.Account.AccountName)
+               .Select(v => new
+               {
+                   v.AccountId,
+                   AccountName = v.Account.AccountName
+               })
+               .ToList();
+
+                ddlVendor.DataSource = vendors;
+                ddlVendor.DataTextField = "AccountName";
+                ddlVendor.DataValueField = "AccountId";
+                ddlVendor.DataBind();
+                ddlVendor.Items.Insert(0, new ListItem("-- Select Vendor --", ""));
+            }
+            catch (Exception ex)
+            {
+                lblMessage.Text = "Error loading vendors: " + ex.Message;
+                lblMessage.CssClass = "alert alert-danger mt-3";
+            }
         }
 
         private void LoadGroups(int? vendorId = null)
@@ -54,7 +73,7 @@ namespace data_pharm_softwere.Pages.Batch
             var query = _context.Groups.Include("Division").AsQueryable();
             if (vendorId.HasValue && vendorId.Value > 0)
             {
-                query = query.Where(g => g.Division.VendorID == vendorId.Value);
+                query = query.Where(g => g.Division.AccountId == vendorId.Value);
             }
             ddlGroup.DataSource = query.OrderBy(g => g.Name).ToList();
             ddlGroup.DataTextField = "Name";
@@ -70,7 +89,7 @@ namespace data_pharm_softwere.Pages.Batch
                 .AsQueryable();
 
             if (vendorId.HasValue)
-                query = query.Where(sg => sg.Group.Division.VendorID == vendorId.Value);
+                query = query.Where(sg => sg.Group.Division.AccountId == vendorId.Value);
             if (groupId.HasValue)
                 query = query.Where(sg => sg.GroupID == groupId.Value);
 
@@ -94,7 +113,7 @@ namespace data_pharm_softwere.Pages.Batch
             }
             else if (int.TryParse(ddlVendor.SelectedValue, out int vendorId))
             {
-                query = query.Where(p => p.SubGroup.Group.Division.VendorID == vendorId);
+                query = query.Where(p => p.SubGroup.Group.Division.AccountId == vendorId);
             }
 
             var products = query.Select(p => new
@@ -174,10 +193,10 @@ namespace data_pharm_softwere.Pages.Batch
             var group = subGroup?.Group;
             var vendor = group?.Division?.Vendor;
 
-            if (vendor != null) ddlVendor.SelectedValue = vendor.VendorID.ToString();
-            LoadGroups(vendor?.VendorID);
+            if (vendor != null) ddlVendor.SelectedValue = vendor.AccountId.ToString();
+            LoadGroups(vendor?.AccountId);
             if (group != null) ddlGroup.SelectedValue = group.GroupID.ToString();
-            LoadSubGroups(vendor?.VendorID, group?.GroupID);
+            LoadSubGroups(vendor?.AccountId, group?.GroupID);
             if (subGroup != null) ddlSubGroup.SelectedValue = subGroup.SubGroupID.ToString();
             LoadProducts();
             ddlProduct.SelectedValue = product?.ProductID.ToString();

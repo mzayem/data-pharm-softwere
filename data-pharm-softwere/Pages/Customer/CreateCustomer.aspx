@@ -12,7 +12,7 @@
                 ShowSummary="true"
                 ValidationGroup="CustomerForm" />
 
-            <asp:Label ID="lblMessage" runat="server" CssClass="text-success fw-semibold"></asp:Label>
+            <asp:Label ID="lblMessage" runat="server"></asp:Label>
 
             <asp:UpdatePanel ID="upForm" runat="server">
                 <ContentTemplate>
@@ -132,8 +132,8 @@
                         </div>
 
                         <!-- Expiry Date -->
-                        <div>
-                            <label for="txtExpiryDate" class="form-label fw-semibold mt-3">Expiry Date</label>
+                        <div class="col-md-6">
+                            <label for="txtExpiryDate" class="form-label fw-semibold">Expiry Date</label>
                             <asp:TextBox ID="txtExpiryDate" runat="server" CssClass="form-control rounded-pill" TextMode="Date" />
                             <asp:RequiredFieldValidator ID="rfvExpiryDate" runat="server"
                                 ControlToValidate="txtExpiryDate"
@@ -156,7 +156,7 @@
                         </div>
 
                         <!-- Customer Type -->
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <label class="form-label fw-semibold">Customer Type</label>
                             <asp:DropDownList ID="ddlCustomerType" runat="server" CssClass="form-select rounded-pill" />
                             <asp:RequiredFieldValidator ID="rfvCustomerType" runat="server"

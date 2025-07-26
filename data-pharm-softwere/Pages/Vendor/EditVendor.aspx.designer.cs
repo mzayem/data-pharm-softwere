@@ -15,6 +15,15 @@ namespace data_pharm_softwere.Pages.Vendor
     {
 
         /// <summary>
+        /// lblMessage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblMessage;
+
+        /// <summary>
         /// pnlForm control.
         /// </summary>
         /// <remarks>
@@ -22,6 +31,33 @@ namespace data_pharm_softwere.Pages.Vendor
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel pnlForm;
+
+        /// <summary>
+        /// txtID control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtID;
+
+        /// <summary>
+        /// btnFetchAccount control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnFetchAccount;
+
+        /// <summary>
+        /// revID control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator revID;
 
         /// <summary>
         /// txtName control.
@@ -87,15 +123,6 @@ namespace data_pharm_softwere.Pages.Vendor
         protected global::System.Web.UI.WebControls.TextBox txtExpiryDate;
 
         /// <summary>
-        /// txtSraCode control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtSraCode;
-
-        /// <summary>
         /// txtContact control.
         /// </summary>
         /// <remarks>
@@ -141,22 +168,13 @@ namespace data_pharm_softwere.Pages.Vendor
         protected global::System.Web.UI.WebControls.TextBox txtCompanyCode;
 
         /// <summary>
-        /// txtDiscount control.
+        /// txtSraCode control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtDiscount;
-
-        /// <summary>
-        /// revDiscount control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RegularExpressionValidator revDiscount;
+        protected global::System.Web.UI.WebControls.TextBox txtSraCode;
 
         /// <summary>
         /// txtRemarks control.

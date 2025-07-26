@@ -1,10 +1,9 @@
 ﻿using data_pharm_softwere.Data;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Data.Entity;
 
 namespace data_pharm_softwere.Pages.Division
 {
@@ -25,20 +24,29 @@ namespace data_pharm_softwere.Pages.Division
         {
             try
             {
-                var vendors = _context.Vendors.ToList();
-                ddlVendor.DataSource = vendors;
-                ddlVendor.DataTextField = "Name";
-                ddlVendor.DataValueField = "VendorID";
-                ddlVendor.DataBind();
+                var vendors = _context.Vendors
+               .Include(v => v.Account)
+               .OrderBy(v => v.Account.AccountName)
+               .Select(v => new
+               {
+                   v.AccountId,
+                   AccountName = v.Account.AccountName
+               })
+               .ToList();
 
+                ddlVendor.DataSource = vendors;
+                ddlVendor.DataTextField = "AccountName";
+                ddlVendor.DataValueField = "AccountId";
+                ddlVendor.DataBind();
                 ddlVendor.Items.Insert(0, new ListItem("-- Select Vendor --", ""));
             }
             catch (Exception ex)
             {
                 lblMessage.Text = "Error loading vendors: " + ex.Message;
-                lblMessage.CssClass = "text-danger fw-semibold";
+                lblMessage.CssClass = "alert alert-danger mt-3";
             }
         }
+
 
         protected void btnSave_Click(object sender, EventArgs e)
         {
@@ -49,21 +57,21 @@ namespace data_pharm_softwere.Pages.Division
                     var division = new Models.Division
                     {
                         Name = txtName.Text.Trim(),
-                        VendorID = int.Parse(ddlVendor.SelectedValue),
+                        AccountId = int.Parse(ddlVendor.SelectedValue),
                         CreatedAt = DateTime.Now
                     };
 
                     _context.Divisions.Add(division);
                     _context.SaveChanges();
 
-                    lblMessage.CssClass = "text-success fw-semibold";
+                    lblMessage.CssClass = "alert alert-success mt-3";
                     lblMessage.Text = "Division saved successfully.";
                     ClearForm();
                 }
                 catch (Exception ex)
                 {
                     lblMessage.Text = "Error: " + ex.Message;
-                    lblMessage.CssClass = "text-danger fw-semibold";
+                    lblMessage.CssClass = "alert alert-danger mt-3";
                 }
             }
         }

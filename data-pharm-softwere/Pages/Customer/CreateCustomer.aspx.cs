@@ -71,6 +71,20 @@ namespace data_pharm_softwere.Pages.Customer
             {
                 try
                 {
+                    string name = txtName.Text.Trim();
+                    string cnic = txtCNIC.Text.Trim();
+
+                    bool duplicateExists = _context.Customers
+                        .Any(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase)
+                               && c.CNIC == cnic);
+
+                    if (duplicateExists)
+                    {
+                        lblMessage.Text = "A customer with the same Name and CNIC already exists.";
+                        lblMessage.CssClass = "alert alert-warning";
+                        return;
+                    }
+
                     var customer = new Models.Customer
                     {
                         Name = txtName.Text.Trim(),
@@ -95,14 +109,14 @@ namespace data_pharm_softwere.Pages.Customer
                     _context.SaveChanges();
 
                     lblMessage.Text = "Customer saved successfully!";
-                    lblMessage.CssClass = "text-success fw-semibold";
+                    lblMessage.CssClass = "alert alert-success";
 
                     // Optional: clear form or redirect
                 }
                 catch (Exception ex)
                 {
                     lblMessage.Text = "Error: " + ex.Message;
-                    lblMessage.CssClass = "text-danger fw-semibold";
+                    lblMessage.CssClass = "alert alert-danger";
                 }
             }
         }

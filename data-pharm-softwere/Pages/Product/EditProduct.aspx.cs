@@ -61,18 +61,31 @@ namespace data_pharm_softwere.Pages.Product
         {
             try
             {
-                var vendors = _context.Vendors.ToList();
+                var vendors = _context.Vendors
+               .Include(v => v.Account)
+               .OrderBy(v => v.Account.AccountName)
+               .Select(v => new
+               {
+                   v.AccountId,
+                   AccountName = v.Account.AccountName
+               })
+               .ToList();
+
                 ddlVendor.DataSource = vendors;
-                ddlVendor.DataTextField = "Name";
-                ddlVendor.DataValueField = "VendorID";
+                ddlVendor.DataTextField = "AccountName";
+                ddlVendor.DataValueField = "AccountId";
                 ddlVendor.DataBind();
                 ddlVendor.Items.Insert(0, new ListItem("-- Select Vendor --", ""));
             }
             catch (Exception ex)
             {
-                ShowError("Error loading vendors: " + ex.Message);
+                lblMessage.Text = "Error loading vendors: " + ex.Message;
+                lblMessage.CssClass = "alert alert-danger mt-3";
             }
         }
+
+
+
 
         private void LoadGroups(int? vendorId = null)
         {
@@ -80,7 +93,7 @@ namespace data_pharm_softwere.Pages.Product
             {
                 var query = _context.Groups.Include("Division").AsQueryable();
                 if (vendorId.HasValue)
-                    query = query.Where(g => g.Division.VendorID == vendorId.Value);
+                    query = query.Where(g => g.Division.AccountId == vendorId.Value);
 
                 ddlGroup.DataSource = query.ToList();
                 ddlGroup.DataTextField = "Name";
@@ -103,7 +116,7 @@ namespace data_pharm_softwere.Pages.Product
                     .AsQueryable();
 
                 if (vendorId.HasValue)
-                    query = query.Where(sg => sg.Group.Division.VendorID == vendorId.Value);
+                    query = query.Where(sg => sg.Group.Division.AccountId == vendorId.Value);
 
                 if (groupId.HasValue)
                     query = query.Where(sg => sg.GroupID == groupId.Value);
@@ -163,10 +176,10 @@ namespace data_pharm_softwere.Pages.Product
                     var group = _context.Groups.Find(subGroup.GroupID);
                     if (group != null)
                     {
-                        ddlVendor.SelectedValue = group.Division.VendorID.ToString();
-                        LoadGroups(group.Division.VendorID);
+                        ddlVendor.SelectedValue = group.Division.AccountId.ToString();
+                        LoadGroups(group.Division.AccountId);
                         ddlGroup.SelectedValue = group.GroupID.ToString();
-                        LoadSubGroups(group.Division.VendorID, group.GroupID);
+                        LoadSubGroups(group.Division.AccountId, group.GroupID);
                         ddlSubGroup.SelectedValue = subGroup.SubGroupID.ToString();
                     }
                 }

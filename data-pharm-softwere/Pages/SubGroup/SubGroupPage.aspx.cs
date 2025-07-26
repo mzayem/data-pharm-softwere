@@ -36,7 +36,7 @@ namespace data_pharm_softwere.Pages.SubGroup
                 sg.SubGroupID,
                 sg.Name,
                 GroupName = sg.Group.Name,
-                VendorName = sg.Group.Division.Vendor.Name,
+                VendorName = sg.Group.Division.Vendor.Account.AccountName,
                 sg.CreatedAt
             });
 

@@ -71,8 +71,14 @@
                     EmptyDataText="No Vendor Found">
 
                     <Columns>
-                        <asp:BoundField DataField="VendorID" HeaderText="ID" />
-                        <asp:BoundField DataField="Name" HeaderText="Name" />
+                        <asp:BoundField DataField="AccountId" HeaderText="ID" />
+                        <asp:TemplateField HeaderText="Name">
+                        <ItemTemplate>
+                            <%# Eval("Account.AccountName") %>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+
+
                         <asp:BoundField DataField="City" HeaderText="City" />
                         <asp:BoundField DataField="CompanyCode" HeaderText="Company Code" />
                         <asp:BoundField DataField="GstNo" HeaderText="GST No" />
@@ -93,9 +99,9 @@
                                 </asp:DropDownList>
 
                                 <asp:HiddenField 
-                                    ID="hfVendorID" 
+                                    ID="hfAccountId" 
                                     runat="server" 
-                                    Value='<%# Eval("VendorID") %>' />
+                                    Value='<%# Eval("AccountId") %>' />
                             </ItemTemplate>
                         </asp:TemplateField>
                     </Columns>

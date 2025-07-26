@@ -8,13 +8,8 @@ namespace data_pharm_softwere.Models
     [Table("Vendors")]
     public class Vendor
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int VendorID { get; set; }
-
-        [Required]
-        [StringLength(100)]
-        public string Name { get; set; }
+        [Key, ForeignKey("Account")]
+        public int AccountId { get; set; }
 
         [EmailAddress]
         public string Email { get; set; }
@@ -56,14 +51,11 @@ namespace data_pharm_softwere.Models
         [StringLength(20)]
         public string CompanyCode { get; set; }
 
-        [Required]
-        [Range(0, 100)]
-        public decimal MaxDiscountAllowed { get; set; }
-
         [StringLength(250)]
         public string Remarks { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public ICollection<Division> Divisions { get; set; }
+        public virtual Account Account { get; set; }
     }
 }

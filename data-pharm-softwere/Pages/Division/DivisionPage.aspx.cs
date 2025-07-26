@@ -40,7 +40,7 @@ namespace data_pharm_softwere.Pages.Division
             {
                 g.DivisionID,
                 g.Name,
-                VendorName = g.Vendor.Name,
+                VendorName = g.Vendor.Account.AccountName,
                 g.CreatedAt
             });
 
@@ -92,12 +92,12 @@ namespace data_pharm_softwere.Pages.Division
         {
             string search = ViewState["DivisionSearch"]?.ToString() ?? "";
             var divisions = _context.Divisions
-                .Where(g => string.IsNullOrEmpty(search) || g.Name.Contains(search) || g.Vendor.Name.Contains(search))
+                .Where(g => string.IsNullOrEmpty(search) || g.Name.Contains(search) || g.Vendor.Account.AccountName.Contains(search))
                 .Select(g => new
                 {
                     g.DivisionID,
                     g.Name,
-                    VendorName = g.Vendor.Name,
+                    VendorName = g.Vendor.Account.AccountName,
                     g.CreatedAt
                 })
                 .OrderBy(g => g.Name)
@@ -147,12 +147,12 @@ namespace data_pharm_softwere.Pages.Division
         {
             string search = ViewState["DivisionSearch"]?.ToString() ?? "";
             var divisions = _context.Divisions
-                .Where(g => string.IsNullOrEmpty(search) || g.Name.Contains(search) || g.Vendor.Name.Contains(search))
+                .Where(g => string.IsNullOrEmpty(search) || g.Name.Contains(search) || g.Vendor.Account.AccountName.Contains(search))
                 .Select(g => new
                 {
                     g.DivisionID,
                     g.Name,
-                    VendorName = g.Vendor.Name,
+                    VendorName = g.Vendor.Account.AccountName,
                     g.CreatedAt
                 })
                 .OrderBy(g => g.Name)
@@ -216,8 +216,7 @@ namespace data_pharm_softwere.Pages.Division
             Response.AddHeader("Content-Disposition", "attachment;filename=division_sample.csv");
 
             Response.Write("Name,VendorID\r\n");
-            Response.Write("Division1,1001\r\n");
-            Response.Write("Division2,1002\r\n");
+            Response.Write("Division1,10726\r\n");
 
             Response.End();
         }
@@ -279,11 +278,11 @@ namespace data_pharm_softwere.Pages.Division
                             if (!int.TryParse(rawVendorID, out int vendorId))
                                 throw new Exception($"Invalid VendorID '{rawVendorID}'.");
 
-                            if (!_context.Vendors.Any(v => v.VendorID == vendorId))
+                            if (!_context.Vendors.Any(v => v.AccountId == vendorId))
                                 throw new Exception($"VendorID '{vendorId}' not found in database.");
 
                             var existing = _context.Divisions
-                                .FirstOrDefault(d => d.Name == rawName && d.VendorID == vendorId);
+                                .FirstOrDefault(d => d.Name == rawName && d.AccountId == vendorId);
 
                             if (existing != null)
                             {
@@ -294,7 +293,7 @@ namespace data_pharm_softwere.Pages.Division
                             var division = new Models.Division
                             {
                                 Name = rawName,
-                                VendorID = vendorId,
+                                AccountId = vendorId,
                                 CreatedAt = DateTime.Now
                             };
 

@@ -10,6 +10,7 @@ namespace data_pharm_softwere.Data
             this.Configuration.LazyLoadingEnabled = false;
         }
 
+        public virtual DbSet<Account> Accounts { get; set; }
         public DbSet<Vendor> Vendors { get; set; }
         public DbSet<Division> Divisions { get; set; }
         public DbSet<Group> Groups { get; set; }
@@ -29,6 +30,7 @@ namespace data_pharm_softwere.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Vendor>().ToTable("Vendors");
+            modelBuilder.Entity<Division>().ToTable("Divisions");
             modelBuilder.Entity<Group>().ToTable("Groups");
             modelBuilder.Entity<SubGroup>().ToTable("SubGroups");
             modelBuilder.Entity<Product>().ToTable("Products");
@@ -37,11 +39,17 @@ namespace data_pharm_softwere.Data
             modelBuilder.Entity<Town>().ToTable("Towns");
             modelBuilder.Entity<Customer>().ToTable("Customers");
 
+            // Vendor → Account
+            modelBuilder.Entity<Account>()
+                .HasOptional(a => a.Vendor)
+                .WithRequired(v => v.Account)
+                .WillCascadeOnDelete(true);
+
             // Division → Vendor
             modelBuilder.Entity<Division>()
                 .HasRequired(d => d.Vendor)
                 .WithMany(v => v.Divisions)
-                .HasForeignKey(d => d.VendorID)
+                .HasForeignKey(d => d.AccountId)
                 .WillCascadeOnDelete(true);
 
             // Group → Division
