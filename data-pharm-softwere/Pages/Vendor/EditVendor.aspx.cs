@@ -1,5 +1,4 @@
 ﻿using data_pharm_softwere.Data;
-using data_pharm_softwere.Models;
 using System;
 using System.Linq;
 using System.Data.Entity;
@@ -15,11 +14,7 @@ namespace data_pharm_softwere.Pages.Vendor
             get
             {
                 int id;
-                if (int.TryParse(Request.QueryString["id"], out id))
-                {
-                    return id;
-                }
-                return 0;
+                return int.TryParse(Request.QueryString["id"], out id) ? id : 0;
             }
         }
 
@@ -42,48 +37,69 @@ namespace data_pharm_softwere.Pages.Vendor
         protected void btnFetchAccount_Click(object sender, EventArgs e)
         {
             int newAccountId;
+            txtName.Text = string.Empty;
+
             if (!int.TryParse(txtID.Text.Trim(), out newAccountId))
             {
-                lblMessage.CssClass = "text-danger fw-semibold";
-                lblMessage.Text = "Invalid Account ID.";
+                ShowMessage("Invalid Account ID.", "danger");
                 return;
             }
 
-            var account = _context.Accounts.FirstOrDefault(a => a.AccountId == newAccountId);
-            if (account == null)
-            {
-                lblMessage.CssClass = "text-danger fw-semibold";
-                lblMessage.Text = "Account not found.";
-                return;
-            }
-
-            if (!string.Equals(account.AccountType, "VENDORS", StringComparison.OrdinalIgnoreCase))
-            {
-                lblMessage.CssClass = "text-danger fw-semibold";
-                lblMessage.Text = "This account is not of type 'Vendor'.";
-                return;
-            }
-
-            if (!string.Equals(account.Status, "ACTIVE", StringComparison.OrdinalIgnoreCase))
-            {
-                lblMessage.CssClass = "text-danger fw-semibold";
-                lblMessage.Text = "This account is not active.";
-                return;
-            }
+            if (!FetchAccount(newAccountId, out var validAccount)) return;
 
             // Check if vendor already exists
             var vendor = _context.Vendors.FirstOrDefault(v => v.AccountId == newAccountId);
             if (vendor == null)
             {
-                // Redirect to Create page with this accountId
                 Response.Redirect($"/vendor/create?id={newAccountId}", false);
                 Context.ApplicationInstance.CompleteRequest();
                 return;
             }
 
-            // If vendor exists, refresh the page with new ID to reload it
+            // If vendor exists, reload this page with new ID
             Response.Redirect($"/vendor/edit?id={newAccountId}", false);
             Context.ApplicationInstance.CompleteRequest();
+        }
+
+        private bool FetchAccount(int accountId, out Account validAccount)
+        {
+            validAccount = null;
+
+            using (var db = new DataPharmaContext())
+            {
+                var account = db.Accounts.FirstOrDefault(a => a.AccountId == accountId);
+
+                if (account == null)
+                {
+                    Response.Redirect($"/vendor/create?id={accountId}", false);
+                    Context.ApplicationInstance.CompleteRequest();
+                    return false;
+                }
+
+                if (!account.AccountType?.Equals("VENDORS", StringComparison.OrdinalIgnoreCase) ?? true)
+                {
+                    Response.Redirect($"/vendor/create?id={accountId}", false);
+                    Context.ApplicationInstance.CompleteRequest();
+                    return false;
+                }
+
+                if (!account.Status?.Equals("ACTIVE", StringComparison.OrdinalIgnoreCase) ?? true)
+                {
+                    Response.Redirect($"/vendor/create?id={accountId}", false);
+                    Context.ApplicationInstance.CompleteRequest();
+                    return false;
+                }
+
+                txtName.Text = account.AccountName;
+                validAccount = account;
+                return true;
+            }
+        }
+
+        private void ShowMessage(string message, string cssType)
+        {
+            lblMessage.Text = message;
+            lblMessage.CssClass = "alert alert-" + cssType;
         }
 
         private void LoadVendor()
@@ -113,20 +129,34 @@ namespace data_pharm_softwere.Pages.Vendor
         {
             if (!Page.IsValid) return;
 
-            var vendor = _context.Vendors.FirstOrDefault(v => v.AccountId == AccountId);
-            if (vendor == null)
+            // Validate account
+            if (!FetchAccount(AccountId, out var validAccount))
             {
-                Response.Redirect("/vendor/create/");
                 return;
             }
 
+            // Check vendor existence
+            var vendor = _context.Vendors.FirstOrDefault(v => v.AccountId == AccountId);
+            if (vendor == null)
+            {
+                Response.Redirect($"/vendor/create?id={AccountId}", false);
+                Context.ApplicationInstance.CompleteRequest();
+                return;
+            }
+
+            // Update vendor
             vendor.Email = txtEmail.Text;
             vendor.Contact = txtContact.Text;
             vendor.Address = txtAddress.Text;
             vendor.Town = txtTown.Text;
             vendor.City = txtCity.Text;
             vendor.LicenceNo = txtLicenceNo.Text;
-            vendor.ExpiryDate = DateTime.Parse(txtExpiryDate.Text);
+
+            if (DateTime.TryParse(txtExpiryDate.Text, out DateTime expiryDate))
+            {
+                vendor.ExpiryDate = expiryDate;
+            }
+
             vendor.SRACode = txtSraCode.Text;
             vendor.GstNo = txtGstNo.Text;
             vendor.NtnNo = txtNtnNo.Text;

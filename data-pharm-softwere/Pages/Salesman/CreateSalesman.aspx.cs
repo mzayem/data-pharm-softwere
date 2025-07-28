@@ -17,6 +17,7 @@ namespace data_pharm_softwere.Pages.Salesman
         {
             if (!IsPostBack)
             {
+                lblMessage.Text = string.Empty;
                 ViewState["AssignedTownIDs"] = new List<int>();
                 LoadTowns();
                 BindAssignedTowns();
@@ -74,6 +75,7 @@ namespace data_pharm_softwere.Pages.Salesman
                 BindAssignedTowns();
             }
         }
+
         protected void btnSave_Click(object sender, EventArgs e)
         {
             if (Page.IsValid)

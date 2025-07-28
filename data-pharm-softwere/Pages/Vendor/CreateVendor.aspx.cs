@@ -1,11 +1,11 @@
 ﻿using data_pharm_softwere.Data;
+using data_pharm_softwere.Models;
 using System;
 using System.Linq;
 using System.Web.UI;
 
 namespace data_pharm_softwere.Pages.Vendor
 {
-
     public partial class CreateVendor : System.Web.UI.Page
     {
         private int AccountId
@@ -13,13 +13,10 @@ namespace data_pharm_softwere.Pages.Vendor
             get
             {
                 int id;
-                if (int.TryParse(Request.QueryString["id"], out id))
-                {
-                    return id;
-                }
-                return 0;
+                return int.TryParse(Request.QueryString["id"], out id) ? id : 0;
             }
         }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -27,8 +24,11 @@ namespace data_pharm_softwere.Pages.Vendor
                 if (AccountId > 0)
                 {
                     txtID.Text = AccountId.ToString();
-                    FetchAccount(AccountId);
+                    FetchAccount(AccountId, out _);
                 }
+            }
+            else
+            {
                 lblMessage.Text = string.Empty;
             }
         }
@@ -38,113 +38,114 @@ namespace data_pharm_softwere.Pages.Vendor
             int accountId;
             if (!int.TryParse(txtID.Text.Trim(), out accountId))
             {
-                lblMessage.CssClass = "alert alert-danger";
-                lblMessage.Text = "Invalid Account ID.";
+                ShowMessage("Invalid Account ID.", "danger");
                 return;
             }
 
-            FetchAccount(accountId);
+            txtName.Text = string.Empty;
+            FetchAccount(accountId, out _);
         }
 
-        private void FetchAccount(int accountId)
+        private bool FetchAccount(int accountId, out Account validAccount)
         {
+            validAccount = null;
+
             using (var db = new DataPharmaContext())
             {
                 var account = db.Accounts.FirstOrDefault(a => a.AccountId == accountId);
 
                 if (account == null)
                 {
-                    lblMessage.CssClass = "alert alert-danger";
-                    lblMessage.Text = "Account not found.";
-                    return;
+                    ShowMessage("Account not found.", "danger");
+                    return false;
                 }
 
                 if (!account.AccountType?.Equals("VENDORS", StringComparison.OrdinalIgnoreCase) ?? true)
                 {
-                    lblMessage.CssClass = "alert alert-warning";
-                    lblMessage.Text = "This Account is not of type 'Vendor'.";
-                    return;
+                    ShowMessage("This Account is not of type 'Vendor'.", "warning");
+                    return false;
                 }
 
                 if (!account.Status?.Equals("ACTIVE", StringComparison.OrdinalIgnoreCase) ?? true)
                 {
-                    lblMessage.CssClass = "alert alert-danger";
-                    lblMessage.Text = "This Account is Deactivated!";
-                    return;
+                    ShowMessage("This Account is Deactivated!", "danger");
+                    return false;
                 }
 
-                var vendor = db.Vendors.FirstOrDefault(v => v.AccountId == accountId);
-                if (vendor != null)
+                if (db.Vendors.Any(v => v.AccountId == accountId))
                 {
-                    // Redirect to Edit page
-                    Response.Redirect($"/vendor/edit?id={vendor.AccountId}", false);
+                    // Redirect to Edit
+                    Response.Redirect($"/vendor/edit?id={accountId}", false);
                     Context.ApplicationInstance.CompleteRequest();
-                    return;
+                    return false;
                 }
 
-                // No vendor yet, show account name to proceed
                 txtName.Text = account.AccountName;
-                lblMessage.CssClass = "alert alert-success";
-                lblMessage.Text = "Account is valid. Please fill vendor details.";
+                ShowMessage("Account is valid. Please fill vendor details.", "success");
+                validAccount = account;
+                return true;
             }
         }
 
-
         protected void btnSave_Click(object sender, EventArgs e)
         {
-            if (Page.IsValid)
+            if (!Page.IsValid)
+                return;
+
+            if (!int.TryParse(txtID.Text.Trim(), out int accountId))
             {
-                try
+                ShowMessage("Invalid Account ID. Cannot save vendor.", "danger");
+                return;
+            }
+
+            if (!FetchAccount(accountId, out var account))
+                return;
+
+            try
+            {
+                using (var db = new DataPharmaContext())
                 {
-                    using (var db = new DataPharmaContext())
+                    if (db.Vendors.Any(v => v.AccountId == accountId))
                     {
-                        int accountId;
-                        if (!int.TryParse(txtID.Text.Trim(), out accountId))
-                        {
-                            lblMessage.CssClass = "alert alert-danger";
-                            lblMessage.Text = "Invalid Account ID. Cannot save vendor.";
-                            return;
-                        }
-
-                        var vendor = new Models.Vendor
-                        {
-                            AccountId = accountId,
-                            Email = txtEmail.Text.Trim(),
-                            Address = txtAddress.Text.Trim(),
-                            Contact = txtContact.Text.Trim(),
-                            Town = txtTown.Text.Trim(),
-                            City = txtCity.Text.Trim(),
-                            LicenceNo = txtLicenceNo.Text.Trim(),
-                            ExpiryDate = DateTime.TryParse(txtExpiryDate.Text, out var expDate) ? expDate : DateTime.Now,
-                            SRACode = txtSRACode.Text.Trim(),
-                            GstNo = txtGstNo.Text.Trim(),
-                            NtnNo = txtNtnNo.Text.Trim(),
-                            CompanyCode = txtCompanyCode.Text.Trim(),
-                            Remarks = txtRemarks.Text.Trim(),
-                            CreatedAt = DateTime.Now
-                        };
-
-                        if (db.Vendors.Any(v => v.AccountId == accountId))
-                        {
-                            lblMessage.Text = "Vendor already exists for this Account ID.";
-                            lblMessage.CssClass = "alert alert-danger";
-                            return;
-                        }
-
-                        db.Vendors.Add(vendor);
-                        db.SaveChanges();
-
-                        lblMessage.CssClass = "alert alert-success";
-                        lblMessage.Text = "Vendor saved successfully!";
-                        ClearForm();
+                        ShowMessage("Vendor already exists for this Account ID.", "danger");
+                        return;
                     }
-                }
-                catch (Exception ex)
-                {
-                    lblMessage.Text = "Error: " + ex.Message;
-                    lblMessage.CssClass = "alert alert-danger";
+
+                    var vendor = new Models.Vendor
+                    {
+                        AccountId = accountId,
+                        Email = txtEmail.Text.Trim(),
+                        Address = txtAddress.Text.Trim(),
+                        Contact = txtContact.Text.Trim(),
+                        Town = txtTown.Text.Trim(),
+                        City = txtCity.Text.Trim(),
+                        LicenceNo = txtLicenceNo.Text.Trim(),
+                        ExpiryDate = DateTime.TryParse(txtExpiryDate.Text, out var expDate) ? expDate : DateTime.Now,
+                        SRACode = txtSRACode.Text.Trim(),
+                        GstNo = txtGstNo.Text.Trim(),
+                        NtnNo = txtNtnNo.Text.Trim(),
+                        CompanyCode = txtCompanyCode.Text.Trim(),
+                        Remarks = txtRemarks.Text.Trim(),
+                        CreatedAt = DateTime.Now
+                    };
+
+                    db.Vendors.Add(vendor);
+                    db.SaveChanges();
+
+                    ShowMessage("Vendor saved successfully!", "success");
+                    ClearForm();
                 }
             }
+            catch (Exception ex)
+            {
+                ShowMessage("Error: " + ex.Message, "danger");
+            }
+        }
+
+        private void ShowMessage(string message, string cssType)
+        {
+            lblMessage.Text = message;
+            lblMessage.CssClass = "alert alert-" + cssType;
         }
 
         private void ClearForm()

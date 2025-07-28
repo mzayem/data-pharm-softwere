@@ -1,7 +1,6 @@
 ﻿using data_pharm_softwere.Data;
 using data_pharm_softwere.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web.UI.WebControls;
 
@@ -50,7 +49,7 @@ namespace data_pharm_softwere.Pages.Customer
         {
             ddlCustomerType.DataSource = Enum.GetValues(typeof(CustomerType));
             ddlCustomerType.DataBind();
-            ddlCustomerType.Items.Insert(0, new ListItem("-- Select Part Type --", ""));
+            ddlCustomerType.Items.Insert(0, new ListItem("-- Select Customer Type --", ""));
         }
 
         protected void ddlCityRoute_SelectedIndexChanged(object sender, EventArgs e)

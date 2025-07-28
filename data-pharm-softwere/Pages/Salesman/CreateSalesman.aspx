@@ -38,7 +38,7 @@
                                                         ErrorMessage="Invalid email address"
                                                         CssClass="text-danger"
                                                         Display="Dynamic"
-                                                        ValidationGroup="CustomerForm" />
+                                                        ValidationGroup="SalesmanForm" />
                     
                     </div>
 
@@ -51,7 +51,7 @@
                                                         ErrorMessage="Contact No is required"
                                                         CssClass="text-danger"
                                                         Display="Dynamic"
-                                                        ValidationGroup="CustomerForm" />
+                                                        ValidationGroup="SalesmanForm" />
 
                         <asp:RegularExpressionValidator 
                                 ID="revContact" 
@@ -61,7 +61,7 @@
                                 ErrorMessage="Invalid phone number format"
                                 CssClass="text-danger"
                                 Display="Dynamic"
-                                ValidationGroup="CustomerForm" />
+                                ValidationGroup="SalesmanForm" />
                        </div>
 
                     <!-- Assign Town -->
@@ -83,7 +83,7 @@
                         <div class="d-flex flex-wrap gap-2 mt-1">
                             <asp:Repeater ID="rptAssignedTowns" runat="server">
                                 <ItemTemplate>
-                                    <div class="assigned-town badge text-dark bg-light px-3 py-2 rounded-pill">
+                                    <div class="badge text-dark bg-light px-3 py-2 rounded-pill">
                                         <%# Eval("Name") %>
                                         <asp:LinkButton ID="btnRemoveTown" runat="server"
                                             CssClass="btn-close ms-2 small border-0 shadow-none focus-ring-0"

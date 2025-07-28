@@ -9,8 +9,8 @@ namespace data_pharm_softwere.Models
 {
     public enum RepType
     {
-        DFM = 1,
-        MedicalRep = 2
+        DFM,
+        MedicalRep
     }
 
     [Table("MedicalReps")]
