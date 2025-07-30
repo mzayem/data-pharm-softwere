@@ -228,6 +228,10 @@
     <Compile Include="Migrations\202507251302472_AccountChartUpdate.Designer.cs">
       <DependentUpon>202507251302472_AccountChartUpdate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202507300519382_productUpdate.cs" />
+    <Compile Include="Migrations\202507300519382_productUpdate.Designer.cs">
+      <DependentUpon>202507300519382_productUpdate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\Batch.cs" />
@@ -581,6 +585,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202507251302472_AccountChartUpdate.resx">
       <DependentUpon>202507251302472_AccountChartUpdate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202507300519382_productUpdate.resx">
+      <DependentUpon>202507300519382_productUpdate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

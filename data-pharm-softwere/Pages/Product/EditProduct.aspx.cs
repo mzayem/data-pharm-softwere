@@ -30,6 +30,7 @@ namespace data_pharm_softwere.Pages.Product
             {
                 lblMessage.Text = string.Empty;
                 LoadVendors();
+                LoadDivisions();
                 LoadGroups();
                 LoadSubGroups();
                 LoadDropdowns();
@@ -84,8 +85,25 @@ namespace data_pharm_softwere.Pages.Product
             }
         }
 
-
-
+        private void LoadDivisions()
+        {
+            try
+            {
+                var divisions = _context.Divisions
+                    .OrderBy(d => d.Name)
+                    .ToList();
+                ddlDivision.DataSource = divisions;
+                ddlDivision.DataTextField = "Name";
+                ddlDivision.DataValueField = "DivisionID";
+                ddlDivision.DataBind();
+                ddlDivision.Items.Insert(0, new ListItem("-- Select Division --", ""));
+            }
+            catch (Exception ex)
+            {
+                lblMessage.Text = "Error loading divisions: " + ex.Message;
+                lblMessage.CssClass = "alert alert-danger mt-3";
+            }
+        }
 
         private void LoadGroups(int? vendorId = null)
         {
@@ -169,6 +187,7 @@ namespace data_pharm_softwere.Pages.Product
                 ddlType.SelectedValue = product.Type.ToString();
                 chkAdvTaxExempted.Checked = product.IsAdvTaxExempted;
                 chkGSTExempted.Checked = product.IsGSTExempted;
+                ddlDivision.SelectedValue = product.DivisionID.ToString();
 
                 var subGroup = _context.SubGroups.Find(product.SubGroupID);
                 if (subGroup != null)
@@ -272,6 +291,12 @@ namespace data_pharm_softwere.Pages.Product
                     return;
                 }
 
+                if (!int.TryParse(ddlDivision.SelectedValue, out int divisionId))
+                {
+                    ShowError("Please select a valid Division.");
+                    return;
+                }
+
                 if (!long.TryParse(txtProductCode.Text.Trim(), out var productCode))
                 {
                     lblMessage.Text = "Invalid Product Code";
@@ -291,6 +316,7 @@ namespace data_pharm_softwere.Pages.Product
                 product.PackingType = packingType;
                 product.Type = productType;
                 product.SubGroupID = subGroupId;
+                product.DivisionID = divisionId;
                 product.IsAdvTaxExempted = chkAdvTaxExempted.Checked;
                 product.IsGSTExempted = chkGSTExempted.Checked;
                 product.UpdatedAt = DateTime.Now;

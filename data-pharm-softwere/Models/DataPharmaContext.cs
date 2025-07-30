@@ -73,6 +73,13 @@ namespace data_pharm_softwere.Data
                 .HasForeignKey(p => p.SubGroupID)
                 .WillCascadeOnDelete(true);
 
+            // Product → Division
+            modelBuilder.Entity<Product>()
+                .HasRequired(p => p.Division)
+                .WithMany(d => d.Products)
+                .HasForeignKey(p => p.DivisionID)
+                .WillCascadeOnDelete(false);
+
             // Batch → Product (optional)
             modelBuilder.Entity<Batch>()
                 .HasOptional(b => b.Product)

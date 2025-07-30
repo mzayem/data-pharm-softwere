@@ -81,6 +81,12 @@ namespace data_pharm_softwere.Models
         [ForeignKey("SubGroupID")]
         public virtual SubGroup SubGroup { get; set; }
 
+        [Required]
+        public int DivisionID { get; set; }
+
+        [ForeignKey("DivisionID")]
+        public virtual Division Division { get; set; }
+
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         public DateTime? UpdatedAt { get; set; }

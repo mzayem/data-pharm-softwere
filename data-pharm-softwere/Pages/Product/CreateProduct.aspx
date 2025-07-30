@@ -231,6 +231,19 @@
                 </div>
             </div>
 
+            <!-- Division -->
+            <div class="col-md-8">
+                <label class="form-label fw-semibold">Division</label>
+                <asp:DropDownList ID="ddlDivision" runat="server" CssClass="form-select rounded-pill" />
+                <asp:RequiredFieldValidator ID="rfvDivision" runat="server"
+                    ControlToValidate="ddlDivision"
+                    InitialValue=""
+                    ErrorMessage="Division is required"
+                    CssClass="text-danger"
+                    Display="Dynamic"
+                    ValidationGroup="ProductForm" />
+            </div>
+
             <!-- Checkboxes -->
             <div class="col-md-6 mt-2">
                 <div class="form-check">

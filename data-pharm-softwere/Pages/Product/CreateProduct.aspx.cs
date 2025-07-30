@@ -19,6 +19,7 @@ namespace data_pharm_softwere.Pages.Product
                 LoadVendors();
                 LoadGroups();
                 LoadSubGroups();
+                LoadDivisions();
                 LoadDropdowns();
                 ShowNextProductId();
 
@@ -81,6 +82,25 @@ namespace data_pharm_softwere.Pages.Product
             }
         }
 
+        private void LoadDivisions()
+        {
+            try
+            {
+                var divisions = _context.Divisions
+                    .OrderBy(d => d.Name)
+                    .ToList();
+                ddlDivision.DataSource = divisions;
+                ddlDivision.DataTextField = "Name";
+                ddlDivision.DataValueField = "DivisionID";
+                ddlDivision.DataBind();
+                ddlDivision.Items.Insert(0, new ListItem("-- Select Division --", ""));
+            }
+            catch (Exception ex)
+            {
+                lblMessage.Text = "Error loading divisions: " + ex.Message;
+                lblMessage.CssClass = "alert alert-danger mt-3";
+            }
+        }
 
         private void LoadGroups(int? vendorId = null)
         {
@@ -212,6 +232,12 @@ namespace data_pharm_softwere.Pages.Product
                         lblMessage.CssClass = "alert alert-danger mt-3";
                         return;
                     }
+                    if (!int.TryParse(ddlDivision.SelectedValue, out int divisionId))
+                    {
+                        lblMessage.Text = "Please select a valid Division.";
+                        lblMessage.CssClass = "alert alert-danger mt-3";
+                        return;
+                    }
 
                     if (!long.TryParse(txtProductCode.Text.Trim(), out var productCode))
                     {
@@ -238,6 +264,7 @@ namespace data_pharm_softwere.Pages.Product
                         IsAdvTaxExempted = chkAdvTaxExempted.Checked,
                         IsGSTExempted = chkGSTExempted.Checked,
                         SubGroupID = subGroupId,
+                        DivisionID = divisionId,
                         CreatedAt = DateTime.Now
                     };
 
@@ -270,6 +297,7 @@ namespace data_pharm_softwere.Pages.Product
             ddlVendor.SelectedIndex = 0;
             ddlGroup.SelectedIndex = 0;
             ddlSubGroup.SelectedIndex = 0;
+            ddlDivision.SelectedIndex = 0;
             ddlType.SelectedIndex = 0;
             txtUom.Text = "";
             chkAdvTaxExempted.Checked = false;

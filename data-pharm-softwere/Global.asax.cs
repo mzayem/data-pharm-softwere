@@ -199,6 +199,23 @@ namespace data_pharm_softwere
                 "salesman",
                 "~/pages/Salesman/SalesmanPage.aspx"
             );
+
+            //MedicalRep routes
+            routes.MapPageRoute(
+                "MedicalRep  Create",
+                "medicalRep/create",
+                "~/pages/MedicalRep/CreateMedicalRep.aspx"
+            );
+            routes.MapPageRoute(
+                "MedicalRep Edit",
+                "medicalRep/edit",
+                "~/pages/MedicalRep/EditMedicalRep.aspx"
+            );
+            routes.MapPageRoute(
+                "MedicalRep Management",
+                "medicalRep",
+                "~/pages/MedicalRep/MedicalRepPage.aspx"
+            );
         }
 
         // Default event hooks
