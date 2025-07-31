@@ -246,9 +246,12 @@ namespace data_pharm_softwere.Pages.Product
                         return;
                     }
 
+                    int nextProductId = (_context.Products.Max(p => (int?)p.ProductID) ?? 101000) + 1;
+
                     // Assign values
                     var product = new Models.Product
                     {
+                        ProductID = nextProductId,
                         Type = productType,
                         PackingType = packingType,
                         Name = txtName.Text.Trim(),

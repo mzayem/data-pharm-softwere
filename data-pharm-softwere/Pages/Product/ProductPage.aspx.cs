@@ -534,6 +534,7 @@ namespace data_pharm_softwere.Pages.Product
                     var errorMessages = new List<string>();
                     int lineNo = 1;
 
+                    int nextProductId = (_context.Products.Max(p => (int?)p.ProductID) ?? 101000) + 1;
                     while (!reader.EndOfStream)
                     {
                         string line = reader.ReadLine();
@@ -581,8 +582,10 @@ namespace data_pharm_softwere.Pages.Product
                             }
                             else
                             {
+                                
                                 var newProduct = new Models.Product
                                 {
+                                    ProductID = nextProductId++,
                                     Name = rawName,
                                     SubGroupID = subGroupId,
                                     CreatedAt = DateTime.Now,
