@@ -72,7 +72,7 @@ namespace data_pharm_softwere.Pages.Vendor
                     return false;
                 }
 
-                if (db.Vendors.Any(v => v.AccountId == accountId))
+                if (db.Vendors != null && db.Vendors.Any(v => v.AccountId == accountId))
                 {
                     // Redirect to Edit
                     Response.Redirect($"/vendor/edit?id={accountId}", false);

@@ -2,7 +2,7 @@
 {
     using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class productUpdate : DbMigration
     {
         public override void Up()
@@ -11,7 +11,7 @@
             CreateIndex("dbo.Products", "DivisionID");
             AddForeignKey("dbo.Products", "DivisionID", "dbo.Divisions", "DivisionID");
         }
-        
+
         public override void Down()
         {
             DropForeignKey("dbo.Products", "DivisionID", "dbo.Divisions");

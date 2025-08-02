@@ -45,7 +45,7 @@ namespace data_pharm_softwere.Pages.Product
                     .OrderByDescending(p => p.ProductID)
                     .FirstOrDefault();
 
-                long nextProductId = (lastProduct?.ProductID ?? 101000) + 1;
+                int nextProductId = (lastProduct?.ProductID ?? 101000) + 1;
                 lblProductId.Text = nextProductId.ToString();
             }
             catch (Exception ex)

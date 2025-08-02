@@ -11,7 +11,7 @@
                 "dbo.Products",
                 c => new
                 {
-                    ProductID = c.Int(nullable: false, identity: true),
+                    ProductID = c.Int(nullable: false, identity: false),
                     PackingType = c.Int(nullable: false),
                     Type = c.Int(nullable: false),
                     Name = c.String(nullable: false, maxLength: 150),
@@ -32,14 +32,14 @@
                 .PrimaryKey(t => t.ProductID)
                 .ForeignKey("dbo.SubGroups", t => t.SubGroupID, cascadeDelete: true)
                 .Index(t => t.SubGroupID);
-            Sql(@"
-                DECLARE @currentId BIGINT = IDENT_CURRENT('Products');
+            //Sql(@"
+            //    DECLARE @currentId BIGINT = IDENT_CURRENT('Products');
 
-                IF @currentId IS NULL OR @currentId < 101001
-                BEGIN
-                    DBCC CHECKIDENT ('Products', RESEED, 101001);
-                END
-            ");
+            //    IF @currentId IS NULL OR @currentId < 101001
+            //    BEGIN
+            //        DBCC CHECKIDENT ('Products', RESEED, 101001);
+            //    END
+            //");
         }
 
         public override void Down()
