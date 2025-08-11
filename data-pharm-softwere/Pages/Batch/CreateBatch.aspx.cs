@@ -188,11 +188,11 @@ namespace data_pharm_softwere.Pages.Batch
         {
             if (int.TryParse(txtBatchNo.Text.Trim(), out int batchNo))
             {
-                var existingBatch = _context.Batches.FirstOrDefault(b => b.BatchNo == batchNo);
+                var existingBatch = _context.BatchesStock.FirstOrDefault(b => b.BatchNo == batchNo.ToString());
                 if (existingBatch != null)
                 {
                     // Redirect to edit page with ID
-                    Response.Redirect($"/batch/edit?id={existingBatch.BatchID}");
+                    Response.Redirect($"/batch/edit?id={existingBatch.BatchStockID}");
                 }
             }
         }
@@ -205,33 +205,31 @@ namespace data_pharm_softwere.Pages.Batch
                 {
                     if (int.TryParse(txtBatchNo.Text.Trim(), out int batchNo))
                     {
-                        var existingBatch = _context.Batches.FirstOrDefault(b => b.BatchNo == batchNo);
+                        var existingBatch = _context.BatchesStock.FirstOrDefault(b => b.BatchNo == batchNo.ToString());
                         if (existingBatch != null)
                         {
                             // Redirect if batch already exists
-                            Response.Redirect($"/batch/edit?id={existingBatch.BatchID}");
+                            Response.Redirect($"/batch/edit?id={existingBatch.BatchStockID}");
                             return;
                         }
                     }
 
-                    var batch = new Models.Batch
+                    var batch = new Models.BatchStock
                     {
-                        ProductID = string.IsNullOrEmpty(ddlProduct.SelectedValue)
-                            ? (int?)null
-                            : int.Parse(ddlProduct.SelectedValue),
-                        BatchNo = int.Parse(txtBatchNo.Text),
+                        ProductID = int.Parse(ddlProduct.SelectedValue),
+                        BatchNo = txtBatchNo.Text.Trim(),
                         MFGDate = DateTime.Parse(txtMFGDate.Text),
                         ExpiryDate = DateTime.Parse(txtExpiryDate.Text),
                         DP = decimal.Parse(txtDP.Text),
                         TP = decimal.Parse(txtTP.Text),
                         MRP = decimal.Parse(txtMRP.Text),
-                        CartonQty = int.Parse(txtCartonQty.Text),
-                        CartonPrice = decimal.Parse(txtCartonPrice.Text),
+                        CartonUnits = int.Parse(txtCartonQty.Text),
+                        CartonDp = decimal.Parse(txtCartonPrice.Text),
                         CreatedAt = DateTime.Now,
                         CreatedBy = "Admin",
                     };
 
-                    _context.Batches.Add(batch);
+                    _context.BatchesStock.Add(batch);
                     _context.SaveChanges();
 
                     lblMessage.Text = "Batch saved successfully.";

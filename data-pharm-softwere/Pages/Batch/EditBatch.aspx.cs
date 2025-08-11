@@ -181,7 +181,7 @@ namespace data_pharm_softwere.Pages.Batch
 
         private void LoadBatch()
         {
-            var batch = _context.Batches.FirstOrDefault(b => b.BatchID == BatchId);
+            var batch = _context.BatchesStock.FirstOrDefault(b => b.BatchStockID == BatchId);
             if (batch == null)
             {
                 Response.Redirect("/batch/create");
@@ -207,8 +207,8 @@ namespace data_pharm_softwere.Pages.Batch
             txtDP.Text = batch.DP.ToString("0.##");
             txtTP.Text = batch.TP.ToString("0.##");
             txtMRP.Text = batch.MRP.ToString("0.##");
-            txtCartonQty.Text = batch.CartonQty.ToString();
-            txtCartonPrice.Text = batch.CartonPrice.ToString("0.##");
+            txtCartonQty.Text = batch.CartonUnits.ToString();
+            txtCartonPrice.Text = batch.CartonDp.ToString("0.##");
         }
 
         protected void ddlVendor_SelectedIndexChanged(object sender, EventArgs e)
@@ -236,7 +236,7 @@ namespace data_pharm_softwere.Pages.Batch
         {
             if (!Page.IsValid) return;
 
-            var batch = _context.Batches.FirstOrDefault(b => b.BatchID == BatchId);
+            var batch = _context.BatchesStock.FirstOrDefault(b => b.BatchStockID == BatchId);
             if (batch == null)
             {
                 Response.Redirect("/batch/create");
@@ -245,15 +245,15 @@ namespace data_pharm_softwere.Pages.Batch
 
             try
             {
-                batch.ProductID = string.IsNullOrEmpty(ddlProduct.SelectedValue) ? (int?)null : int.Parse(ddlProduct.SelectedValue);
-                batch.BatchNo = int.Parse(txtBatchNo.Text);
+                batch.ProductID = int.Parse(ddlProduct.SelectedValue);
+                batch.BatchNo = txtBatchNo.Text.Trim();
                 batch.MFGDate = DateTime.Parse(txtMFGDate.Text);
                 batch.ExpiryDate = DateTime.Parse(txtExpiryDate.Text);
                 batch.DP = decimal.Parse(txtDP.Text);
                 batch.TP = decimal.Parse(txtTP.Text);
                 batch.MRP = decimal.Parse(txtMRP.Text);
-                batch.CartonQty = int.Parse(txtCartonQty.Text);
-                batch.CartonPrice = decimal.Parse(txtCartonPrice.Text);
+                batch.CartonUnits = int.Parse(txtCartonQty.Text);
+                batch.CartonDp = decimal.Parse(txtCartonPrice.Text);
                 batch.UpdatedAt = DateTime.Now;
                 batch.UpdatedBy = "Admin";
 

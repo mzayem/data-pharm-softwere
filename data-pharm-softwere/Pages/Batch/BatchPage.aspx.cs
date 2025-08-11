@@ -31,23 +31,21 @@ namespace data_pharm_softwere.Pages.Batch
 
         private void LoadVendors()
         {
-                var vendors = _context.Vendors
-               .Include(v => v.Account)
-               .OrderBy(v => v.Account.AccountName)
-               .Select(v => new
-               {
-                   v.AccountId,
-                   AccountName = v.Account.AccountName
-               })
-               .ToList();
+            var vendors = _context.Vendors
+           .Include(v => v.Account)
+           .OrderBy(v => v.Account.AccountName)
+           .Select(v => new
+           {
+               v.AccountId,
+               AccountName = v.Account.AccountName
+           })
+           .ToList();
 
-                ddlVendor.DataSource = vendors;
-                ddlVendor.DataTextField = "AccountName";
-                ddlVendor.DataValueField = "AccountId";
-                ddlVendor.DataBind();
-                ddlVendor.Items.Insert(0, new ListItem("-- Select Vendor --", ""));
-            
-            
+            ddlVendor.DataSource = vendors;
+            ddlVendor.DataTextField = "AccountName";
+            ddlVendor.DataValueField = "AccountId";
+            ddlVendor.DataBind();
+            ddlVendor.Items.Insert(0, new ListItem("-- Select Vendor --", ""));
         }
 
         private void LoadGroups()
@@ -103,12 +101,12 @@ namespace data_pharm_softwere.Pages.Batch
 
         private void LoadBatches(string search = "")
         {
-            if (!_context.Batches.Any())
+            if (!_context.BatchesStock.Any())
             {
                 Response.Redirect("/batch/create");
                 return;
             }
-            var query = _context.Batches
+            var query = _context.BatchesStock
                 .Where(b => b.Product != null &&
                             b.Product.SubGroup != null &&
                             b.Product.SubGroup.Group != null &&
@@ -116,7 +114,7 @@ namespace data_pharm_softwere.Pages.Batch
                             b.Product.SubGroup.Group.Division.Vendor != null)
                 .Select(b => new
                 {
-                    b.BatchID,
+                    b.BatchStockID,
                     b.BatchNo,
                     ProductName = b.Product.Name,
                     b.MFGDate,
@@ -230,10 +228,10 @@ namespace data_pharm_softwere.Pages.Batch
                 }
                 else if (action == "Delete")
                 {
-                    var batch = _context.Batches.Find(batchId);
+                    var batch = _context.BatchesStock.Find(batchId);
                     if (batch != null)
                     {
-                        _context.Batches.Remove(batch);
+                        _context.BatchesStock.Remove(batch);
                         _context.SaveChanges();
                         LoadBatches();
                     }
@@ -373,7 +371,7 @@ namespace data_pharm_softwere.Pages.Batch
                             if (!int.TryParse(rawQty, out int qty))
                                 throw new Exception($"Invalid CartonQty '{rawQty}'");
 
-                            var existingBatch = _context.Batches.FirstOrDefault(b => b.BatchNo == batchNo);
+                            var existingBatch = _context.BatchesStock.FirstOrDefault(b => b.BatchNo == batchNo.ToString());
 
                             if (existingBatch != null)
                             {
@@ -384,8 +382,8 @@ namespace data_pharm_softwere.Pages.Batch
                                 existingBatch.DP = dp;
                                 existingBatch.TP = tp;
                                 existingBatch.MRP = mrp;
-                                existingBatch.CartonQty = qty;
-                                existingBatch.CartonPrice = tp * qty;
+                                existingBatch.CartonUnits = qty;
+                                existingBatch.CartonDp = tp * qty;
                                 existingBatch.UpdatedBy = string.IsNullOrWhiteSpace(User.Identity?.Name) ? "System" : User.Identity.Name;
                                 existingBatch.UpdatedAt = DateTime.Now;
 
@@ -393,22 +391,20 @@ namespace data_pharm_softwere.Pages.Batch
                             }
                             else
                             {
-                                var batch = new Models.Batch
+                                var batch = new Models.BatchStock
                                 {
-                                    BatchNo = batchNo,
+                                    BatchNo = batchNo.ToString(),
                                     ProductID = productId,
                                     MFGDate = mfgDate,
                                     ExpiryDate = expDate,
                                     DP = dp,
                                     TP = tp,
                                     MRP = mrp,
-                                    CartonQty = qty,
-                                    CartonPrice = tp * qty,
                                     CreatedBy = string.IsNullOrWhiteSpace(User.Identity?.Name) ? "System" : User.Identity.Name,
                                     CreatedAt = DateTime.Now
                                 };
 
-                                _context.Batches.Add(batch);
+                                _context.BatchesStock.Add(batch);
                                 insertCount++;
                             }
                         }

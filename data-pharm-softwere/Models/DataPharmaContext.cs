@@ -16,7 +16,7 @@ namespace data_pharm_softwere.Data
         public DbSet<Group> Groups { get; set; }
         public DbSet<SubGroup> SubGroups { get; set; }
         public DbSet<Product> Products { get; set; }
-        public DbSet<Batch> Batches { get; set; }
+        public DbSet<BatchStock> BatchesStock { get; set; }
         public DbSet<CityRoute> CityRoutes { get; set; }
         public DbSet<Town> Towns { get; set; }
         public DbSet<Customer> Customers { get; set; }
@@ -24,6 +24,8 @@ namespace data_pharm_softwere.Data
         public DbSet<SalesmanTown> SalesmanTowns { get; set; }
         public DbSet<MedicalRep> MedicalReps { get; set; }
         public DbSet<MedicalRepSubGroup> MedicalRepSubGroups { get; set; }
+        public DbSet<Purchase> Purchases { get; set; }
+        public DbSet<PurchaseDetail> PurchaseDetails { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -34,7 +36,7 @@ namespace data_pharm_softwere.Data
             modelBuilder.Entity<Group>().ToTable("Groups");
             modelBuilder.Entity<SubGroup>().ToTable("SubGroups");
             modelBuilder.Entity<Product>().ToTable("Products");
-            modelBuilder.Entity<Batch>().ToTable("Batches");
+            modelBuilder.Entity<BatchStock>().ToTable("BatchesStock");
             modelBuilder.Entity<CityRoute>().ToTable("CityRoutes");
             modelBuilder.Entity<Town>().ToTable("Towns");
             modelBuilder.Entity<Customer>().ToTable("Customers");
@@ -81,9 +83,9 @@ namespace data_pharm_softwere.Data
                 .WillCascadeOnDelete(false);
 
             // Batch → Product (optional)
-            modelBuilder.Entity<Batch>()
-                .HasOptional(b => b.Product)
-                .WithMany(p => p.Batches)
+            modelBuilder.Entity<BatchStock>()
+                .HasRequired(b => b.Product)
+                .WithMany(p => p.BatchesStock)
                 .HasForeignKey(b => b.ProductID)
                 .WillCascadeOnDelete(true);
 
@@ -127,6 +129,20 @@ namespace data_pharm_softwere.Data
                 .WithMany(sg => sg.MedicalRepSubGroups)
                 .HasForeignKey(ms => ms.SubGroupID)
                 .WillCascadeOnDelete(true);
+
+            // Purchase → PurchaseDetails
+            modelBuilder.Entity<Purchase>()
+                .HasMany(p => p.PurchaseDetails)
+                .WithRequired(pd => pd.Purchase)
+                .HasForeignKey(pd => pd.PurchaseId)
+                .WillCascadeOnDelete(true);
+
+            // PurchaseDetail → BatchStock
+            modelBuilder.Entity<PurchaseDetail>()
+                .HasRequired(pd => pd.BatchStock)
+                .WithMany()
+                .HasForeignKey(pd => pd.BatchStockID)
+                .WillCascadeOnDelete(false);
         }
     }
 }

@@ -1,18 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace data_pharm_softwere.Models
 {
-    [Table("Batches")]
-    public class Batch
+    [Table("BatchesStock")]
+    public class BatchStock
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int BatchID { get; set; }
+        public int BatchStockID { get; set; }
 
         [Required]
-        public int BatchNo { get; set; }
+        [StringLength(50)]
+        public string BatchNo { get; set; }
 
         [Required]
         [DataType(DataType.Date)]
@@ -35,12 +37,27 @@ namespace data_pharm_softwere.Models
         public decimal MRP { get; set; }
 
         [Required]
-        [Range(0, int.MaxValue)]
-        public int CartonQty { get; set; }
+        [Range(0, double.MaxValue)]
+        public decimal CartonUnits { get; set; }
 
         [Required]
         [Range(0, double.MaxValue)]
-        public decimal CartonPrice { get; set; }
+        public decimal CartonDp { get; set; }
+
+        [Required]
+        [Range(0, int.MaxValue)]
+        public int AvailableQty { get; set; } = 0;
+
+        [Required]
+        [Range(0, int.MaxValue)]
+        public int InTransitQty { get; set; } = 0;
+
+        [Required]
+        [Range(0, int.MaxValue)]
+        public int UnavailableQty { get; set; } = 0;
+
+        [NotMapped]
+        public int TotalQty => AvailableQty + InTransitQty + UnavailableQty;
 
         [Required]
         [StringLength(50)]
@@ -53,9 +70,12 @@ namespace data_pharm_softwere.Models
 
         public DateTime? UpdatedAt { get; set; }
 
-        public int? ProductID { get; set; }
+        [Required]
+        public int ProductID { get; set; }
 
         [ForeignKey("ProductID")]
         public virtual Product Product { get; set; }
+
+        public virtual ICollection<PurchaseDetail> PurchaseDetails { get; set; }
     }
 }

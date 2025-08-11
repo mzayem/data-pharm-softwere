@@ -7,6 +7,8 @@ namespace data_pharm_softwere.Models
     [Table("MedicalRepSubGroups")]
     public class MedicalRepSubGroup
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
 
         [Required]

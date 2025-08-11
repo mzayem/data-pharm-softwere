@@ -90,6 +90,6 @@ namespace data_pharm_softwere.Models
 
         public DateTime? UpdatedAt { get; set; }
 
-        public ICollection<Batch> Batches { get; set; }
+        public virtual ICollection<BatchStock> BatchesStock { get; set; }
     }
 }

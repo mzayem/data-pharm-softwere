@@ -1,8 +1,6 @@
 ﻿using data_pharm_softwere.Data;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -22,7 +20,7 @@ namespace data_pharm_softwere.Pages.Batch.Controls
 
         private void LoadProducts()
         {
-            var products = _context.Products.OrderBy(p => p.Name).ToList();
+            var products = _context.Products.ToList();
             ddlProduct.DataSource = products;
             ddlProduct.DataTextField = "Name";
             ddlProduct.DataValueField = "ProductID";
@@ -34,22 +32,22 @@ namespace data_pharm_softwere.Pages.Batch.Controls
         {
             if (Page.IsValid)
             {
-                var batch = new Models.Batch
+                var batch = new Models.BatchStock
                 {
-                    ProductID = string.IsNullOrEmpty(ddlProduct.SelectedValue) ? (int?)null : int.Parse(ddlProduct.SelectedValue),
-                    BatchNo = int.Parse(txtBatchNo.Text),
+                    ProductID = int.Parse(ddlProduct.SelectedValue),
+                    BatchNo = txtBatchNo.Text,
                     MFGDate = DateTime.Parse(txtMFGDate.Text),
                     ExpiryDate = DateTime.Parse(txtExpiryDate.Text),
                     DP = decimal.Parse(txtDP.Text),
                     TP = decimal.Parse(txtTP.Text),
                     MRP = decimal.Parse(txtMRP.Text),
-                    CartonQty = int.Parse(txtCartonQty.Text),
-                    CartonPrice = decimal.Parse(txtCartonPrice.Text),
+                    CartonUnits = int.Parse(txtCartonQty.Text),
+                    CartonDp = decimal.Parse(txtCartonPrice.Text),
                     CreatedAt = DateTime.Now,
                     CreatedBy = "Admin",
                 };
 
-                _context.Batches.Add(batch);
+                _context.BatchesStock.Add(batch);
                 _context.SaveChanges();
 
                 Response.Redirect("/batch");
