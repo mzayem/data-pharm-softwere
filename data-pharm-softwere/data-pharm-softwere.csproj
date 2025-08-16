@@ -126,6 +126,12 @@
     <Content Include="Pages\Product\CreateProduct.aspx" />
     <Content Include="Pages\Product\EditProduct.aspx" />
     <Content Include="Pages\Product\ProductPage.aspx" />
+    <Content Include="Pages\PurchaseForms\Purchase\CreatePurchase.aspx" />
+    <Content Include="Pages\PurchaseForms\Purchase\EditPurchase.aspx" />
+    <Content Include="Pages\PurchaseForms\Purchase\PurchasesPage.aspx" />
+    <Content Include="Pages\PurchaseForms\Return\CreateReturn.aspx" />
+    <Content Include="Pages\PurchaseForms\Return\EditReturn.aspx" />
+    <Content Include="Pages\PurchaseForms\Return\ReturnPage.aspx" />
     <Content Include="Pages\Salesman\CreateSalesman.aspx" />
     <Content Include="Pages\Salesman\EditSalesman.aspx" />
     <Content Include="Pages\Salesman\SalesmanPage.aspx" />
@@ -164,77 +170,53 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202506240656359_InitialCreate.cs" />
-    <Compile Include="Migrations\202506240656359_InitialCreate.Designer.cs">
-      <DependentUpon>202506240656359_InitialCreate.cs</DependentUpon>
+    <Compile Include="Migrations\202508131129429_AccountModal.cs" />
+    <Compile Include="Migrations\202508131129429_AccountModal.Designer.cs">
+      <DependentUpon>202508131129429_AccountModal.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202506240714272_GroupSubGroup.cs" />
-    <Compile Include="Migrations\202506240714272_GroupSubGroup.Designer.cs">
-      <DependentUpon>202506240714272_GroupSubGroup.cs</DependentUpon>
+    <Compile Include="Migrations\202508131133182_VendorModal.cs" />
+    <Compile Include="Migrations\202508131133182_VendorModal.Designer.cs">
+      <DependentUpon>202508131133182_VendorModal.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202506240717117_ProductModel.cs" />
-    <Compile Include="Migrations\202506240717117_ProductModel.Designer.cs">
-      <DependentUpon>202506240717117_ProductModel.cs</DependentUpon>
+    <Compile Include="Migrations\202508131136014_DivisionGroupSubGroupModal.cs" />
+    <Compile Include="Migrations\202508131136014_DivisionGroupSubGroupModal.Designer.cs">
+      <DependentUpon>202508131136014_DivisionGroupSubGroupModal.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202506240723480_BatchModal.cs" />
-    <Compile Include="Migrations\202506240723480_BatchModal.Designer.cs">
-      <DependentUpon>202506240723480_BatchModal.cs</DependentUpon>
+    <Compile Include="Migrations\202508131139021_ProductModal.cs" />
+    <Compile Include="Migrations\202508131139021_ProductModal.Designer.cs">
+      <DependentUpon>202508131139021_ProductModal.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202506240743378_TownCityRouteModal.cs" />
-    <Compile Include="Migrations\202506240743378_TownCityRouteModal.Designer.cs">
-      <DependentUpon>202506240743378_TownCityRouteModal.cs</DependentUpon>
+    <Compile Include="Migrations\202508131143331_BatchStock.cs" />
+    <Compile Include="Migrations\202508131143331_BatchStock.Designer.cs">
+      <DependentUpon>202508131143331_BatchStock.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202506240806465_customerModal.cs" />
-    <Compile Include="Migrations\202506240806465_customerModal.Designer.cs">
-      <DependentUpon>202506240806465_customerModal.cs</DependentUpon>
+    <Compile Include="Migrations\202508131146464_CityRouteTownModal.cs" />
+    <Compile Include="Migrations\202508131146464_CityRouteTownModal.Designer.cs">
+      <DependentUpon>202508131146464_CityRouteTownModal.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202506241039157_TownUpdate.cs" />
-    <Compile Include="Migrations\202506241039157_TownUpdate.Designer.cs">
-      <DependentUpon>202506241039157_TownUpdate.cs</DependentUpon>
+    <Compile Include="Migrations\202508131148499_CustomerModal.cs" />
+    <Compile Include="Migrations\202508131148499_CustomerModal.Designer.cs">
+      <DependentUpon>202508131148499_CustomerModal.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202506241059076_CustomerChecks.cs" />
-    <Compile Include="Migrations\202506241059076_CustomerChecks.Designer.cs">
-      <DependentUpon>202506241059076_CustomerChecks.cs</DependentUpon>
+    <Compile Include="Migrations\202508131150549_SalesmanModal.cs" />
+    <Compile Include="Migrations\202508131150549_SalesmanModal.Designer.cs">
+      <DependentUpon>202508131150549_SalesmanModal.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202506261035427_SpellFix.cs" />
-    <Compile Include="Migrations\202506261035427_SpellFix.Designer.cs">
-      <DependentUpon>202506261035427_SpellFix.cs</DependentUpon>
+    <Compile Include="Migrations\202508131152410_MedicalrepModal.cs" />
+    <Compile Include="Migrations\202508131152410_MedicalrepModal.Designer.cs">
+      <DependentUpon>202508131152410_MedicalrepModal.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202506280848178_DivisionAdded.cs" />
-    <Compile Include="Migrations\202506280848178_DivisionAdded.Designer.cs">
-      <DependentUpon>202506280848178_DivisionAdded.cs</DependentUpon>
+    <Compile Include="Migrations\202508131154233_PurchaseModal.cs" />
+    <Compile Include="Migrations\202508131154233_PurchaseModal.Designer.cs">
+      <DependentUpon>202508131154233_PurchaseModal.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202507180730342_CustomerUpdate.cs" />
-    <Compile Include="Migrations\202507180730342_CustomerUpdate.Designer.cs">
-      <DependentUpon>202507180730342_CustomerUpdate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202507180759430_SalesmanModal.cs" />
-    <Compile Include="Migrations\202507180759430_SalesmanModal.Designer.cs">
-      <DependentUpon>202507180759430_SalesmanModal.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202507180851055_MedicalReps.cs" />
-    <Compile Include="Migrations\202507180851055_MedicalReps.Designer.cs">
-      <DependentUpon>202507180851055_MedicalReps.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202507181137289_MinorFixes.cs" />
-    <Compile Include="Migrations\202507181137289_MinorFixes.Designer.cs">
-      <DependentUpon>202507181137289_MinorFixes.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202507250749241_InitialMigration.cs" />
-    <Compile Include="Migrations\202507250749241_InitialMigration.Designer.cs">
-      <DependentUpon>202507250749241_InitialMigration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202507251302472_AccountChartUpdate.cs" />
-    <Compile Include="Migrations\202507251302472_AccountChartUpdate.Designer.cs">
-      <DependentUpon>202507251302472_AccountChartUpdate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202507300519382_productUpdate.cs" />
-    <Compile Include="Migrations\202507300519382_productUpdate.Designer.cs">
-      <DependentUpon>202507300519382_productUpdate.cs</DependentUpon>
+    <Compile Include="Migrations\202508131212544_update.cs" />
+    <Compile Include="Migrations\202508131212544_update.Designer.cs">
+      <DependentUpon>202508131212544_update.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
-    <Compile Include="Models\Batch.cs" />
+    <Compile Include="Models\BatchStock.cs" />
     <Compile Include="Models\CityRoute.cs" />
     <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\DataPharmaContext.cs" />
@@ -243,6 +225,8 @@
     <Compile Include="Models\MedicalRep.cs" />
     <Compile Include="Models\MedicalRepSubGroup.cs" />
     <Compile Include="Models\Product.cs" />
+    <Compile Include="Models\Purchase.cs" />
+    <Compile Include="Models\PurchaseDetail.cs" />
     <Compile Include="Models\Salesman.cs" />
     <Compile Include="Models\SalesmanTown.cs" />
     <Compile Include="Models\SubGroup.cs" />
@@ -416,6 +400,48 @@
     <Compile Include="Pages\Product\ProductPage.aspx.designer.cs">
       <DependentUpon>ProductPage.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Pages\PurchaseForms\Purchase\CreatePurchase.aspx.cs">
+      <DependentUpon>CreatePurchase.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\PurchaseForms\Purchase\CreatePurchase.aspx.designer.cs">
+      <DependentUpon>CreatePurchase.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PurchaseForms\Purchase\EditPurchase.aspx.cs">
+      <DependentUpon>EditPurchase.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\PurchaseForms\Purchase\EditPurchase.aspx.designer.cs">
+      <DependentUpon>EditPurchase.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PurchaseForms\Purchase\PurchasesPage.aspx.cs">
+      <DependentUpon>PurchasesPage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\PurchaseForms\Purchase\PurchasesPage.aspx.designer.cs">
+      <DependentUpon>PurchasesPage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PurchaseForms\Return\CreateReturn.aspx.cs">
+      <DependentUpon>CreateReturn.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\PurchaseForms\Return\CreateReturn.aspx.designer.cs">
+      <DependentUpon>CreateReturn.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PurchaseForms\Return\EditReturn.aspx.cs">
+      <DependentUpon>EditReturn.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\PurchaseForms\Return\EditReturn.aspx.designer.cs">
+      <DependentUpon>EditReturn.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PurchaseForms\Return\ReturnPage.aspx.cs">
+      <DependentUpon>ReturnPage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\PurchaseForms\Return\ReturnPage.aspx.designer.cs">
+      <DependentUpon>ReturnPage.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Salesman\CreateSalesman.aspx.cs">
       <DependentUpon>CreateSalesman.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -538,60 +564,42 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202506240656359_InitialCreate.resx">
-      <DependentUpon>202506240656359_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202506240714272_GroupSubGroup.resx">
-      <DependentUpon>202506240714272_GroupSubGroup.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202506240717117_ProductModel.resx">
-      <DependentUpon>202506240717117_ProductModel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202506240723480_BatchModal.resx">
-      <DependentUpon>202506240723480_BatchModal.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202506240743378_TownCityRouteModal.resx">
-      <DependentUpon>202506240743378_TownCityRouteModal.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202506240806465_customerModal.resx">
-      <DependentUpon>202506240806465_customerModal.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202506241039157_TownUpdate.resx">
-      <DependentUpon>202506241039157_TownUpdate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202506241059076_CustomerChecks.resx">
-      <DependentUpon>202506241059076_CustomerChecks.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202506261035427_SpellFix.resx">
-      <DependentUpon>202506261035427_SpellFix.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202506280848178_DivisionAdded.resx">
-      <DependentUpon>202506280848178_DivisionAdded.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202507180730342_CustomerUpdate.resx">
-      <DependentUpon>202507180730342_CustomerUpdate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202507180759430_SalesmanModal.resx">
-      <DependentUpon>202507180759430_SalesmanModal.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202507180851055_MedicalReps.resx">
-      <DependentUpon>202507180851055_MedicalReps.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202507181137289_MinorFixes.resx">
-      <DependentUpon>202507181137289_MinorFixes.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202507250749241_InitialMigration.resx">
-      <DependentUpon>202507250749241_InitialMigration.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202507251302472_AccountChartUpdate.resx">
-      <DependentUpon>202507251302472_AccountChartUpdate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202507300519382_productUpdate.resx">
-      <DependentUpon>202507300519382_productUpdate.cs</DependentUpon>
-    </EmbeddedResource>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+    <EmbeddedResource Include="Migrations\202508131129429_AccountModal.resx">
+      <DependentUpon>202508131129429_AccountModal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202508131133182_VendorModal.resx">
+      <DependentUpon>202508131133182_VendorModal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202508131136014_DivisionGroupSubGroupModal.resx">
+      <DependentUpon>202508131136014_DivisionGroupSubGroupModal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202508131139021_ProductModal.resx">
+      <DependentUpon>202508131139021_ProductModal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202508131143331_BatchStock.resx">
+      <DependentUpon>202508131143331_BatchStock.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202508131146464_CityRouteTownModal.resx">
+      <DependentUpon>202508131146464_CityRouteTownModal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202508131148499_CustomerModal.resx">
+      <DependentUpon>202508131148499_CustomerModal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202508131150549_SalesmanModal.resx">
+      <DependentUpon>202508131150549_SalesmanModal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202508131152410_MedicalrepModal.resx">
+      <DependentUpon>202508131152410_MedicalrepModal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202508131154233_PurchaseModal.resx">
+      <DependentUpon>202508131154233_PurchaseModal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202508131212544_update.resx">
+      <DependentUpon>202508131212544_update.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -628,7 +636,7 @@
   </Target>
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.4.1.0\build\net472\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.targets" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.4.1.0\build\net472\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.targets')" />
   <Import Project="..\packages\EntityFramework.6.5.1\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.targets')" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

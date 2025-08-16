@@ -216,6 +216,23 @@ namespace data_pharm_softwere
                 "medicalRep",
                 "~/pages/MedicalRep/MedicalRepPage.aspx"
             );
+
+            //Purchase routes
+            routes.MapPageRoute(
+                "Purchase Create",
+                "purchase/create",
+                "~/pages/PurchaseForms/Purchase/CreatePurchase.aspx"
+            );
+            routes.MapPageRoute(
+                "Purchase Edit",
+                "purchase/edit",
+                "~/pages/PurchaseForms/Purchase/EditPurchase.aspx"
+            );
+            routes.MapPageRoute(
+                "Purchases Management",
+                "purchase",
+                "~/pages/PurchaseForms/Purchase/PurchasePage.aspx"
+            );
         }
 
         // Default event hooks
