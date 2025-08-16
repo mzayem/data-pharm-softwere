@@ -223,8 +223,6 @@ namespace data_pharm_softwere.Pages.Batch
                         DP = decimal.Parse(txtDP.Text),
                         TP = decimal.Parse(txtTP.Text),
                         MRP = decimal.Parse(txtMRP.Text),
-                        CartonUnits = int.Parse(txtCartonQty.Text),
-                        CartonDp = decimal.Parse(txtCartonPrice.Text),
                         CreatedAt = DateTime.Now,
                         CreatedBy = "Admin",
                     };
@@ -253,8 +251,6 @@ namespace data_pharm_softwere.Pages.Batch
                     txtDP.Text = "";
                     txtTP.Text = "";
                     txtMRP.Text = "";
-                    txtCartonQty.Text = "";
-                    txtCartonPrice.Text = "";
                 }
             }
         }

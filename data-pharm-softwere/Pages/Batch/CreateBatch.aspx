@@ -1,6 +1,5 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Pages/Layout.Master" AutoEventWireup="true" CodeBehind="CreateBatch.aspx.cs" Inherits="data_pharm_softwere.Pages.Batch.CreateBatch" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-    <asp:ScriptManager ID="ScriptManager1" runat="server" />
 
     <div class="container my-4">
         <h3>Create Batch</h3>
@@ -73,7 +72,8 @@
                                 ValidationGroup="BatchForm" />
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="col-md-3
+                            ">
                             <label class="form-label fw-semibold">DP (Rs.)</label>
                             <asp:TextBox ID="txtDP" runat="server" CssClass="form-control rounded-pill" TextMode="Number"
                                 AutoPostBack="true" OnTextChanged="txtDP_TextChanged" />
@@ -85,7 +85,7 @@
                                 ValidationGroup="BatchForm" />
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label class="form-label fw-semibold">TP (Rs.)</label>
                             <asp:TextBox ID="txtTP" runat="server" CssClass="form-control rounded-pill" TextMode="Number" />
                             <asp:RequiredFieldValidator ID="rfvTP" runat="server"
@@ -96,7 +96,7 @@
                                 ValidationGroup="BatchForm" />
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label class="form-label fw-semibold">MRP (Rs.)</label>
                             <asp:TextBox ID="txtMRP" runat="server" CssClass="form-control rounded-pill" TextMode="Number" />
                             <asp:RequiredFieldValidator ID="rfvMRP" runat="server"
@@ -107,30 +107,21 @@
                                 ValidationGroup="BatchForm" />
                         </div>
 
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">Carton Quantity</label>
-                            <asp:TextBox ID="txtCartonQty" runat="server" CssClass="form-control rounded-pill" TextMode="Number" />
-                            <asp:RequiredFieldValidator ID="rfvCartonQty" runat="server"
-                                ControlToValidate="txtCartonQty"
-                                ErrorMessage="Carton Quantity is required"
-                                CssClass="text-danger"
-                                Display="Dynamic"
-                                ValidationGroup="BatchForm" />
-                        </div>
-
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <label class="form-label fw-semibold">Carton Price</label>
-                            <asp:TextBox ID="txtCartonPrice" runat="server" CssClass="form-control rounded-pill"
+                            <asp:TextBox ID="txtCartonPrice" runat="server" CssClass="form-control rounded-pill bg-light text-secondary"
                                 TextMode="Number" ReadOnly="true" />
                         </div>
                     </div>
 
-                    <div class="mt-4">
+                    <div class="d-flex flex-wrap gap-2 justify-content-between mt-4">
                         <asp:Button ID="btnSave" runat="server"
                             Text="Save Batch"
                             CssClass="btn btn-primary px-5 py-2 rounded-pill"
                             ValidationGroup="BatchForm"
                             OnClick="btnSave_Click" />
+                        <asp:HyperLink NavigateUrl="/batch" Text="Back to List"
+                            CssClass="btn btn-secondary px-5 py-2 rounded-pill" runat="server" />
                     </div>
                 </ContentTemplate>
                 <Triggers>

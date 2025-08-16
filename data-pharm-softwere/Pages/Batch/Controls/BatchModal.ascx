@@ -3,10 +3,13 @@
 <div class="modal fade" id="batchModal" tabindex="-1" aria-labelledby="batchModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
+            <asp:UpdatePanel ID="updBatchModal" runat="server" UpdateMode="Conditional">
+               <ContentTemplate>  
             <div class="modal-header">
                 <h5 class="modal-title">Create Batch</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+            
             <div class="modal-body">
                 <asp:Panel ID="pnlForm" runat="server" CssClass="row g-3">
                     <div class="row g-3">
@@ -18,6 +21,7 @@
                             <label class="form-label">Batch No</label>
                             <asp:TextBox ID="txtBatchNo" runat="server" CssClass="form-control rounded-pill" />
                         </div>
+                       
                         <div class="col-md-6">
                             <label class="form-label">MFG Date</label>
                             <asp:TextBox ID="txtMFGDate" runat="server" TextMode="Date" CssClass="form-control rounded-pill" />
@@ -39,12 +43,8 @@
                             <asp:TextBox ID="txtMRP" runat="server" CssClass="form-control rounded-pill" TextMode="Number" />
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">Carton Quantity</label>
-                            <asp:TextBox ID="txtCartonQty" runat="server" CssClass="form-control rounded-pill" TextMode="Number" />
-                        </div>
-                        <div class="col-md-6">
                             <label class="form-label">Carton Price</label>
-                            <asp:TextBox ID="txtCartonPrice" runat="server" CssClass="form-control rounded-pill" TextMode="Number" />
+                            <asp:TextBox ID="txtCartonPrice" runat="server" CssClass="form-control rounded-pill bg-light text-secondary" TextMode="Number" />
                         </div>
                     </div>
                 </asp:Panel>
@@ -52,6 +52,8 @@
             <div class="modal-footer">
                 <asp:Button ID="btnSave" runat="server" Text="Save Batch" CssClass="btn btn-primary" OnClick="btnSave_Click" />
             </div>
+                       </ContentTemplate>
+</asp:UpdatePanel>
         </div>
     </div>
 </div>

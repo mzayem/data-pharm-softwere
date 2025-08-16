@@ -1,7 +1,6 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Pages/Layout.Master" AutoEventWireup="true" CodeBehind="CreateVendor.aspx.cs" Inherits="data_pharm_softwere.Pages.Vendor.CreateVendor" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-    <asp:ScriptManager ID="ScriptManager1" runat="server" />
     <div class="container-fluid my-5">
             <h3 class="mb-4 text-center fw-semibold">Add New Vendor</h3>
 

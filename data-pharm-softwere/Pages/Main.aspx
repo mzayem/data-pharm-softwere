@@ -35,6 +35,9 @@
                 <a href="/salesman" class="btn btn-primary rounded-pill px-4 mt-4">
                     Go to Salesmen Management
                 </a>
+                <a href="/purchase" class="btn btn-primary rounded-pill px-4 mt-4">
+                    Go to Purchase Management
+                </a>
 
             </div>
 </div>

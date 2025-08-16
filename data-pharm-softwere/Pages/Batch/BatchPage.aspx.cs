@@ -216,19 +216,19 @@ namespace data_pharm_softwere.Pages.Batch
         {
             DropDownList ddl = (DropDownList)sender;
             GridViewRow row = (GridViewRow)ddl.NamingContainer;
-            HiddenField hf = (HiddenField)row.FindControl("hfBatchID");
+            HiddenField hf = (HiddenField)row.FindControl("hfBatchStockID");
 
-            if (int.TryParse(hf.Value, out int batchId))
+            if (int.TryParse(hf.Value, out int BatchStockID))
             {
                 string action = ddl.SelectedValue;
 
                 if (action == "Edit")
                 {
-                    Response.Redirect($"/batch/edit?id={batchId}");
+                    Response.Redirect($"/batch/edit?id={BatchStockID}");
                 }
                 else if (action == "Delete")
                 {
-                    var batch = _context.BatchesStock.Find(batchId);
+                    var batch = _context.BatchesStock.Find(BatchStockID);
                     if (batch != null)
                     {
                         _context.BatchesStock.Remove(batch);
@@ -243,9 +243,9 @@ namespace data_pharm_softwere.Pages.Batch
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
-                int batchId = Convert.ToInt32(DataBinder.Eval(e.Row.DataItem, "BatchID"));
+                int BatchStockID = Convert.ToInt32(DataBinder.Eval(e.Row.DataItem, "BatchStockID"));
                 e.Row.Attributes["style"] = "cursor:pointer";
-                e.Row.Attributes["onclick"] = $"window.location='/batch/edit?id={batchId}'";
+                e.Row.Attributes["onclick"] = $"window.location='/batch/edit?id={BatchStockID}'";
 
                 foreach (TableCell cell in e.Row.Cells)
                 {
@@ -271,9 +271,9 @@ namespace data_pharm_softwere.Pages.Batch
             Response.ContentType = "text/csv";
             Response.AddHeader("Content-Disposition", "attachment;filename=batch_sample.csv");
 
-            Response.Write("ProductID,BatchNo,MFGDate,ExpiryDate,DP,TP,MRP,CartonQty\r\n");
-            Response.Write("1,1001,2024-01-01,2025-12-31,12.5,14.0,16.5,50\r\n");
-            Response.Write("2,1002,2024-02-01,2026-01-01,11.0,13.0,15.0,40\r\n");
+            Response.Write("ProductID,BatchNo,MFGDate,ExpiryDate,DP,TP,MRP\r\n");
+            Response.Write("1,1001,2024-01-01,2025-12-31,12.5,14.0,16.5\r\n");
+            Response.Write("2,1002,2024-02-01,2026-01-01,11.0,13.0,15.0\r\n");
 
             Response.End();
         }
@@ -309,10 +309,9 @@ namespace data_pharm_softwere.Pages.Batch
                     int colDP = headers.IndexOf("DP");
                     int colTP = headers.IndexOf("TP");
                     int colMRP = headers.IndexOf("MRP");
-                    int colCartonQty = headers.IndexOf("CartonQty");
 
                     if (colProductID == -1 || colBatchNo == -1 || colMFGDate == -1 || colExpiryDate == -1 ||
-                        colDP == -1 || colTP == -1 || colMRP == -1 || colCartonQty == -1)
+                        colDP == -1 || colTP == -1 || colMRP == -1 )
                     {
                         lblImportStatus.Text = "Missing required columns in CSV.";
                         lblImportStatus.CssClass = "alert alert-danger d-block";
@@ -342,7 +341,6 @@ namespace data_pharm_softwere.Pages.Batch
                             string rawDP = values[colDP].Trim();
                             string rawTP = values[colTP].Trim();
                             string rawMRP = values[colMRP].Trim();
-                            string rawQty = values[colCartonQty].Trim();
 
                             if (!int.TryParse(rawProductID, out int productId))
                                 throw new Exception($"Invalid ProductID '{rawProductID}'");
@@ -368,8 +366,6 @@ namespace data_pharm_softwere.Pages.Batch
                             if (!decimal.TryParse(rawMRP, out decimal mrp))
                                 throw new Exception($"Invalid MRP '{rawMRP}'");
 
-                            if (!int.TryParse(rawQty, out int qty))
-                                throw new Exception($"Invalid CartonQty '{rawQty}'");
 
                             var existingBatch = _context.BatchesStock.FirstOrDefault(b => b.BatchNo == batchNo.ToString());
 
@@ -382,8 +378,6 @@ namespace data_pharm_softwere.Pages.Batch
                                 existingBatch.DP = dp;
                                 existingBatch.TP = tp;
                                 existingBatch.MRP = mrp;
-                                existingBatch.CartonUnits = qty;
-                                existingBatch.CartonDp = tp * qty;
                                 existingBatch.UpdatedBy = string.IsNullOrWhiteSpace(User.Identity?.Name) ? "System" : User.Identity.Name;
                                 existingBatch.UpdatedAt = DateTime.Now;
 

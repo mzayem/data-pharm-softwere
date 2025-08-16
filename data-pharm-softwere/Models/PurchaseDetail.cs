@@ -12,6 +12,11 @@ namespace data_pharm_softwere.Models
         public int PurchaseDetailId { get; set; }
 
         [Required]
+        [Range(0, double.MaxValue)]
+        [DataType(DataType.Currency)]
+        public decimal NetAmount { get; set; }
+
+        [Required]
         public int PurchaseId { get; set; }
 
         [ForeignKey("PurchaseId")]

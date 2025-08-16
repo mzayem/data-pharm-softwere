@@ -10,7 +10,7 @@ namespace data_pharm_softwere.Pages.Batch
     {
         private readonly DataPharmaContext _context = new DataPharmaContext();
 
-        private int BatchId
+        private int BatchStockID
         {
             get
             {
@@ -25,7 +25,7 @@ namespace data_pharm_softwere.Pages.Batch
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            //if (BatchId == 0)
+            //if (BatchStockID == 0)
             //{
             //    Response.Redirect("/batch/create");
             //    return;
@@ -181,7 +181,7 @@ namespace data_pharm_softwere.Pages.Batch
 
         private void LoadBatch()
         {
-            var batch = _context.BatchesStock.FirstOrDefault(b => b.BatchStockID == BatchId);
+            var batch = _context.BatchesStock.FirstOrDefault(b => b.BatchStockID == BatchStockID);
             if (batch == null)
             {
                 Response.Redirect("/batch/create");
@@ -207,7 +207,6 @@ namespace data_pharm_softwere.Pages.Batch
             txtDP.Text = batch.DP.ToString("0.##");
             txtTP.Text = batch.TP.ToString("0.##");
             txtMRP.Text = batch.MRP.ToString("0.##");
-            txtCartonQty.Text = batch.CartonUnits.ToString();
             txtCartonPrice.Text = batch.CartonDp.ToString("0.##");
         }
 
@@ -236,7 +235,7 @@ namespace data_pharm_softwere.Pages.Batch
         {
             if (!Page.IsValid) return;
 
-            var batch = _context.BatchesStock.FirstOrDefault(b => b.BatchStockID == BatchId);
+            var batch = _context.BatchesStock.FirstOrDefault(b => b.BatchStockID == BatchStockID);
             if (batch == null)
             {
                 Response.Redirect("/batch/create");
@@ -252,8 +251,6 @@ namespace data_pharm_softwere.Pages.Batch
                 batch.DP = decimal.Parse(txtDP.Text);
                 batch.TP = decimal.Parse(txtTP.Text);
                 batch.MRP = decimal.Parse(txtMRP.Text);
-                batch.CartonUnits = int.Parse(txtCartonQty.Text);
-                batch.CartonDp = decimal.Parse(txtCartonPrice.Text);
                 batch.UpdatedAt = DateTime.Now;
                 batch.UpdatedBy = "Admin";
 

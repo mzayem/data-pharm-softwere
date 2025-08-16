@@ -1,7 +1,6 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Pages/Layout.Master" AutoEventWireup="true" CodeBehind="DivisionPage.aspx.cs" Inherits="data_pharm_softwere.Pages.Division.DivisionPage" %>
 <%@ Register TagPrefix="uc" TagName="ImportInfo" Src="~/Components/Control/ImportInfo.ascx" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-    <asp:ScriptManager ID="ScriptManager1" runat="server" />
     <uc:ImportInfo ID="ImportInfoControl" runat="server" ImportContext="division" />
 
 

@@ -2,13 +2,10 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Web;
 
 namespace data_pharm_softwere.Models
 {
-    public enum AdvTaxOn
+    public enum TaxBaseType
     {
         Net,
         Gross
@@ -34,7 +31,10 @@ namespace data_pharm_softwere.Models
         public DateTime PurchaseDate { get; set; }
 
         [Required]
-        public AdvTaxOn AdvTaxOn { get; set; }
+        public TaxBaseType AdvTaxOn { get; set; }
+
+        [Required]
+        public TaxBaseType GSTType { get; set; }
 
         [StringLength(100)]
         public string PoNumber { get; set; }

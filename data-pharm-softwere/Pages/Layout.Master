@@ -8,9 +8,7 @@
     <script src="/Scripts/jquery-3.7.1.min.js"></script>
     <script src="/Scripts/bootstrap.bundle.min.js"></script>
     <link href="/Content/bootstrap-icons.css" rel="stylesheet" />
-
-
-
+    
 
     <style>
     /* Hide the default dropdown arrow */
@@ -37,6 +35,7 @@
 </head>
 <body class="bg-light text-dark">
     <form id="form1" runat="server">
+    <asp:ScriptManager ID="ScriptManager1" runat="server" />
         <div class="min-vh-100 d-flex flex-column">
             <header class="bg-primary text-white p-3">
                 <div class="container">

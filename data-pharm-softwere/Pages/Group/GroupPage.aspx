@@ -2,7 +2,6 @@
 <%@ Register TagPrefix="uc" TagName="ImportInfo" Src="~/Components/Control/ImportInfo.ascx" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-    <asp:ScriptManager ID="ScriptManager1" runat="server" />
     <uc:ImportInfo ID="ImportInfoControl" runat="server" ImportContext="group" />
     
 

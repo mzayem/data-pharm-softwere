@@ -15,6 +15,15 @@ namespace data_pharm_softwere.Pages.Batch.Controls
     {
 
         /// <summary>
+        /// updBatchModal control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel updBatchModal;
+
+        /// <summary>
         /// pnlForm control.
         /// </summary>
         /// <remarks>
@@ -85,15 +94,6 @@ namespace data_pharm_softwere.Pages.Batch.Controls
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtMRP;
-
-        /// <summary>
-        /// txtCartonQty control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtCartonQty;
 
         /// <summary>
         /// txtCartonPrice control.

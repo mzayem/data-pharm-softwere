@@ -82,7 +82,7 @@ namespace data_pharm_softwere.Data
                 .HasForeignKey(p => p.DivisionID)
                 .WillCascadeOnDelete(false);
 
-            // Batch → Product (optional)
+            // BatchStock → Product (optional)
             modelBuilder.Entity<BatchStock>()
                 .HasRequired(b => b.Product)
                 .WithMany(p => p.BatchesStock)
@@ -102,6 +102,7 @@ namespace data_pharm_softwere.Data
                 .WithMany(t => t.Customers)
                 .HasForeignKey(c => c.TownID)
                 .WillCascadeOnDelete(true);
+
             //  SalesmanTown → Salesman
             modelBuilder.Entity<SalesmanTown>()
                 .HasRequired(st => st.Salesman)

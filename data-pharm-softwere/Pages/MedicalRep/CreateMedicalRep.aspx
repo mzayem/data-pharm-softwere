@@ -2,7 +2,6 @@
 
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-     <asp:ScriptManager ID="ScriptManager1" runat="server" />
 
     <div class="container my-5">
     <div class="card shadow-sm rounded-4 p-4 mx-auto" style="max-width: 900px;">
