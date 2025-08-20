@@ -36,9 +36,11 @@ namespace data_pharm_softwere.Models
         [Required]
         public TaxBaseType GSTType { get; set; }
 
+        [Required]
         [StringLength(100)]
         public string PoNumber { get; set; }
 
+        [Required]
         [StringLength(200)]
         public string Reference { get; set; }
 
@@ -49,22 +51,27 @@ namespace data_pharm_softwere.Models
         [Range(0, 100)]
         public decimal AdvTaxRate { get; set; }
 
+        [Required]
         [Range(0, double.MaxValue)]
         [DataType(DataType.Currency)]
         public decimal AdvTaxAmount { get; set; }
 
+        [Required]
         [Range(0, double.MaxValue)]
         [DataType(DataType.Currency)]
         public decimal AdditionalCharges { get; set; }
 
+        [Required]
         [Range(0, double.MaxValue)]
         [DataType(DataType.Currency)]
         public decimal DiscountedAmount { get; set; }
 
+        [Required]
         [Range(0, double.MaxValue)]
         [DataType(DataType.Currency)]
         public decimal GrossAmount { get; set; }
 
+        [Required]
         [Range(0, double.MaxValue)]
         [DataType(DataType.Currency)]
         public decimal NetAmount { get; set; }

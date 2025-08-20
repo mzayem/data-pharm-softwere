@@ -15,15 +15,6 @@ namespace data_pharm_softwere.Pages.Batch
     {
 
         /// <summary>
-        /// ScriptManager1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.ScriptManager ScriptManager1;
-
-        /// <summary>
         /// ValidationSummary1 control.
         /// </summary>
         /// <remarks>
@@ -112,6 +103,15 @@ namespace data_pharm_softwere.Pages.Batch
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtBatchNo;
+
+        /// <summary>
+        /// revtxtBatchNo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator revtxtBatchNo;
 
         /// <summary>
         /// txtMFGDate control.

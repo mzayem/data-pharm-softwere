@@ -1,4 +1,6 @@
 ﻿using data_pharm_softwere.Data;
+using data_pharm_softwere.Models;
+using Org.BouncyCastle.Tls.Crypto;
 using System;
 using System.Linq;
 using System.Web.UI;
@@ -30,6 +32,30 @@ namespace data_pharm_softwere.Pages.Batch.Controls
             if (!string.IsNullOrEmpty(selectedProduct) && ddlProduct.Items.FindByValue(selectedProduct) != null)
             {
                 ddlProduct.SelectedValue = selectedProduct;
+            }
+        }
+        protected void txtDP_TextChanged(object sender, EventArgs e)
+        {
+            CalculateCartonPrice();
+        }
+
+        private void CalculateCartonPrice()
+        {
+            if (int.TryParse(ddlProduct.SelectedValue, out int productId))
+            {
+                var product = _context.Products.FirstOrDefault(p => p.ProductID == productId);
+                if (product != null && decimal.TryParse(txtDP.Text, out decimal dp))
+                {
+                    txtCartonPrice.Text = (dp * product.CartonSize).ToString("0.00");
+                }
+                else
+                {
+                    txtCartonPrice.Text = "";
+                }
+            }
+            else
+            {
+                txtCartonPrice.Text = "";
             }
         }
 
@@ -71,28 +97,88 @@ namespace data_pharm_softwere.Pages.Batch.Controls
             updBatchModal.Update();
         }
 
+        protected void txtBatchNo_TextChanged(object sender, EventArgs e)
+        {
+            if (int.TryParse(txtBatchNo.Text.Trim(), out int batchNo))
+            {
+                int productId = int.TryParse(ddlProduct.SelectedValue, out var pid) ? pid : 0;
+                var existingBatch = _context.BatchesStock.FirstOrDefault(b => b.BatchNo == batchNo.ToString() && b.ProductID == productId);
+                if (existingBatch != null)
+                {
+                    lblMessage.Text = "Batch already exist!";
+                    lblMessage.CssClass = "alert alert-danger mt-3";
+                    return;
+                }
+            }
+        }
+
         protected void btnSave_Click(object sender, EventArgs e)
         {
             if (Page.IsValid)
             {
-                var batch = new Models.BatchStock
+                try
                 {
-                    ProductID = int.Parse(ddlProduct.SelectedValue),
-                    BatchNo = txtBatchNo.Text,
-                    MFGDate = DateTime.Parse(txtMFGDate.Text),
-                    ExpiryDate = DateTime.Parse(txtExpiryDate.Text),
-                    DP = decimal.Parse(txtDP.Text),
-                    TP = decimal.Parse(txtTP.Text),
-                    MRP = decimal.Parse(txtMRP.Text),
-                    CreatedAt = DateTime.Now,
-                    CreatedBy = "Admin",
-                };
+                    // Check if Batch already exists
+                    if (int.TryParse(txtBatchNo.Text.Trim(), out int batchNo))
+                    {
+                        int productId = int.TryParse(ddlProduct.SelectedValue, out var pid) ? pid : 0;
+                        string batchNoStr = txtBatchNo.Text.Trim();
 
-                _context.BatchesStock.Add(batch);
-                _context.SaveChanges();
+                        var existingBatch = _context.BatchesStock
+                            .FirstOrDefault(b => b.BatchNo == batchNoStr && b.ProductID == productId);
 
-                Response.Redirect("/batch");
+                        if (existingBatch != null)
+                        {
+                            lblMessage.Text = "Batch already exist!";
+                            lblMessage.CssClass = "alert alert-danger mt-3";
+                            return;
+                        }
+                    }
+
+                    // Create new Batch
+                    var batch = new Models.BatchStock
+                    {
+                        ProductID = int.Parse(ddlProduct.SelectedValue),
+                        BatchNo = txtBatchNo.Text,
+                        MFGDate = DateTime.Parse(txtMFGDate.Text),
+                        ExpiryDate = DateTime.Parse(txtExpiryDate.Text),
+                        DP = decimal.Parse(txtDP.Text),
+                        TP = decimal.Parse(txtTP.Text),
+                        MRP = decimal.Parse(txtMRP.Text),
+                        CreatedAt = DateTime.Now,
+                        CreatedBy = "Admin",
+                    };
+
+                    _context.BatchesStock.Add(batch);
+                    _context.SaveChanges();
+
+                    // Success message
+                    lblMessage.Text = "Batch saved successfully.";
+                    lblMessage.CssClass = "alert alert-success mt-3";
+
+                    ClearForm();
+                }
+                catch (Exception ex)
+                {
+                    lblMessage.Text = "Error: " + ex.Message;
+                    lblMessage.CssClass = "alert alert-danger mt-3";
+
+                }
+
             }
         }
+
+        private void ClearForm()
+        {
+            ddlProduct.ClearSelection();
+
+            txtBatchNo.Text = "";
+            txtMFGDate.Text = "";
+            txtExpiryDate.Text = "";
+            txtDP.Text = "";
+            txtTP.Text = "";
+            txtMRP.Text = "";
+        }
+
     }
 }

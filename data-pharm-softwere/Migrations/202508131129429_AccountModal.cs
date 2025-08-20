@@ -11,7 +11,7 @@
                 "dbo.Accounts",
                 c => new
                 {
-                    AccountId = c.Int(nullable: false, identity: true),
+                    AccountId = c.Int(nullable: false, identity: false),
                     AccountName = c.String(nullable: false, maxLength: 100),
                     AccountType = c.String(nullable: false, maxLength: 100),
                     AccountDetail = c.String(nullable: false, maxLength: 100),

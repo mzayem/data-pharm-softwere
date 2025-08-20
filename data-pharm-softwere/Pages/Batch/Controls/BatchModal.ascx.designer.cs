@@ -24,6 +24,15 @@ namespace data_pharm_softwere.Pages.Batch.Controls
         protected global::System.Web.UI.UpdatePanel updBatchModal;
 
         /// <summary>
+        /// ValidationSummary1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ValidationSummary ValidationSummary1;
+
+        /// <summary>
         /// pnlForm control.
         /// </summary>
         /// <remarks>
@@ -31,6 +40,15 @@ namespace data_pharm_softwere.Pages.Batch.Controls
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel pnlForm;
+
+        /// <summary>
+        /// lblMessage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblMessage;
 
         /// <summary>
         /// ddlProduct control.
@@ -42,6 +60,15 @@ namespace data_pharm_softwere.Pages.Batch.Controls
         protected global::System.Web.UI.WebControls.DropDownList ddlProduct;
 
         /// <summary>
+        /// rfvProduct control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvProduct;
+
+        /// <summary>
         /// txtBatchNo control.
         /// </summary>
         /// <remarks>
@@ -49,6 +76,15 @@ namespace data_pharm_softwere.Pages.Batch.Controls
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtBatchNo;
+
+        /// <summary>
+        /// revtxtBatchNo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator revtxtBatchNo;
 
         /// <summary>
         /// txtMFGDate control.
@@ -60,6 +96,15 @@ namespace data_pharm_softwere.Pages.Batch.Controls
         protected global::System.Web.UI.WebControls.TextBox txtMFGDate;
 
         /// <summary>
+        /// rfvMFGDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvMFGDate;
+
+        /// <summary>
         /// txtExpiryDate control.
         /// </summary>
         /// <remarks>
@@ -67,6 +112,15 @@ namespace data_pharm_softwere.Pages.Batch.Controls
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtExpiryDate;
+
+        /// <summary>
+        /// rfvExpiryDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvExpiryDate;
 
         /// <summary>
         /// txtDP control.
@@ -78,6 +132,15 @@ namespace data_pharm_softwere.Pages.Batch.Controls
         protected global::System.Web.UI.WebControls.TextBox txtDP;
 
         /// <summary>
+        /// rfvDP control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvDP;
+
+        /// <summary>
         /// txtTP control.
         /// </summary>
         /// <remarks>
@@ -87,6 +150,15 @@ namespace data_pharm_softwere.Pages.Batch.Controls
         protected global::System.Web.UI.WebControls.TextBox txtTP;
 
         /// <summary>
+        /// rfvTP control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvTP;
+
+        /// <summary>
         /// txtMRP control.
         /// </summary>
         /// <remarks>
@@ -94,6 +166,15 @@ namespace data_pharm_softwere.Pages.Batch.Controls
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtMRP;
+
+        /// <summary>
+        /// rfvMRP control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvMRP;
 
         /// <summary>
         /// txtCartonPrice control.

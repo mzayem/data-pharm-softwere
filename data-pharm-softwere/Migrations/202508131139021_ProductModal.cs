@@ -11,7 +11,7 @@
                 "dbo.Products",
                 c => new
                 {
-                    ProductID = c.Int(nullable: false, identity: true),
+                    ProductID = c.Int(nullable: false, identity: false),
                     PackingType = c.Int(nullable: false),
                     Type = c.Int(nullable: false),
                     Name = c.String(nullable: false, maxLength: 150),

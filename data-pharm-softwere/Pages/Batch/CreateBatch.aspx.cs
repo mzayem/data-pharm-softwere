@@ -232,27 +232,30 @@ namespace data_pharm_softwere.Pages.Batch
 
                     lblMessage.Text = "Batch saved successfully.";
                     lblMessage.CssClass = "alert alert-success mt-3";
+                    ClearForm();
                 }
                 catch (Exception ex)
                 {
                     lblMessage.Text = "Error: " + ex.Message;
                     lblMessage.CssClass = "alert alert-danger mt-3";
                 }
-                finally
-                {
-                    ddlVendor.ClearSelection();
-                    ddlGroup.ClearSelection();
-                    ddlSubGroup.ClearSelection();
-                    ddlProduct.ClearSelection();
-
-                    txtBatchNo.Text = "";
-                    txtMFGDate.Text = "";
-                    txtExpiryDate.Text = "";
-                    txtDP.Text = "";
-                    txtTP.Text = "";
-                    txtMRP.Text = "";
-                }
+                
             }
+        }
+        private void ClearForm()
+        {
+
+            ddlVendor.ClearSelection();
+            ddlGroup.ClearSelection();
+            ddlSubGroup.ClearSelection();
+            ddlProduct.ClearSelection();
+
+            txtBatchNo.Text = "";
+            txtMFGDate.Text = "";
+            txtExpiryDate.Text = "";
+            txtDP.Text = "";
+            txtTP.Text = "";
+            txtMRP.Text = "";
         }
     }
 }

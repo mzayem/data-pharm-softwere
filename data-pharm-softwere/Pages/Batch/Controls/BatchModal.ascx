@@ -11,49 +11,106 @@
             </div>
             
             <div class="modal-body">
+                 <asp:ValidationSummary ID="ValidationSummary1" runat="server" CssClass="alert alert-danger" />
                 <asp:Panel ID="pnlForm" runat="server" CssClass="row g-3">
                     <div class="row g-3">
+                         <asp:Label ID="lblMessage" runat="server" EnableViewState="false" />
                         <div class="col-md-6">
                             <label class="form-label">Product</label>
                             <asp:DropDownList ID="ddlProduct" runat="server" CssClass="form-select rounded-pill" />
+                            <asp:RequiredFieldValidator ID="rfvProduct" runat="server"
+                                ControlToValidate="ddlProduct"
+                                InitialValue=""
+                                ErrorMessage="Product is required"
+                                CssClass="text-danger"
+                                Display="Dynamic"
+                                ValidationGroup="BatchForm" />
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Batch No</label>
-                            <asp:TextBox ID="txtBatchNo" runat="server" CssClass="form-control rounded-pill" />
+                            <asp:TextBox ID="txtBatchNo" runat="server" CssClass="form-control rounded-pill"
+                                AutoPostBack="true" OnTextChanged="txtBatchNo_TextChanged" />
+                            <asp:RequiredFieldValidator ID="revtxtBatchNo" runat="server"
+                                ControlToValidate="txtBatchNo"
+                                ErrorMessage="Batch no is required"
+                                CssClass="text-danger"
+                                Display="Dynamic"
+                                ValidationGroup="BatchForm" />
+
                         </div>
-                       
                         <div class="col-md-6">
                             <label class="form-label">MFG Date</label>
                             <asp:TextBox ID="txtMFGDate" runat="server" TextMode="Date" CssClass="form-control rounded-pill" />
+                             <asp:RequiredFieldValidator ID="rfvMFGDate" runat="server"
+                                ControlToValidate="txtMFGDate"
+                                ErrorMessage="MFG Date is required"
+                                CssClass="text-danger"
+                                Display="Dynamic"
+                                ValidationGroup="BatchForm" />
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Expiry Date</label>
                             <asp:TextBox ID="txtExpiryDate" runat="server" TextMode="Date" CssClass="form-control rounded-pill" />
+                            <asp:RequiredFieldValidator ID="rfvExpiryDate" runat="server"
+                                ControlToValidate="txtExpiryDate"
+                                ErrorMessage="Expiry Date is required"
+                                CssClass="text-danger"
+                                Display="Dynamic"
+                                ValidationGroup="BatchForm" />
                         </div>
                         <div class="col-md-4">
                             <label class="form-label">DP (Rs.)</label>
-                            <asp:TextBox ID="txtDP" runat="server" CssClass="form-control rounded-pill" TextMode="Number" />
+                            <asp:TextBox ID="txtDP" runat="server" CssClass="form-control rounded-pill" TextMode="Number" 
+                                 AutoPostBack="true" OnTextChanged="txtDP_TextChanged" />
+                             <asp:RequiredFieldValidator ID="rfvDP" runat="server"
+                         ControlToValidate="txtDP"
+                         ErrorMessage="DP is required"
+                         CssClass="text-danger"
+                         Display="Dynamic"
+                         ValidationGroup="BatchForm" />
                         </div>
                         <div class="col-md-4">
                             <label class="form-label">TP (Rs.)</label>
                             <asp:TextBox ID="txtTP" runat="server" CssClass="form-control rounded-pill" TextMode="Number" />
+                            <asp:RequiredFieldValidator ID="rfvTP" runat="server"
+                                ControlToValidate="txtTP"
+                                ErrorMessage="TP is required"
+                                CssClass="text-danger"
+                                Display="Dynamic"
+                                ValidationGroup="BatchForm" />
                         </div>
                         <div class="col-md-4">
                             <label class="form-label">MRP (Rs.)</label>
                             <asp:TextBox ID="txtMRP" runat="server" CssClass="form-control rounded-pill" TextMode="Number" />
+                            <asp:RequiredFieldValidator ID="rfvMRP" runat="server"
+                                ControlToValidate="txtMRP"
+                                ErrorMessage="MRP is required"
+                                CssClass="text-danger"
+                                Display="Dynamic"
+                                ValidationGroup="BatchForm" />
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Carton Price</label>
-                            <asp:TextBox ID="txtCartonPrice" runat="server" CssClass="form-control rounded-pill bg-light text-secondary" TextMode="Number" />
+                             <asp:TextBox ID="txtCartonPrice" runat="server" CssClass="form-control rounded-pill bg-light text-secondary"
+                                 TextMode="Number" ReadOnly="true" />
                         </div>
                     </div>
                 </asp:Panel>
             </div>
             <div class="modal-footer">
-                <asp:Button ID="btnSave" runat="server" Text="Save Batch" CssClass="btn btn-primary" OnClick="btnSave_Click" />
+                <asp:Button ID="btnSave" runat="server"
+                    Text="Save Batch"
+                    CssClass="btn btn-primary px-5 py-2 rounded-pill"
+                    ValidationGroup="BatchForm"
+                    OnClick="btnSave_Click" />
             </div>
                        </ContentTemplate>
-</asp:UpdatePanel>
+                 <Triggers>
+                 <asp:AsyncPostBackTrigger ControlID="ddlProduct" EventName="SelectedIndexChanged" />
+                 <asp:AsyncPostBackTrigger ControlID="txtDP" EventName="TextChanged" />
+                 <asp:AsyncPostBackTrigger ControlID="txtBatchNo" EventName="TextChanged" />
+                </Triggers>
+            </asp:UpdatePanel>
         </div>
     </div>
 </div>

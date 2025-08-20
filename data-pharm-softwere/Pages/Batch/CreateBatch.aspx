@@ -48,6 +48,12 @@
                             <label class="form-label fw-semibold">Batch No</label>
                             <asp:TextBox ID="txtBatchNo" runat="server" CssClass="form-control rounded-pill"
                                 AutoPostBack="true" OnTextChanged="txtBatchNo_TextChanged" />
+                            <asp:RequiredFieldValidator ID="revtxtBatchNo" runat="server"
+                                ControlToValidate="txtBatchNo"
+                                ErrorMessage="Batch no is required"
+                                CssClass="text-danger"
+                                Display="Dynamic"
+                                ValidationGroup="BatchForm" />
                         </div>
 
                         <div class="col-md-6">
