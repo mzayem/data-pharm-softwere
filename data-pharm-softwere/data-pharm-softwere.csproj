@@ -214,6 +214,14 @@
     <Compile Include="Migrations\202508131212544_update.Designer.cs">
       <DependentUpon>202508131212544_update.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202508160933559_BatchStock_Update.cs" />
+    <Compile Include="Migrations\202508160933559_BatchStock_Update.Designer.cs">
+      <DependentUpon>202508160933559_BatchStock_Update.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202508200932258_PurchaseUpdate.cs" />
+    <Compile Include="Migrations\202508200932258_PurchaseUpdate.Designer.cs">
+      <DependentUpon>202508200932258_PurchaseUpdate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\BatchStock.cs" />
@@ -599,6 +607,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202508131212544_update.resx">
       <DependentUpon>202508131212544_update.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202508160933559_BatchStock_Update.resx">
+      <DependentUpon>202508160933559_BatchStock_Update.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202508200932258_PurchaseUpdate.resx">
+      <DependentUpon>202508200932258_PurchaseUpdate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

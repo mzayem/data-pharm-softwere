@@ -3,9 +3,12 @@ using data_pharm_softwere.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Validation;
+using System.Globalization;
 using System.Linq;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using static data_pharm_softwere.Pages.PurchaseForms.Purchase.CreatePurchase;
 
 namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
 {
@@ -18,19 +21,30 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
             if (!IsPostBack)
             {
                 LoadInvoiceNumber();
-                txtAdvTaxRate.Text = "0";
-                ddlAdvTaxType.SelectedValue = "Net";
-
-                lblGross.Text = "0.00";
-                lblDiscount.Text = "0.00";
-                lblAdvTaxAmount.Text = "0.00";
-                lblNetAmount.Text = "0.00";
                 Session["PurchaseDetails"] = new List<PurchaseLineItem>();
                 LoadVendors();
-                LoadAdvTaxType();
+                LoadTaxType();
                 LoadAllAvailableBatches();
                 ClearUI();
             }
+        }
+
+        private void SetDefaultFooterValues()
+        {
+            txtAdvTaxRate.Attributes["step"] = "0.1";
+            txtAdvTaxRate.Attributes["min"] = "0";
+            txtAdvTaxRate.Attributes["value"] = "0.5";
+
+            // Footer default values
+            txtAdvTaxRate.Text = "0.5";
+            txtAdditionalCharges.Text = "0.00";
+
+            lblGross.Text = "0.00";
+            lblDiscount.Text = "0.00";
+            lblAdvTaxAmount.Text = "0.00";
+            lblNetAmount.Text = "0.00";
+            ddlAdvTaxType.SelectedValue = "Net";
+            ddlGstType.SelectedValue = "Net";
         }
 
         private void LoadInvoiceNumber()
@@ -106,7 +120,7 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
             }
         }
 
-        private void LoadAdvTaxType()
+        private void LoadTaxType()
         {
             ddlAdvTaxType.Items.Clear();
             ddlAdvTaxType.Items.Add(new ListItem("Net", "Net"));
@@ -297,14 +311,26 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
         public class PurchaseLineItem
         {
             public int BatchStockID { get; set; }
-            public string BatchNo { get; set; }
+            public string ProductId { get; set; }
             public string ProductName { get; set; }
+            public string BatchNo { get; set; }
             public DateTime ExpiryDate { get; set; }
             public int CartonQty { get; set; }
             public decimal CartonPrice { get; set; }
+            public decimal DiscountPercent { get; set; }
             public decimal GSTPercent { get; set; }
-            public decimal GSTAmount => CartonQty * CartonPrice * GSTPercent / 100;
-            public decimal TotalAmount => (CartonQty * CartonPrice) + GSTAmount;
+            public string GstType { get; set; }
+
+            public decimal GrossAmount => CartonQty * CartonPrice;
+
+            public decimal DiscountAmount => Math.Round(GrossAmount * (DiscountPercent / 100m), 2);
+
+            public decimal TaxBase => GstType == "Net" ? (GrossAmount - DiscountAmount) : GrossAmount;
+
+            public decimal GSTAmount => Math.Round(TaxBase * (GSTPercent / 100m), 2);
+
+            public decimal NetAmount => Math.Round(TaxBase + GSTAmount, 2);
+            public decimal TotalAmount => NetAmount;
         }
 
         protected void btnAddBatch_Click(object sender, EventArgs e)
@@ -338,11 +364,14 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
             {
                 BatchStockID = batchStock.BatchStockID,
                 BatchNo = batchStock.BatchNo,
+                ProductId = batchStock.ProductID.ToString(),
                 ProductName = batchStock.Product?.Name,
                 ExpiryDate = batchStock.ExpiryDate,
-                CartonQty = 0,
+                CartonQty = int.TryParse(txtQty.Text, out var parsedQty) ? parsedQty : 0,
                 CartonPrice = batchStock.CartonDp,
-                GSTPercent = batchStock.Product?.ReqGST ?? 0
+                DiscountPercent = batchStock.Product?.PurchaseDiscount ?? 0,
+                GSTPercent = batchStock.Product?.ReqGST ?? 0,
+                GstType = ddlGstType.SelectedValue
             };
 
             list.Add(item);
@@ -358,24 +387,133 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
             LoadAllAvailableBatches();
         }
 
+        // --- Helpers ---
+        private List<PurchaseLineItem> GetPurchaseList()
+        {
+            var list = Session["PurchaseDetails"] as List<PurchaseLineItem>;
+            if (list == null)
+            {
+                list = new List<PurchaseLineItem>();
+                Session["PurchaseDetails"] = list;
+            }
+            return list;
+        }
+
+        private void BindGrid()
+        {
+            var list = GetPurchaseList();
+            gvPurchaseDetails.DataSource = list;
+            gvPurchaseDetails.DataBind();
+        }
+
+        protected void gvPurchaseDetails_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                // Example: add serial number dynamically
+                Label lblSrNo = e.Row.FindControl("lblSrNo") as Label;
+                if (lblSrNo != null)
+                {
+                    lblSrNo.Text = (e.Row.RowIndex + 1).ToString();
+                }
+
+                // Force Qty column into edit mode automatically
+                if (gvPurchaseDetails.EditIndex == e.Row.RowIndex)
+                {
+                    TextBox txtQty = e.Row.FindControl("txtEditQty") as TextBox;
+                    if (txtQty != null)
+                    {
+                        txtQty.Focus();
+                    }
+                }
+            }
+        }
+
+        protected void Qty_TextChanged(object sender, EventArgs e)
+        {
+            TextBox txt = (TextBox)sender;
+            GridViewRow row = (GridViewRow)txt.NamingContainer;
+
+            int id = Convert.ToInt32(gvPurchaseDetails.DataKeys[row.RowIndex].Value);
+            int qty = int.TryParse(txt.Text, out int parsed) ? parsed : 0;
+
+            var list = GetPurchaseList();
+            var item = list.FirstOrDefault(x => x.BatchStockID == id);
+            if (item != null)
+            {
+                item.CartonQty = qty;
+            }
+
+            Session["PurchaseDetails"] = list;
+            BindGrid();
+            UpdateTotals(list);
+        }
+
+        protected void gvPurchaseDetails_RowDeleting(object sender, GridViewDeleteEventArgs e)
+        {
+            var list = GetPurchaseList();
+
+            int id = Convert.ToInt32(gvPurchaseDetails.DataKeys[e.RowIndex].Value);
+            var item = list.FirstOrDefault(x => x.BatchStockID == id);
+            if (item != null)
+            {
+                list.Remove(item);
+            }
+
+            Session["PurchaseDetails"] = list;
+
+            BindGrid();
+            UpdateTotals(list);
+            LoadAllAvailableBatches();
+        }
+
         private void UpdateTotals(List<PurchaseLineItem> list)
         {
-            decimal gross = list.Sum(i => i.TotalAmount);
-            decimal discount = decimal.TryParse(txtDiscountedAmount.Text, out var d) ? d : 0;
+            decimal gross = list.Sum(i => i.GrossAmount);
+            decimal discount = list.Sum(i => i.DiscountAmount);
             decimal advTaxRate = decimal.TryParse(txtAdvTaxRate.Text, out var a) ? a : 0;
             decimal additional = decimal.TryParse(txtAdditionalCharges.Text, out var add) ? add : 0;
 
-            string taxType = ddlAdvTaxType.SelectedValue;
-            decimal advTax = taxType == "Net"
-                ? (gross - discount) * advTaxRate / 100
-                : gross * advTaxRate / (100 + advTaxRate);
+            decimal advTax = ddlAdvTaxType.SelectedValue == "Net"
+            ? (gross - discount) * advTaxRate / 100
+            : gross * advTaxRate / (100 + advTaxRate);
 
-            decimal net = gross - discount + advTax + additional;
+            decimal net = list.Sum(i => i.NetAmount) + advTax + additional;
 
             lblGross.Text = gross.ToString("N2");
             lblDiscount.Text = discount.ToString("N2");
             lblAdvTaxAmount.Text = advTax.ToString("N2");
             lblNetAmount.Text = net.ToString("N2");
+        }
+
+        private void KeepFocus(Control control)
+        {
+            if (control != null)
+            {
+                ScriptManager.RegisterStartupScript(
+                    this,
+                    this.GetType(),
+                    "setFocus",
+                    $"setTimeout(function(){{document.getElementById('{control.ClientID}').focus();}}, 0);",
+                    true
+                );
+            }
+        }
+
+        protected void TotalValuesChanged(object sender, EventArgs e)
+        {
+            var list = GetPurchaseList();
+            foreach (var item in list)
+            {
+                item.GstType = ddlGstType.SelectedValue;
+            }
+
+            Session["PurchaseDetails"] = list;
+
+            BindGrid();
+            UpdateTotals(list);
+
+            KeepFocus(sender as Control);
         }
 
         protected void btnSave_Click(object sender, EventArgs e)
@@ -390,51 +528,104 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
 
             try
             {
-                decimal gross = list.Sum(i => i.TotalAmount);
-                decimal discount = decimal.Parse(txtDiscountedAmount.Text);
-                decimal advTaxRate = decimal.Parse(txtAdvTaxRate.Text);
-                decimal additional = decimal.Parse(txtAdditionalCharges.Text);
-                string taxType = ddlAdvTaxType.SelectedValue;
-
-                decimal advTax = taxType == "Net"
-                    ? (gross - discount) * advTaxRate / 100
-                    : gross * advTaxRate / (100 + advTaxRate);
-
-                decimal net = gross - discount + advTax + additional;
+                decimal ParseDecimal(string input)
+                {
+                    decimal.TryParse(input,
+                        NumberStyles.AllowThousands | NumberStyles.AllowDecimalPoint,
+                        CultureInfo.InvariantCulture,
+                        out var result);
+                    return result;
+                }
 
                 var purchase = new Models.Purchase
                 {
-                    PurchaseDate = DateTime.Parse(txtPurchaseDate.Text),
+                    PurchaseDate = DateTime.TryParse(txtPurchaseDate.Text, out var d) ? d : DateTime.Now,
                     PoNumber = txtPoNumber.Text,
                     Reference = txtReference.Text,
+                    AdvTaxOn = (TaxBaseType)Enum.Parse(typeof(TaxBaseType), ddlAdvTaxType.SelectedValue),
+                    GSTType = (TaxBaseType)Enum.Parse(typeof(TaxBaseType), ddlGstType.SelectedValue),
                     PurchaseType = PurchaseType.Purchase,
-                    AdvTaxRate = advTaxRate,
-                    AdditionalCharges = additional,
-                    DiscountedAmount = discount,
-                    GrossAmount = gross,
-                    AdvTaxAmount = advTax,
-                    NetAmount = net,
-                    VendorId = int.Parse(ddlVendor.SelectedValue),
-                    CreatedBy = "Admin",
+                    AdvTaxRate = ParseDecimal(txtAdvTaxRate.Text),
+                    AdvTaxAmount = ParseDecimal(lblAdvTaxAmount.Text),
+                    AdditionalCharges = ParseDecimal(txtAdditionalCharges.Text),
+                    DiscountedAmount = ParseDecimal(lblDiscount.Text),
+                    GrossAmount = ParseDecimal(lblGross.Text),
+                    NetAmount = ParseDecimal(lblNetAmount.Text),
+                    VendorId = int.TryParse(ddlVendor.SelectedValue, out var v) ? v : 0,
+                    CreatedBy = "system",
                     CreatedAt = DateTime.Now,
-                    PurchaseDetails = list.Select(i => new PurchaseDetail
-                    {
-                        BatchStockID = i.BatchStockID,
-                        CreatedAt = DateTime.Now
-                    }).ToList()
+                    Posted = false
                 };
+
+                foreach (var item in list)
+                {
+                    var detail = new PurchaseDetail
+                    {
+                        BatchStockID = item.BatchStockID,
+                        NetAmount = item.NetAmount,
+                        CreatedAt = DateTime.Now
+                    };
+
+                    purchase.PurchaseDetails.Add(detail);
+
+                    var batch = _context.BatchesStock.FirstOrDefault(b => b.BatchStockID == item.BatchStockID);
+                    if (batch != null)
+                    {
+                        batch.InTransitQty += item.CartonQty;
+                        batch.UpdatedAt = DateTime.Now;
+                        batch.UpdatedBy = "system";
+                    }
+                }
 
                 _context.Purchases.Add(purchase);
                 _context.SaveChanges();
 
                 lblMessage.Text = "Purchase saved successfully.";
                 lblMessage.CssClass = "alert alert-success mt-3";
-
                 ClearUI();
+            }
+            catch (DbEntityValidationException dbEx)
+            {
+                // Detailed EF validation error dump
+                var errors = new System.Text.StringBuilder();
+                foreach (var eve in dbEx.EntityValidationErrors)
+                {
+                    errors.AppendLine($"Entity: {eve.Entry.Entity.GetType().Name}, State: {eve.Entry.State}");
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        errors.AppendLine($"-- Property: {ve.PropertyName}, Error: {ve.ErrorMessage}");
+                    }
+                }
+
+                lblMessage.Text = "Entity Validation Error:<br/><pre>" + errors.ToString() + "</pre>";
+                lblMessage.CssClass = "alert alert-danger";
             }
             catch (Exception ex)
             {
-                lblMessage.Text = "Error: " + ex.Message;
+                string debugInfo = $@"
+Exception: {ex.Message}
+StackTrace: {ex.StackTrace}
+
+--- Form Values ---
+PurchaseDate: {txtPurchaseDate.Text}
+PoNumber: {txtPoNumber.Text}
+Reference: {txtReference.Text}
+AdvTaxType: {ddlAdvTaxType.SelectedValue}
+GstType: {ddlGstType.SelectedValue}
+VendorId: {ddlVendor.SelectedValue}
+
+--- Labels ---
+lblGross: {lblGross.Text}
+lblDiscount: {lblDiscount.Text}
+lblAdvTaxAmount: {lblAdvTaxAmount.Text}
+lblNetAmount: {lblNetAmount.Text}
+
+--- Textboxes ---
+txtAdvTaxRate: {txtAdvTaxRate.Text}
+txtAdditionalCharges: {txtAdditionalCharges.Text}
+";
+
+                lblMessage.Text = "Unexpected Error:<br/><pre>" + debugInfo + "</pre>";
                 lblMessage.CssClass = "alert alert-danger";
             }
         }
@@ -450,12 +641,14 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
             txtReference.Text = "";
             txtAdvTaxRate.Text = "";
             txtAdditionalCharges.Text = "";
-            txtDiscountedAmount.Text = "";
             txtPurchaseDate.Text = DateTime.Today.ToString("yyyy-MM-dd");
             lblGross.Text = lblDiscount.Text = lblAdvTaxAmount.Text = lblNetAmount.Text = "";
+
             gvPurchaseDetails.DataSource = null;
             gvPurchaseDetails.DataBind();
             Session["PurchaseDetails"] = new List<PurchaseLineItem>();
+
+            SetDefaultFooterValues();
         }
     }
 }
