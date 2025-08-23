@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Pages/Layout.Master" AutoEventWireup="true" CodeBehind="CreatePurchase.aspx.cs" Inherits="data_pharm_softwere.Pages.PurchaseForms.Purchase.CreatePurchase" %>
+﻿<%@ Page Title="Create Purchase" Language="C#" MasterPageFile="~/Pages/Layout.Master" AutoEventWireup="true" CodeBehind="CreatePurchase.aspx.cs" Inherits="data_pharm_softwere.Pages.PurchaseForms.Purchase.CreatePurchase" %>
 <%@ Register Src="~/Pages/Batch/Controls/BatchModal.ascx" TagName="BatchModal" TagPrefix="uc" %>
 
 
@@ -38,7 +38,7 @@
                         <div class="col-md-3">
                             <label class="form-label fw-semibold">Advance Tax Type</label>
                             <asp:DropDownList ID="ddlAdvTaxType" runat="server"
-                               AutoPostBack="true" 
+                                AutoPostBack="true" 
                                OnSelectedIndexChanged="TotalValuesChanged"
                                CssClass="form-select rounded-pill">
                                 <asp:ListItem Text="Net" Value="Net" />
@@ -52,23 +52,23 @@
                                 ValidationGroup="PurchaseForm"
                                 Display="Dynamic" />
                         </div>
+
                         <div class="col-md-3">
-                        <label class="form-label fw-semibold">Gst Tax Type</label>
-                        <asp:DropDownList ID="ddlGstType" runat="server"
-                            AutoPostBack="true" 
-                            OnSelectedIndexChanged="TotalValuesChanged"
-                            CssClass="form-select rounded-pill">
-                            <asp:ListItem Text="Net" Value="Net" />
-                            <asp:ListItem Text="Gross" Value="Gross" />
-                        </asp:DropDownList>
-                        <asp:RequiredFieldValidator ID="rfvGstType" runat="server"
-                                ControlToValidate="ddlGstType"
-                                InitialValue=""
-                                ErrorMessage="GST Tax Type is required"
-                                CssClass="text-danger"
-                                ValidationGroup="PurchaseForm"
-                                Display="Dynamic" />
-                        </div>
+                            <label class="form-label fw-semibold">Gst Tax Type</label>
+                            <asp:DropDownList ID="ddlGstType" runat="server" 
+                                AutoPostBack="true" 
+                                OnSelectedIndexChanged="TotalValuesChanged"
+                                CssClass="form-select rounded-pill">
+                                <asp:ListItem Text="Net" Value="Net" />
+                                <asp:ListItem Text="Gross" Value="Gross" />
+                            </asp:DropDownList>
+                            <asp:RequiredFieldValidator ID="rfvGstType" runat="server"
+                                    ControlToValidate="ddlGstType"
+                                    InitialValue=""
+                                    ErrorMessage="GST Tax Type is required"
+                                    CssClass="text-danger"
+                                    ValidationGroup="PurchaseForm"
+                                    Display="Dynamic" />
                     </div>
                     </div>
 
@@ -87,14 +87,15 @@
                                   CssClass="form-select rounded-pill"
                                   AutoPostBack="true" 
                                   OnSelectedIndexChanged="ddlVendor_SelectedIndexChanged" />
-                                 <asp:RequiredFieldValidator ID="rfvVendor" runat="server"
-                                    ControlToValidate="ddlVendor"
-                                    InitialValue=""
-                                    ErrorMessage="Vendor is required"
-                                    CssClass="text-danger"
-                                    ValidationGroup="PurchaseForm"
-                                    Display="Dynamic" />
+                                 
                             </div>
+                            <asp:RequiredFieldValidator ID="rfvVendor" runat="server"
+                               ControlToValidate="ddlVendor"
+                               InitialValue=""
+                               ErrorMessage="Vendor is required"
+                               CssClass="text-danger"
+                               ValidationGroup="PurchaseForm"
+                               Display="Dynamic" />
                         </div>
                         <div class="col-md-3">
                             <label class="form-label fw-semibold">PO Number</label>
@@ -106,7 +107,7 @@
                                 ValidationGroup="PurchaseForm"
                                 Display="Dynamic" />
                         </div>
-                           <div class="col-md-4">
+                        <div class="col-md-4">
                             <label class="form-label fw-semibold">Reference</label>
                             <asp:TextBox ID="txtReference" runat="server" placeholder="Enter Ref#" CssClass="form-control rounded-pill" />
                             <asp:RequiredFieldValidator ID="rfvReference" runat="server"
@@ -123,17 +124,25 @@
                    <!-- Add Record Row -->
                     <div class="row g-3 mb-3 align-items-end">
                         <!-- Product Code -->
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <label class="form-label fw-semibold">Product Id</label>
+                            <div class=" d-flex gap-2">
                             <asp:TextBox ID="txtProductId" runat="server" CssClass="form-control rounded-pill"
                                          AutoPostBack="true" OnTextChanged="txtProductId_TextChanged"
                                          placeholder="Enter Product Id" />
+                            <asp:DropDownList ID="ddlProduct" 
+                                        runat="server" 
+                                        AutoPostBack="true"
+                                        OnSelectedIndexChanged="ddlProduct_SelectedIndexChanged" 
+                                        CssClass="form-select rounded-pill"></asp:DropDownList>
+                                </div>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-1">
                             <label class="form-label fw-semibold">Qty</label>
                             <asp:TextBox ID="txtQty" runat="server" CssClass="form-control rounded-pill"
-                                         AutoPostBack="true" OnTextChanged="txtProductId_TextChanged"
-                                         placeholder="0" />
+                                         placeholder="0"
+                                         TextMode="Number"
+                                />
                         </div>
 
                         <!-- Batch Dropdown -->
@@ -159,8 +168,8 @@
                         </div>
                     </div>
 
-                   <!-- Grid -->
-                    <div style="min-height:250px; overflow-x:auto; white-space:nowrap;">
+                    <!-- Grid -->
+                     <div style="min-height:250px; overflow-x:auto; white-space:nowrap;">
                         <asp:GridView ID="gvPurchaseDetails" runat="server"
                             AutoGenerateColumns="False"
                             CssClass="table table-bordered table-hover light-grid"
@@ -177,15 +186,13 @@
                                     </ItemTemplate>
                                     <ItemStyle Width="40px" />
                                 </asp:TemplateField>
-
                                 <asp:BoundField HeaderText="Code" DataField="ProductID" />
                                 <asp:BoundField HeaderText="Product Name" DataField="ProductName" />
                                 <asp:BoundField HeaderText="Batch#" DataField="BatchNo" />
                                 <asp:BoundField HeaderText="Expiry" DataField="ExpiryDate" DataFormatString="{0:yyyy-MM-dd}" />
-
                                 <asp:TemplateField HeaderText="Qty">
                                     <ItemTemplate>
-                                        <asp:TextBox ID="txtQty" runat="server"
+                                        <asp:TextBox ID="txtQtyList" runat="server"
                                             CssClass="form-control form-control-sm qty-box"
                                             style="width:70px;"
                                             Text='<%# Bind("CartonQty") %>'
@@ -195,17 +202,15 @@
                                             />
                                     </ItemTemplate>
                                     <ItemStyle Width="90px" />
-                                </asp:TemplateField>
-
+                                </asp:TemplateField>  
                                 <asp:BoundField HeaderText="Rate" DataField="CartonPrice" DataFormatString="{0:N2}" />
                                 <asp:BoundField HeaderText="Dist%" DataField="DiscountPercent" />
-                                <asp:BoundField HeaderText="GST %" DataField="GSTPercent" />
+                                <asp:BoundField HeaderText="GST%" DataField="GSTPercent" />
                                 <asp:BoundField HeaderText="Gross Amount" DataField="GrossAmount" DataFormatString="{0:N2}" />
                                 <asp:BoundField HeaderText="Net Amount" DataField="NetAmount" DataFormatString="{0:N2}" />
                                 <asp:BoundField HeaderText="Dist Amnt" DataField="DiscountAmount" DataFormatString="{0:N2}" />
                                 <asp:BoundField HeaderText="GST Amnt" DataField="GSTAmount" DataFormatString="{0:N2}" />
-
-                                <asp:CommandField ShowDeleteButton="True" />
+                                   <asp:CommandField ShowDeleteButton="True" />
                             </Columns>
                         </asp:GridView>
                     </div>
@@ -223,13 +228,12 @@
                         </div>
                          <div class="col-md-1">
                             <label class="form-label fw-semibold">AdvTax%</label>
-                            <asp:TextBox ID="txtAdvTaxRate" runat="server" 
+                            <asp:TextBox ID="txtAdvTaxRate" runat="server"
                                 AutoPostBack="true" 
                                 OnTextChanged="TotalValuesChanged"
                                 CssClass="form-control rounded-pill"
                                 TextMode="Number" />
                         </div>
-
                         <div class="col-md-2">
                             <label class="form-label fw-semibold">Advance Tax</label>
                             <asp:Label ID="lblAdvTaxAmount" runat="server" CssClass="form-control rounded-pill bg-light" />
@@ -243,15 +247,14 @@
                         </div>
 
                         <div class="col-md-3">
-                        <label class="form-label fw-semibold">Net Amount</label>
-                        <asp:Label ID="lblNetAmount" runat="server" CssClass="form-control rounded-pill bg-light fw-bold" />
-                    </div>
-
+                            <label class="form-label fw-semibold">Net Amount</label>
+                            <asp:Label ID="lblNetAmount" runat="server" CssClass="form-control rounded-pill bg-light fw-bold" />
+                        </div>
                     </div>
 
                     <!-- Save Button -->
                     <div class="mt-4 d-flex justify-content-between">
-                        <asp:Button ID="btnSave" runat="server" Text="Save Purchase" CssClass="btn btn-primary px-5 py-2 rounded-pill" OnClick="btnSave_Click"  ValidationGroup="PurchaseForm"/>
+                        <asp:Button ID="btnSave" runat="server" Text="Save Purchase" CssClass="btn btn-primary px-5 py-2 rounded-pill" OnClick="btnSave_Click" ValidationGroup="PurchaseForm"/>
                         <asp:HyperLink NavigateUrl="/purchase" Text="Back to List" CssClass="btn btn-secondary px-5 py-2 rounded-pill" runat="server" />
                     </div>
                 </ContentTemplate>

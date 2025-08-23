@@ -1,6 +1,4 @@
 ﻿using data_pharm_softwere.Data;
-using data_pharm_softwere.Models;
-using Org.BouncyCastle.Tls.Crypto;
 using System;
 using System.Linq;
 using System.Web.UI;
@@ -32,30 +30,6 @@ namespace data_pharm_softwere.Pages.Batch.Controls
             if (!string.IsNullOrEmpty(selectedProduct) && ddlProduct.Items.FindByValue(selectedProduct) != null)
             {
                 ddlProduct.SelectedValue = selectedProduct;
-            }
-        }
-        protected void txtDP_TextChanged(object sender, EventArgs e)
-        {
-            CalculateCartonPrice();
-        }
-
-        private void CalculateCartonPrice()
-        {
-            if (int.TryParse(ddlProduct.SelectedValue, out int productId))
-            {
-                var product = _context.Products.FirstOrDefault(p => p.ProductID == productId);
-                if (product != null && decimal.TryParse(txtDP.Text, out decimal dp))
-                {
-                    txtCartonPrice.Text = (dp * product.CartonSize).ToString("0.00");
-                }
-                else
-                {
-                    txtCartonPrice.Text = "";
-                }
-            }
-            else
-            {
-                txtCartonPrice.Text = "";
             }
         }
 
@@ -95,21 +69,6 @@ namespace data_pharm_softwere.Pages.Batch.Controls
                 }
             }
             updBatchModal.Update();
-        }
-
-        protected void txtBatchNo_TextChanged(object sender, EventArgs e)
-        {
-            if (int.TryParse(txtBatchNo.Text.Trim(), out int batchNo))
-            {
-                int productId = int.TryParse(ddlProduct.SelectedValue, out var pid) ? pid : 0;
-                var existingBatch = _context.BatchesStock.FirstOrDefault(b => b.BatchNo == batchNo.ToString() && b.ProductID == productId);
-                if (existingBatch != null)
-                {
-                    lblMessage.Text = "Batch already exist!";
-                    lblMessage.CssClass = "alert alert-danger mt-3";
-                    return;
-                }
-            }
         }
 
         protected void btnSave_Click(object sender, EventArgs e)
@@ -162,9 +121,7 @@ namespace data_pharm_softwere.Pages.Batch.Controls
                 {
                     lblMessage.Text = "Error: " + ex.Message;
                     lblMessage.CssClass = "alert alert-danger mt-3";
-
                 }
-
             }
         }
 
@@ -179,6 +136,5 @@ namespace data_pharm_softwere.Pages.Batch.Controls
             txtTP.Text = "";
             txtMRP.Text = "";
         }
-
     }
 }

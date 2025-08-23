@@ -7,11 +7,11 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace data_pharm_softwere.Pages.PurchaseForms.Return
+namespace data_pharm_softwere.Pages.PurchaseForms.PurchaseReturn
 {
 
 
-    public partial class CreateReturn
+    public partial class ReturnPage
     {
     }
 }

@@ -2,7 +2,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
     <div class="container my-4">
-        <h3>Create Batch</h3>
+       
 
         <asp:ValidationSummary ID="ValidationSummary1" runat="server" CssClass="alert alert-danger" />
 
@@ -10,9 +10,17 @@
             <asp:UpdatePanel ID="upAllControls" runat="server" UpdateMode="Conditional">
                 <ContentTemplate>
                     <div class="row g-3">
+                         <h3>Create Batch</h3>
                         <asp:Label ID="lblMessage" runat="server" EnableViewState="false" />
 
                         <!-- Filter Section -->
+                        <div class="col-md-12 my-4">
+                            <div class="d-flex align-items-center">
+                                <hr class="flex-grow-1" />
+                                <span class="mx-3 fw-bold text-muted">Product Filters</span>
+                                <hr class="flex-grow-1" />
+                            </div>
+                        </div>
                         <div class="col-md-12 row g-3">
                             <div class="col-md-4">
                                 <label class="form-label fw-semibold">Vendor</label>
@@ -30,18 +38,34 @@
                                     AutoPostBack="true" OnSelectedIndexChanged="ddlSubGroup_SelectedIndexChanged" />
                             </div>
                         </div>
+                        <div class="col-md-12 my-4">
+                            <div class="d-flex align-items-center">
+                                <hr class="flex-grow-1" />
+                                <span class="mx-3 fw-bold text-muted">Forms</span>
+                                <hr class="flex-grow-1" />
+                            </div>
+                        </div>
 
                         <div class="col-md-6">
                             <label class="form-label fw-semibold">Product</label>
-                            <asp:DropDownList ID="ddlProduct" runat="server" CssClass="form-select rounded-pill"
-                                AutoPostBack="true" OnSelectedIndexChanged="ddlProduct_SelectedIndexChanged" />
-                            <asp:RequiredFieldValidator ID="rfvProduct" runat="server"
-                                ControlToValidate="ddlProduct"
-                                InitialValue=""
-                                ErrorMessage="Product is required"
-                                CssClass="text-danger"
-                                Display="Dynamic"
-                                ValidationGroup="BatchForm" />
+                            
+                            <div class="input-group d-flex justify-content-between align-content-between gap-3">
+                                 <asp:TextBox ID="txtProductID" runat="server" 
+                                     CssClass="form-control rounded-pill" 
+                                     placeholder="Enter Product Id" 
+                                     AutoPostBack="true" 
+                                     OnTextChanged="txtProductID_TextChanged" />
+
+                                <asp:DropDownList ID="ddlProduct" runat="server" CssClass="form-select rounded-pill"
+                                    AutoPostBack="true" OnSelectedIndexChanged="ddlProduct_SelectedIndexChanged" />
+                                <asp:RequiredFieldValidator ID="rfvProduct" runat="server"
+                                    ControlToValidate="ddlProduct"
+                                    InitialValue=""
+                                    ErrorMessage="Product is required"
+                                    CssClass="text-danger"
+                                    Display="Dynamic"
+                                    ValidationGroup="BatchForm" />
+                            </div>
                         </div>
 
                         <div class="col-md-6">
@@ -78,11 +102,9 @@
                                 ValidationGroup="BatchForm" />
                         </div>
 
-                        <div class="col-md-3
-                            ">
+                        <div class="col-md-4">
                             <label class="form-label fw-semibold">DP (Rs.)</label>
-                            <asp:TextBox ID="txtDP" runat="server" CssClass="form-control rounded-pill" TextMode="Number"
-                                AutoPostBack="true" OnTextChanged="txtDP_TextChanged" />
+                            <asp:TextBox ID="txtDP" runat="server" CssClass="form-control rounded-pill" TextMode="Number"/>
                             <asp:RequiredFieldValidator ID="rfvDP" runat="server"
                                 ControlToValidate="txtDP"
                                 ErrorMessage="DP is required"
@@ -91,7 +113,7 @@
                                 ValidationGroup="BatchForm" />
                         </div>
 
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <label class="form-label fw-semibold">TP (Rs.)</label>
                             <asp:TextBox ID="txtTP" runat="server" CssClass="form-control rounded-pill" TextMode="Number" />
                             <asp:RequiredFieldValidator ID="rfvTP" runat="server"
@@ -102,7 +124,7 @@
                                 ValidationGroup="BatchForm" />
                         </div>
 
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <label class="form-label fw-semibold">MRP (Rs.)</label>
                             <asp:TextBox ID="txtMRP" runat="server" CssClass="form-control rounded-pill" TextMode="Number" />
                             <asp:RequiredFieldValidator ID="rfvMRP" runat="server"
@@ -111,12 +133,6 @@
                                 CssClass="text-danger"
                                 Display="Dynamic"
                                 ValidationGroup="BatchForm" />
-                        </div>
-
-                        <div class="col-md-3">
-                            <label class="form-label fw-semibold">Carton Price</label>
-                            <asp:TextBox ID="txtCartonPrice" runat="server" CssClass="form-control rounded-pill bg-light text-secondary"
-                                TextMode="Number" ReadOnly="true" />
                         </div>
                     </div>
 

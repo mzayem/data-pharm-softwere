@@ -8,6 +8,7 @@
         <div class="container my-4">
             <h2 class="mb-3">Batch List</h2>
             <asp:Label ID="lblImportStatus" runat="server" CssClass="d-none" EnableViewState="false" />
+            <asp:Label ID="lblMessage" runat="server" EnableViewState="false" />
             
             <div class="d-flex justify-content-between mb-3">
                 <!-- Add New Batch -->

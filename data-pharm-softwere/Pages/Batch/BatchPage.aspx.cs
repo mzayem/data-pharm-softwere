@@ -228,12 +228,24 @@ namespace data_pharm_softwere.Pages.Batch
                 }
                 else if (action == "Delete")
                 {
+                    bool hasPurchases = _context.PurchaseDetails.Any(p => p.BatchStockID == BatchStockID);
+
+                    if (hasPurchases)
+                    {
+                        lblMessage.Text = "❌ This batch is used in purchases and cannot be deleted.";
+                        lblMessage.CssClass = "alert alert-danger";
+                        return;
+                    }
+
                     var batch = _context.BatchesStock.Find(BatchStockID);
                     if (batch != null)
                     {
                         _context.BatchesStock.Remove(batch);
                         _context.SaveChanges();
                         LoadBatches();
+
+                        lblMessage.Text = "✅ Batch deleted successfully.";
+                        lblMessage.CssClass = "alert alert-success";
                     }
                 }
             }
@@ -311,7 +323,7 @@ namespace data_pharm_softwere.Pages.Batch
                     int colMRP = headers.IndexOf("MRP");
 
                     if (colProductID == -1 || colBatchNo == -1 || colMFGDate == -1 || colExpiryDate == -1 ||
-                        colDP == -1 || colTP == -1 || colMRP == -1 )
+                        colDP == -1 || colTP == -1 || colMRP == -1)
                     {
                         lblImportStatus.Text = "Missing required columns in CSV.";
                         lblImportStatus.CssClass = "alert alert-danger d-block";
@@ -365,7 +377,6 @@ namespace data_pharm_softwere.Pages.Batch
 
                             if (!decimal.TryParse(rawMRP, out decimal mrp))
                                 throw new Exception($"Invalid MRP '{rawMRP}'");
-
 
                             var existingBatch = _context.BatchesStock.FirstOrDefault(b => b.BatchNo == batchNo.ToString());
 

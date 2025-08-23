@@ -1,10 +1,10 @@
-﻿using data_pharm_softwere.Data;
-using data_pharm_softwere.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Validation;
 using System.Globalization;
+using data_pharm_softwere.Data;
+using data_pharm_softwere.Models;
 using System.Linq;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -25,6 +25,7 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
                 LoadVendors();
                 LoadTaxType();
                 LoadAllAvailableBatches();
+                LoadProduct();
                 ClearUI();
             }
         }
@@ -120,6 +121,26 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
             }
         }
 
+        private void LoadProduct()
+        {
+            try
+            {
+                var products = _context.Products
+               .ToList();
+
+                ddlProduct.DataSource = products;
+                ddlProduct.DataTextField = "Name";
+                ddlProduct.DataValueField = "ProductID";
+                ddlProduct.DataBind();
+                ddlProduct.Items.Insert(0, new ListItem("-- Select Product --", ""));
+            }
+            catch (Exception ex)
+            {
+                lblMessage.Text = "Error loading products: " + ex.Message;
+                lblMessage.CssClass = "alert alert-danger mt-3";
+            }
+        }
+
         private void LoadTaxType()
         {
             ddlAdvTaxType.Items.Clear();
@@ -155,6 +176,21 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
         {
             var list = Session["PurchaseDetails"] as List<PurchaseLineItem> ?? new List<PurchaseLineItem>();
             UpdateTotals(list);
+        }
+
+        protected void ddlProduct_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(ddlProduct.SelectedValue))
+            {
+                txtProductId.Text = ddlProduct.SelectedValue;
+                txtProductId_TextChanged(sender, e);
+            }
+            else
+            {
+                txtProductId.Text = "";
+                ddlBatch.Items.Clear();
+                ddlBatch.Items.Insert(0, new ListItem("-- Select Batch --", ""));
+            }
         }
 
         protected void txtProductId_TextChanged(object sender, EventArgs e)
@@ -202,6 +238,12 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
             // Store for later use
             hiddenProductId.Value = product.ProductID.ToString();
 
+            if (ddlProduct.Items.FindByValue(product.ProductID.ToString()) != null)
+            {
+                ddlProduct.ClearSelection();
+                ddlProduct.SelectedValue = product.ProductID.ToString();
+            }
+
             // Load batches for product (not in purchase)
             LoadBatches(product.ProductID, addedBatchNos);
         }
@@ -221,6 +263,12 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
             {
                 hiddenProductId.Value = batch.ProductID.ToString();
                 txtProductId.Text = batch.ProductID.ToString();
+
+                if (ddlProduct.Items.FindByValue(batch.ProductID.ToString()) != null)
+                {
+                    ddlProduct.ClearSelection();
+                    ddlProduct.SelectedValue = batch.ProductID.ToString();
+                }
 
                 var addedBatchNos = (Session["PurchaseDetails"] as List<PurchaseLineItem>)
                     ?.Select(i => i.BatchNo.Trim().ToLower())
@@ -266,6 +314,12 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
             hiddenProductId.Value = batch.ProductID.ToString();
             txtProductId.Text = batch.ProductID.ToString();
             productId = batch.ProductID;
+
+            if (ddlProduct.Items.FindByValue(productId.ToString()) != null)
+            {
+                ddlProduct.ClearSelection();
+                ddlProduct.SelectedValue = productId.ToString();
+            }
 
             // Continue loading batches
             var addedBatchNos = (Session["PurchaseDetails"] as List<PurchaseLineItem>)
@@ -320,15 +374,10 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
             public decimal DiscountPercent { get; set; }
             public decimal GSTPercent { get; set; }
             public string GstType { get; set; }
-
             public decimal GrossAmount => CartonQty * CartonPrice;
-
             public decimal DiscountAmount => Math.Round(GrossAmount * (DiscountPercent / 100m), 2);
-
             public decimal TaxBase => GstType == "Net" ? (GrossAmount - DiscountAmount) : GrossAmount;
-
             public decimal GSTAmount => Math.Round(TaxBase * (GSTPercent / 100m), 2);
-
             public decimal NetAmount => Math.Round(TaxBase + GSTAmount, 2);
             public decimal TotalAmount => NetAmount;
         }
@@ -363,12 +412,12 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
             var item = new PurchaseLineItem
             {
                 BatchStockID = batchStock.BatchStockID,
-                BatchNo = batchStock.BatchNo,
                 ProductId = batchStock.ProductID.ToString(),
                 ProductName = batchStock.Product?.Name,
+                BatchNo = batchStock.BatchNo,
                 ExpiryDate = batchStock.ExpiryDate,
                 CartonQty = int.TryParse(txtQty.Text, out var parsedQty) ? parsedQty : 0,
-                CartonPrice = batchStock.CartonDp,
+                CartonPrice = batchStock.DP,
                 DiscountPercent = batchStock.Product?.PurchaseDiscount ?? 0,
                 GSTPercent = batchStock.Product?.ReqGST ?? 0,
                 GstType = ddlGstType.SelectedValue
@@ -385,6 +434,7 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
             txtBatchNo.Text = "";
             ddlBatch.Items.Clear();
             LoadAllAvailableBatches();
+            LoadProduct();
         }
 
         // --- Helpers ---
@@ -446,6 +496,7 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
 
             Session["PurchaseDetails"] = list;
             BindGrid();
+            KeepFocus(sender as Control);
             UpdateTotals(list);
         }
 
@@ -521,7 +572,7 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
             var list = Session["PurchaseDetails"] as List<PurchaseLineItem>;
             if (list == null || !list.Any())
             {
-                lblMessage.Text = "No batches added.";
+                lblMessage.Text = "No Items added.";
                 lblMessage.CssClass = "alert alert-warning";
                 return;
             }
@@ -603,26 +654,26 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
             catch (Exception ex)
             {
                 string debugInfo = $@"
-Exception: {ex.Message}
-StackTrace: {ex.StackTrace}
+                Exception: {ex.Message}
+                StackTrace: {ex.StackTrace}
 
---- Form Values ---
-PurchaseDate: {txtPurchaseDate.Text}
-PoNumber: {txtPoNumber.Text}
-Reference: {txtReference.Text}
-AdvTaxType: {ddlAdvTaxType.SelectedValue}
-GstType: {ddlGstType.SelectedValue}
-VendorId: {ddlVendor.SelectedValue}
+                --- Form Values ---
+                PurchaseDate: {txtPurchaseDate.Text}
+                PoNumber: {txtPoNumber.Text}
+                Reference: {txtReference.Text}
+                AdvTaxType: {ddlAdvTaxType.SelectedValue}
+                GstType: {ddlGstType.SelectedValue}
+                VendorId: {ddlVendor.SelectedValue}
 
---- Labels ---
-lblGross: {lblGross.Text}
-lblDiscount: {lblDiscount.Text}
-lblAdvTaxAmount: {lblAdvTaxAmount.Text}
-lblNetAmount: {lblNetAmount.Text}
+                --- Labels ---
+                lblGross: {lblGross.Text}
+                lblDiscount: {lblDiscount.Text}
+                lblAdvTaxAmount: {lblAdvTaxAmount.Text}
+                lblNetAmount: {lblNetAmount.Text}
 
---- Textboxes ---
-txtAdvTaxRate: {txtAdvTaxRate.Text}
-txtAdditionalCharges: {txtAdditionalCharges.Text}
+                --- Textboxes ---
+                txtAdvTaxRate: {txtAdvTaxRate.Text}
+                txtAdditionalCharges: {txtAdditionalCharges.Text}
 ";
 
                 lblMessage.Text = "Unexpected Error:<br/><pre>" + debugInfo + "</pre>";
@@ -642,7 +693,6 @@ txtAdditionalCharges: {txtAdditionalCharges.Text}
             txtAdvTaxRate.Text = "";
             txtAdditionalCharges.Text = "";
             txtPurchaseDate.Text = DateTime.Today.ToString("yyyy-MM-dd");
-            lblGross.Text = lblDiscount.Text = lblAdvTaxAmount.Text = lblNetAmount.Text = "";
 
             gvPurchaseDetails.DataSource = null;
             gvPurchaseDetails.DataBind();

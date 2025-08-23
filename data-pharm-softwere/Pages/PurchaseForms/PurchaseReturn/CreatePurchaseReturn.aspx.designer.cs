@@ -7,21 +7,12 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
+namespace data_pharm_softwere.Pages.PurchaseForms.PurchaseReturn
 {
 
 
-    public partial class CreatePurchase
+    public partial class CreatePurchaseReturn
     {
-
-        /// <summary>
-        /// BatchModalControl control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::data_pharm_softwere.Pages.Batch.Controls.BatchModal BatchModalControl;
 
         /// <summary>
         /// ValidationSummary1 control.
@@ -87,15 +78,6 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
         protected global::System.Web.UI.WebControls.DropDownList ddlAdvTaxType;
 
         /// <summary>
-        /// rfvAdvTaxType control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvAdvTaxType;
-
-        /// <summary>
         /// ddlGstType control.
         /// </summary>
         /// <remarks>
@@ -103,15 +85,6 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddlGstType;
-
-        /// <summary>
-        /// rfvGstType control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvGstType;
 
         /// <summary>
         /// txtVendorCode control.
@@ -132,15 +105,6 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
         protected global::System.Web.UI.WebControls.DropDownList ddlVendor;
 
         /// <summary>
-        /// rfvVendor control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvVendor;
-
-        /// <summary>
         /// txtPoNumber control.
         /// </summary>
         /// <remarks>
@@ -150,15 +114,6 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
         protected global::System.Web.UI.WebControls.TextBox txtPoNumber;
 
         /// <summary>
-        /// rfvPoNumber control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvPoNumber;
-
-        /// <summary>
         /// txtReference control.
         /// </summary>
         /// <remarks>
@@ -166,15 +121,6 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtReference;
-
-        /// <summary>
-        /// rfvReference control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvReference;
 
         /// <summary>
         /// txtProductId control.

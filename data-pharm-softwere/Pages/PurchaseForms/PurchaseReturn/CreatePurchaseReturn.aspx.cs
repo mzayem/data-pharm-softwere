@@ -5,9 +5,9 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace data_pharm_softwere.Pages.PurchaseForms.Return
+namespace data_pharm_softwere.Pages.PurchaseForms.PurchaseReturn
 {
-    public partial class CreateReturn : System.Web.UI.Page
+    public partial class CreatePurchaseReturn : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {

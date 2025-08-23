@@ -78,6 +78,15 @@ namespace data_pharm_softwere.Pages.Batch
         protected global::System.Web.UI.WebControls.DropDownList ddlSubGroup;
 
         /// <summary>
+        /// txtProductID control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtProductID;
+
+        /// <summary>
         /// ddlProduct control.
         /// </summary>
         /// <remarks>
@@ -202,15 +211,6 @@ namespace data_pharm_softwere.Pages.Batch
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvMRP;
-
-        /// <summary>
-        /// txtCartonPrice control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtCartonPrice;
 
         /// <summary>
         /// btnSave control.

@@ -24,6 +24,13 @@ namespace data_pharm_softwere.Models
         Consumer
     }
 
+    public enum BonusType
+    {
+        NoBonus,
+        Lock,
+        Unlocked
+    }
+
     [Table("Products")]
     public class Product
     {
@@ -74,6 +81,11 @@ namespace data_pharm_softwere.Models
         public bool IsAdvTaxExempted { get; set; }
 
         public bool IsGSTExempted { get; set; }
+
+        public bool IsDiscounted { get; set; }
+
+        [Required]
+        public BonusType BonusType { get; set; }
 
         [Required]
         public int SubGroupID { get; set; }

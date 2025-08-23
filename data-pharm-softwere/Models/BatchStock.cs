@@ -53,10 +53,14 @@ namespace data_pharm_softwere.Models
 
         [Required]
         [Range(0, int.MaxValue)]
+        public int BonusQty { get; set; } = 0;
+
+        [Required]
+        [Range(0, int.MaxValue)]
         public int QuarantineQty { get; set; } = 0;
 
         [NotMapped]
-        public int TotalQty => AvailableQty + InTransitQty + OnHoldQty + QuarantineQty;
+        public int TotalQty => AvailableQty + InTransitQty + BonusQty + OnHoldQty + QuarantineQty;
 
         [Required]
         [StringLength(50)]

@@ -156,31 +156,34 @@ namespace data_pharm_softwere.Pages.Batch
 
         protected void ddlProduct_SelectedIndexChanged(object sender, EventArgs e)
         {
-            CalculateCartonPrice();
-        }
-
-        protected void txtDP_TextChanged(object sender, EventArgs e)
-        {
-            CalculateCartonPrice();
-        }
-
-        private void CalculateCartonPrice()
-        {
-            if (int.TryParse(ddlProduct.SelectedValue, out int productId))
+            if (!string.IsNullOrEmpty(ddlProduct.SelectedValue))
             {
-                var product = _context.Products.FirstOrDefault(p => p.ProductID == productId);
-                if (product != null && decimal.TryParse(txtDP.Text, out decimal dp))
-                {
-                    txtCartonPrice.Text = (dp * product.CartonSize).ToString("0.00");
-                }
-                else
-                {
-                    txtCartonPrice.Text = "";
-                }
+                // Sync textbox with dropdown
+                txtProductID.Text = ddlProduct.SelectedValue;
             }
             else
             {
-                txtCartonPrice.Text = "";
+                txtProductID.Text = string.Empty;
+            }
+        }
+
+        protected void txtProductID_TextChanged(object sender, EventArgs e)
+        {
+            if (int.TryParse(txtProductID.Text.Trim(), out int productId))
+            {
+                var item = ddlProduct.Items.FindByValue(productId.ToString());
+                if (item != null)
+                {
+                    ddlProduct.ClearSelection();
+                    ddlProduct.SelectedValue = productId.ToString();
+                }
+                else
+                {
+                    ddlProduct.ClearSelection();
+                    lblMessage.Text = "Product not found in the list.";
+                    lblMessage.CssClass = "alert alert-warning";
+                    return;
+                }
             }
         }
 
@@ -239,12 +242,11 @@ namespace data_pharm_softwere.Pages.Batch
                     lblMessage.Text = "Error: " + ex.Message;
                     lblMessage.CssClass = "alert alert-danger mt-3";
                 }
-                
             }
         }
+
         private void ClearForm()
         {
-
             ddlVendor.ClearSelection();
             ddlGroup.ClearSelection();
             ddlSubGroup.ClearSelection();
