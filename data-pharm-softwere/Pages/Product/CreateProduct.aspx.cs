@@ -1,9 +1,11 @@
 ﻿using data_pharm_softwere.Data;
 using data_pharm_softwere.Models;
 using System;
-using System.Linq;
-using System.Web.UI.WebControls;
+using System.Collections.Generic;
 using System.Data.Entity;
+using System.Linq;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 
 namespace data_pharm_softwere.Pages.Product
 {
@@ -34,6 +36,16 @@ namespace data_pharm_softwere.Pages.Product
                 txtUnReqGST.Attributes["step"] = "0.1";
                 txtUnReqGST.Attributes["min"] = "0";
                 txtUnReqGST.Attributes["max"] = "100";
+
+                txtDist1.Attributes["step"] = "0.1";
+                txtDist1.Attributes["min"] = "0";
+                txtDist1.Attributes["max"] = "100";
+                txtDist1.Text = "0";
+
+                txtDist2.Attributes["step"] = "0.1";
+                txtDist2.Attributes["min"] = "0";
+                txtDist2.Attributes["max"] = "100";
+                txtDist2.Text = "0";
             }
         }
 
@@ -156,6 +168,14 @@ namespace data_pharm_softwere.Pages.Product
             ddlPackingType.DataSource = Enum.GetNames(typeof(PackingType));
             ddlPackingType.DataBind();
             ddlPackingType.Items.Insert(0, new ListItem("-- Select PackingType --", ""));
+
+            ddlBonusType.DataSource = Enum.GetNames(typeof(BonusType));
+            ddlBonusType.DataBind();
+
+            if (ddlBonusType.Items.FindByText("NoBonus") != null)
+            {
+                ddlBonusType.SelectedValue = "NoBonus";
+            }
         }
 
         protected void ddlVendor_SelectedIndexChanged(object sender, EventArgs e)
@@ -186,12 +206,141 @@ namespace data_pharm_softwere.Pages.Product
             }
         }
 
+        // Temporary storage for bonuses (before product save)
+        private List<ProductBonus> Bonuses
+        {
+            get { return (List<ProductBonus>)Session["Bonuses"] ?? new List<ProductBonus>(); }
+            set { Session["Bonuses"] = value; }
+        }
+
+        protected void btnAddBonus_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!int.TryParse(txtBonusMinQty.Text, out int minQty) || minQty <= 0)
+                {
+                    lblBonuses.Text = "Enter valid Min Qty.";
+                    lblBonuses.CssClass = "alert alert-warning";
+                    return;
+                }
+
+                if (!int.TryParse(txtBonusItems.Text, out int bonusItems) || bonusItems < 0)
+                {
+                    lblBonuses.Text = "Enter valid Bonus Items.";
+                    lblBonuses.CssClass = "alert alert-warning";
+                    return;
+                }
+
+                var bonus = new ProductBonus
+                {
+                    MinQty = minQty,
+                    BonusItems = bonusItems,
+                    IsActive = bool.Parse(ddlBonusStatus.SelectedValue),
+                    AssignedOn = DateTime.Now
+                };
+
+                var list = Bonuses;
+                list.Add(bonus);
+                Bonuses = list;
+
+                BindBonuses();
+
+                // clear input
+                txtBonusMinQty.Text = "";
+                txtBonusItems.Text = "";
+                ddlBonusStatus.SelectedValue = "true";
+            }
+            catch (Exception ex)
+            {
+                lblBonuses.Text = "Error adding bonus: " + ex.Message;
+                lblBonuses.CssClass = "alert alert-danger";
+            }
+        }
+
+        private void BindBonuses()
+        {
+            rptBonuses.DataSource = Bonuses;
+            rptBonuses.DataBind();
+        }
+
+        protected void rptBonuses_ItemCommand(object source, RepeaterCommandEventArgs e)
+        {
+            if (e.CommandName == "Remove")
+            {
+                var list = Bonuses;
+                int index = Convert.ToInt32(e.CommandArgument);
+                if (index >= 0 && index < list.Count)
+                {
+                    list.RemoveAt(index);
+                }
+                Bonuses = list;
+                BindBonuses();
+            }
+        }
+
+        protected void rptBonuses_ItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+            if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            {
+                var bonus = (ProductBonus)e.Item.DataItem;
+
+                var ddlStatus = (DropDownList)e.Item.FindControl("ddlStatus");
+                if (ddlStatus != null)
+                {
+                    ddlStatus.SelectedValue = bonus.IsActive.ToString().ToLower();
+                }
+            }
+        }
+
+        protected void BonusFieldChanged(object sender, EventArgs e)
+        {
+            var list = Bonuses;
+
+            // Find which row triggered the event
+            RepeaterItem item = (RepeaterItem)((Control)sender).NamingContainer;
+            int index = item.ItemIndex;
+
+            if (index >= 0 && index < list.Count)
+            {
+                var txtMinQty = (TextBox)item.FindControl("txtMinQty");
+                var txtBonusItems = (TextBox)item.FindControl("txtBonusItemsRow");
+                var ddlStatus = (DropDownList)item.FindControl("ddlStatus");
+
+                if (int.TryParse(txtMinQty.Text, out int minQty))
+                    list[index].MinQty = minQty;
+
+                if (int.TryParse(txtBonusItems.Text, out int bonusItems))
+                    list[index].BonusItems = bonusItems;
+
+                list[index].IsActive = ddlStatus.SelectedValue == "true";
+
+                KeepFocus((Control)sender);
+            }
+
+            Bonuses = list;
+        }
+
+        private void KeepFocus(Control control)
+        {
+            if (control != null)
+            {
+                ScriptManager.RegisterStartupScript(
+                    this,
+                    this.GetType(),
+                    "setFocus",
+                    $"setTimeout(function(){{document.getElementById('{control.ClientID}').focus();}}, 0);",
+                    true
+                );
+            }
+        }
+
         protected void btnSave_Click(object sender, EventArgs e)
         {
             if (Page.IsValid)
             {
                 try
-                {// Validate PackingType
+                {
+                    // Validate PackingType
                     PackingType packingType;
                     if (!Enum.TryParse(ddlPackingType.SelectedValue, out packingType))
                     {
@@ -205,6 +354,24 @@ namespace data_pharm_softwere.Pages.Product
                     if (!Enum.TryParse(ddlType.SelectedValue, out productType))
                     {
                         lblMessage.Text = "Please select a valid Product Type.";
+                        lblMessage.CssClass = "alert alert-danger mt-3";
+                        return;
+                    }
+
+                    // Validate BonusType
+                    BonusType bonusType;
+                    if (!Enum.TryParse(ddlBonusType.SelectedValue, out bonusType))
+                    {
+                        lblMessage.Text = "Please select a valid Bonus Type.";
+                        lblMessage.CssClass = "alert alert-danger mt-3";
+                        return;
+                    }
+
+                    // Validate IsDiscounted (bool)
+                    bool isDiscounted;
+                    if (!bool.TryParse(ddlIsDiscounted.SelectedValue, out isDiscounted))
+                    {
+                        lblMessage.Text = "Please select if product is discounted or not.";
                         lblMessage.CssClass = "alert alert-danger mt-3";
                         return;
                     }
@@ -232,6 +399,8 @@ namespace data_pharm_softwere.Pages.Product
                         lblMessage.CssClass = "alert alert-danger mt-3";
                         return;
                     }
+
+                    // Validate Division
                     if (!int.TryParse(ddlDivision.SelectedValue, out int divisionId))
                     {
                         lblMessage.Text = "Please select a valid Division.";
@@ -239,6 +408,7 @@ namespace data_pharm_softwere.Pages.Product
                         return;
                     }
 
+                    // Validate Product Code
                     if (!long.TryParse(txtProductCode.Text.Trim(), out var productCode))
                     {
                         lblMessage.Text = "Invalid Product Code";
@@ -246,7 +416,28 @@ namespace data_pharm_softwere.Pages.Product
                         return;
                     }
 
+                    // Dist1 / Dist2 (0–100)
+                    if (!decimal.TryParse(txtDist1.Text, out var dist1) || dist1 < 0 || dist1 > 100)
+                    {
+                        lblMessage.Text = "Discount1 must be a number between 0 and 100.";
+                        lblMessage.CssClass = "alert alert-danger mt-3";
+                        return;
+                    }
+                    if (!decimal.TryParse(txtDist2.Text, out var dist2) || dist2 < 0 || dist2 > 100)
+                    {
+                        lblMessage.Text = "Discount2 must be a number between 0 and 100.";
+                        lblMessage.CssClass = "alert alert-danger mt-3";
+                        return;
+                    }
+
                     int nextProductId = (_context.Products.Max(p => (int?)p.ProductID) ?? 101000) + 1;
+
+                    if (_context.Products.Any(p => p.ProductCode == productCode))
+                    {
+                        lblMessage.Text = "A product with this code already exists.";
+                        lblMessage.CssClass = "alert alert-warning mt-3";
+                        return;
+                    }
 
                     // Assign values
                     var product = new Models.Product
@@ -254,9 +445,12 @@ namespace data_pharm_softwere.Pages.Product
                         ProductID = nextProductId,
                         Type = productType,
                         PackingType = packingType,
+                        BonusType = bonusType,
+                        IsDiscounted = isDiscounted,
+                        Dist1 = dist1,
+                        Dist2 = dist2,
                         Name = txtName.Text.Trim(),
                         ProductCode = productCode,
-
                         HSCode = hsCode,
                         PackingSize = txtPackingSize.Text.Trim(),
                         CartonSize = cartonSize,
@@ -273,6 +467,16 @@ namespace data_pharm_softwere.Pages.Product
 
                     _context.Products.Add(product);
                     _context.SaveChanges();
+
+                    foreach (var bonus in Bonuses)
+                    {
+                        bonus.ProductID = product.ProductID;
+                        _context.ProductBonuses.Add(bonus);
+                    }
+                    _context.SaveChanges();
+
+                    // Clear Bonuses after save
+                    Bonuses = new List<ProductBonus>();
 
                     lblMessage.Text = "Product saved successfully!";
                     lblMessage.CssClass = "alert alert-success mt-3";

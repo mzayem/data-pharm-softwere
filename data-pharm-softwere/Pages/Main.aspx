@@ -38,6 +38,9 @@
                 <a href="/purchase" class="btn btn-primary rounded-pill px-4 mt-4">
                     Go to Purchase Management
                 </a>
+                <a href="/settings" class="btn btn-primary rounded-pill px-4 mt-4">
+                    Go to Settings
+                </a>
 
             </div>
 </div>

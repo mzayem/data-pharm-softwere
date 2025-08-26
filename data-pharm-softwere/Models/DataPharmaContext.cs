@@ -1,5 +1,6 @@
 ﻿using data_pharm_softwere.Models;
 using System.Data.Entity;
+using DataModel = data_pharm_softwere.Models.Data;
 
 namespace data_pharm_softwere.Data
 {
@@ -16,6 +17,7 @@ namespace data_pharm_softwere.Data
         public DbSet<Group> Groups { get; set; }
         public DbSet<SubGroup> SubGroups { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<ProductBonus> ProductBonuses { get; set; }
         public DbSet<BatchStock> BatchesStock { get; set; }
         public DbSet<CityRoute> CityRoutes { get; set; }
         public DbSet<Town> Towns { get; set; }
@@ -26,6 +28,8 @@ namespace data_pharm_softwere.Data
         public DbSet<MedicalRepSubGroup> MedicalRepSubGroups { get; set; }
         public DbSet<Purchase> Purchases { get; set; }
         public DbSet<PurchaseDetail> PurchaseDetails { get; set; }
+        public DbSet<DataModel> Data { get; set; }
+        public DbSet<Setting> Settings { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -87,6 +91,13 @@ namespace data_pharm_softwere.Data
                 .HasRequired(b => b.Product)
                 .WithMany(p => p.BatchesStock)
                 .HasForeignKey(b => b.ProductID)
+                .WillCascadeOnDelete(true);
+
+            // Product → Bonus
+            modelBuilder.Entity<ProductBonus>()
+                .HasRequired(pb => pb.Product)
+                .WithMany(p => p.ProductBonuses)
+                .HasForeignKey(pb => pb.ProductID)
                 .WillCascadeOnDelete(true);
 
             //Town → CityRoute

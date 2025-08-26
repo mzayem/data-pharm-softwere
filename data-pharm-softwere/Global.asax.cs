@@ -1,7 +1,9 @@
-﻿using System;
+﻿using data_pharm_softwere.Data;
+using System;
 using System.Web;
 using System.Web.Routing;
 using System.Web.UI;
+using System.Linq;
 
 namespace data_pharm_softwere
 {
@@ -28,6 +30,13 @@ namespace data_pharm_softwere
                 "Home",
                 "",
                 "~/Pages/Main.aspx"
+            );
+
+            //Settings routes
+            routes.MapPageRoute(
+                "Settings",
+                "settings",
+                "~/Pages/Settings.aspx"
             );
 
             //vendor routes
@@ -240,7 +249,22 @@ namespace data_pharm_softwere
         { }
 
         private void Application_BeginRequest(object sender, EventArgs e)
-        { }
+        {
+            string path = HttpContext.Current.Request.AppRelativeCurrentExecutionFilePath.ToLower();
+
+            if (!path.ToLower().Contains("/settings"))
+            {
+                using (var db = new DataPharmaContext())
+                {
+                    bool hasSettings = db.Settings.Any();
+
+                    if (!hasSettings)
+                    {
+                        HttpContext.Current.Response.Redirect("~/settings");
+                    }
+                }
+            }
+        }
 
         private void Application_AuthenticateRequest(object sender, EventArgs e)
         { }

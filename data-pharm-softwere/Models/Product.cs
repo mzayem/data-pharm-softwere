@@ -88,6 +88,14 @@ namespace data_pharm_softwere.Models
         public BonusType BonusType { get; set; }
 
         [Required]
+        [Range(0, 100)]
+        public decimal Dist1 { get; set; }
+
+        [Required]
+        [Range(0, 100)]
+        public decimal Dist2 { get; set; }
+
+        [Required]
         public int SubGroupID { get; set; }
 
         [ForeignKey("SubGroupID")]
@@ -104,5 +112,6 @@ namespace data_pharm_softwere.Models
         public DateTime? UpdatedAt { get; set; }
 
         public virtual ICollection<BatchStock> BatchesStock { get; set; }
+        public virtual ICollection<ProductBonus> ProductBonuses { get; set; }
     }
 }

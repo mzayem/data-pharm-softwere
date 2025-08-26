@@ -2,8 +2,6 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
     <div class="container my-4">
-       
-
         <asp:ValidationSummary ID="ValidationSummary1" runat="server" CssClass="alert alert-danger" />
 
         <asp:Panel ID="pnlForm" runat="server" CssClass="card p-4 shadow-sm rounded-4">

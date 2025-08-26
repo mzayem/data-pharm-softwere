@@ -47,7 +47,7 @@
       <HintPath>..\packages\BouncyCastle.1.8.9\lib\BouncyCastle.Crypto.dll</HintPath>
     </Reference>
     <Reference Include="BouncyCastle.Cryptography, Version=2.0.0.0, Culture=neutral, PublicKeyToken=072edcf4a5328938, processorArchitecture=MSIL">
-      <HintPath>..\packages\BouncyCastle.Cryptography.2.6.1\lib\net461\BouncyCastle.Cryptography.dll</HintPath>
+      <HintPath>..\packages\BouncyCastle.Cryptography.2.6.2\lib\net461\BouncyCastle.Cryptography.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.5.1\lib\net45\EntityFramework.dll</HintPath>
@@ -89,6 +89,7 @@
     <Content Include="Content\bootstrap-grid.rtl.css" />
     <Content Include="Content\bootstrap-grid.rtl.min.css" />
     <Content Include="Content\bootstrap-icons.min.css" />
+    <Content Include="Content\bootstrap-icons.css" />
     <Content Include="Content\bootstrap-reboot.css" />
     <Content Include="Content\bootstrap-reboot.min.css" />
     <Content Include="Content\bootstrap-reboot.rtl.css" />
@@ -101,7 +102,6 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
-    <Content Include="Content\bootstrap-icons.css" />
     <Content Include="Global.asax" />
     <Content Include="Pages\Batch\BatchPage.aspx" />
     <Content Include="Pages\Batch\Controls\BatchModal.ascx" />
@@ -126,15 +126,16 @@
     <Content Include="Pages\Product\CreateProduct.aspx" />
     <Content Include="Pages\Product\EditProduct.aspx" />
     <Content Include="Pages\Product\ProductPage.aspx" />
+    <Content Include="Pages\PurchaseForms\PurchaseReturn\CreatePurchaseReturn.aspx" />
+    <Content Include="Pages\PurchaseForms\PurchaseReturn\EditPurchaseReturn.aspx" />
+    <Content Include="Pages\PurchaseForms\PurchaseReturn\ReturnPage.aspx" />
     <Content Include="Pages\PurchaseForms\Purchase\CreatePurchase.aspx" />
     <Content Include="Pages\PurchaseForms\Purchase\EditPurchase.aspx" />
     <Content Include="Pages\PurchaseForms\Purchase\PurchasesPage.aspx" />
-    <Content Include="Pages\PurchaseForms\Return\CreateReturn.aspx" />
-    <Content Include="Pages\PurchaseForms\Return\EditReturn.aspx" />
-    <Content Include="Pages\PurchaseForms\Return\ReturnPage.aspx" />
     <Content Include="Pages\Salesman\CreateSalesman.aspx" />
     <Content Include="Pages\Salesman\EditSalesman.aspx" />
     <Content Include="Pages\Salesman\SalesmanPage.aspx" />
+    <Content Include="Pages\Settings.aspx" />
     <Content Include="Pages\SubGroup\CreateSubGroup.aspx" />
     <Content Include="Pages\SubGroup\EditSubGroup.aspx" />
     <Content Include="Pages\SubGroup\SubGroupPage.aspx" />
@@ -144,14 +145,35 @@
     <Content Include="Pages\Vendor\CreateVendor.aspx" />
     <Content Include="Pages\Vendor\EditVendor.aspx" />
     <Content Include="Pages\Vendor\VendorPage.aspx" />
+    <Content Include="Content\fonts\bootstrap-icons.woff" />
+    <Content Include="Content\fonts\bootstrap-icons.woff2" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.esm.js" />
     <Content Include="Scripts\bootstrap.esm.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Content\fonts\bootstrap-icons.woff" />
-    <Content Include="Content\fonts\bootstrap-icons.woff2" />
+    <Content Include="Scripts\bootstrap.min.js.map" />
+    <Content Include="Scripts\bootstrap.js.map" />
+    <Content Include="Scripts\bootstrap.esm.min.js.map" />
+    <Content Include="Scripts\bootstrap.esm.js.map" />
+    <Content Include="Scripts\bootstrap.bundle.min.js.map" />
+    <Content Include="Scripts\bootstrap.bundle.js.map" />
+    <Content Include="Content\bootstrap.rtl.min.css.map" />
+    <Content Include="Content\bootstrap.rtl.css.map" />
+    <Content Include="Content\bootstrap.min.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Content\bootstrap-utilities.rtl.min.css.map" />
+    <Content Include="Content\bootstrap-utilities.rtl.css.map" />
+    <Content Include="Content\bootstrap-utilities.min.css.map" />
+    <Content Include="Content\bootstrap-utilities.css.map" />
+    <Content Include="Content\bootstrap-reboot.rtl.min.css.map" />
+    <Content Include="Content\bootstrap-reboot.rtl.css.map" />
+    <Content Include="Content\bootstrap-reboot.min.css.map" />
+    <Content Include="Content\bootstrap-reboot.css.map" />
+    <Content Include="Content\bootstrap-grid.rtl.min.css.map" />
+    <Content Include="Content\bootstrap-grid.rtl.css.map" />
+    <Content Include="Content\bootstrap-grid.min.css.map" />
     <None Include="Scripts\jquery-3.7.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.1.js" />
     <Content Include="Scripts\jquery-3.7.1.min.js" />
@@ -222,21 +244,36 @@
     <Compile Include="Migrations\202508200932258_PurchaseUpdate.Designer.cs">
       <DependentUpon>202508200932258_PurchaseUpdate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202508231020052_BonusUpdate.cs" />
+    <Compile Include="Migrations\202508231020052_BonusUpdate.Designer.cs">
+      <DependentUpon>202508231020052_BonusUpdate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202508231135102_DiscountAmnt.cs" />
+    <Compile Include="Migrations\202508231135102_DiscountAmnt.Designer.cs">
+      <DependentUpon>202508231135102_DiscountAmnt.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202508261028328_DataTables.cs" />
+    <Compile Include="Migrations\202508261028328_DataTables.Designer.cs">
+      <DependentUpon>202508261028328_DataTables.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\BatchStock.cs" />
     <Compile Include="Models\CityRoute.cs" />
     <Compile Include="Models\Customer.cs" />
+    <Compile Include="Models\Data.cs" />
     <Compile Include="Models\DataPharmaContext.cs" />
     <Compile Include="Models\Division.cs" />
     <Compile Include="Models\Group.cs" />
     <Compile Include="Models\MedicalRep.cs" />
     <Compile Include="Models\MedicalRepSubGroup.cs" />
     <Compile Include="Models\Product.cs" />
+    <Compile Include="Models\ProductBonus.cs" />
     <Compile Include="Models\Purchase.cs" />
     <Compile Include="Models\PurchaseDetail.cs" />
     <Compile Include="Models\Salesman.cs" />
     <Compile Include="Models\SalesmanTown.cs" />
+    <Compile Include="Models\Settings.cs" />
     <Compile Include="Models\SubGroup.cs" />
     <Compile Include="Models\Town.cs" />
     <Compile Include="Pages\Batch\BatchPage.aspx.cs">
@@ -408,6 +445,27 @@
     <Compile Include="Pages\Product\ProductPage.aspx.designer.cs">
       <DependentUpon>ProductPage.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Pages\PurchaseForms\PurchaseReturn\CreatePurchaseReturn.aspx.cs">
+      <DependentUpon>CreatePurchaseReturn.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\PurchaseForms\PurchaseReturn\CreatePurchaseReturn.aspx.designer.cs">
+      <DependentUpon>CreatePurchaseReturn.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PurchaseForms\PurchaseReturn\EditPurchaseReturn.aspx.cs">
+      <DependentUpon>EditPurchaseReturn.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\PurchaseForms\PurchaseReturn\EditPurchaseReturn.aspx.designer.cs">
+      <DependentUpon>EditPurchaseReturn.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PurchaseForms\PurchaseReturn\ReturnPage.aspx.cs">
+      <DependentUpon>ReturnPage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\PurchaseForms\PurchaseReturn\ReturnPage.aspx.designer.cs">
+      <DependentUpon>ReturnPage.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Pages\PurchaseForms\Purchase\CreatePurchase.aspx.cs">
       <DependentUpon>CreatePurchase.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -429,27 +487,6 @@
     <Compile Include="Pages\PurchaseForms\Purchase\PurchasesPage.aspx.designer.cs">
       <DependentUpon>PurchasesPage.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Pages\PurchaseForms\Return\CreateReturn.aspx.cs">
-      <DependentUpon>CreateReturn.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Pages\PurchaseForms\Return\CreateReturn.aspx.designer.cs">
-      <DependentUpon>CreateReturn.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\PurchaseForms\Return\EditReturn.aspx.cs">
-      <DependentUpon>EditReturn.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Pages\PurchaseForms\Return\EditReturn.aspx.designer.cs">
-      <DependentUpon>EditReturn.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\PurchaseForms\Return\ReturnPage.aspx.cs">
-      <DependentUpon>ReturnPage.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Pages\PurchaseForms\Return\ReturnPage.aspx.designer.cs">
-      <DependentUpon>ReturnPage.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Pages\Salesman\CreateSalesman.aspx.cs">
       <DependentUpon>CreateSalesman.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -470,6 +507,13 @@
     </Compile>
     <Compile Include="Pages\Salesman\SalesmanPage.aspx.designer.cs">
       <DependentUpon>SalesmanPage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Settings.aspx.cs">
+      <DependentUpon>Settings.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Settings.aspx.designer.cs">
+      <DependentUpon>Settings.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\SubGroup\CreateSubGroup.aspx.cs">
       <DependentUpon>CreateSubGroup.aspx</DependentUpon>
@@ -537,30 +581,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\bootstrap.rtl.min.css.map" />
-    <Content Include="Content\bootstrap.rtl.css.map" />
-    <Content Include="Content\bootstrap.min.css.map" />
-    <Content Include="Content\bootstrap.css.map" />
-    <Content Include="Content\bootstrap-utilities.rtl.min.css.map" />
-    <Content Include="Content\bootstrap-utilities.rtl.css.map" />
-    <Content Include="Content\bootstrap-utilities.min.css.map" />
-    <Content Include="Content\bootstrap-utilities.css.map" />
-    <Content Include="Content\bootstrap-reboot.rtl.min.css.map" />
-    <Content Include="Content\bootstrap-reboot.rtl.css.map" />
-    <Content Include="Content\bootstrap-reboot.min.css.map" />
-    <Content Include="Content\bootstrap-reboot.css.map" />
-    <Content Include="Content\bootstrap-grid.rtl.min.css.map" />
-    <Content Include="Content\bootstrap-grid.rtl.css.map" />
-    <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
     <Content Include="Pages\Layout.Master" />
     <None Include="packages.config" />
-    <Content Include="Scripts\bootstrap.min.js.map" />
-    <Content Include="Scripts\bootstrap.js.map" />
-    <Content Include="Scripts\bootstrap.esm.min.js.map" />
-    <Content Include="Scripts\bootstrap.esm.js.map" />
-    <Content Include="Scripts\bootstrap.bundle.min.js.map" />
-    <Content Include="Scripts\bootstrap.bundle.js.map" />
     <Content Include="Scripts\jquery-3.7.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.7.1.min.map" />
     <None Include="Web.config.sample" />
@@ -614,7 +637,17 @@
     <EmbeddedResource Include="Migrations\202508200932258_PurchaseUpdate.resx">
       <DependentUpon>202508200932258_PurchaseUpdate.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202508231020052_BonusUpdate.resx">
+      <DependentUpon>202508231020052_BonusUpdate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202508231135102_DiscountAmnt.resx">
+      <DependentUpon>202508231135102_DiscountAmnt.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202508261028328_DataTables.resx">
+      <DependentUpon>202508261028328_DataTables.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -644,12 +677,12 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.4.1.0\build\net472\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.4.1.0\build\net472\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.targets'))" />
     <Error Condition="!Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.5.1\build\EntityFramework.props'))" />
     <Error Condition="!Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.5.1\build\EntityFramework.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.4.1.0\build\net472\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.4.1.0\build\net472\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.targets'))" />
   </Target>
-  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.4.1.0\build\net472\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.targets" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.4.1.0\build\net472\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.targets')" />
   <Import Project="..\packages\EntityFramework.6.5.1\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.targets')" />
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.4.1.0\build\net472\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.targets" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.4.1.0\build\net472\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
