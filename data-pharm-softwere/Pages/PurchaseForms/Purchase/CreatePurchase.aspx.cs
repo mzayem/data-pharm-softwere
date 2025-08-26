@@ -631,6 +631,58 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
                 _context.Purchases.Add(purchase);
                 _context.SaveChanges();
 
+                var vendor = _context.Accounts.FirstOrDefault(a => a.AccountId == purchase.VendorId);
+                var stockInHandAccount = _context.Settings
+                    .Select(s => s.StockInHandAccountNo)
+                    .FirstOrDefault();
+
+                int stockInHandAccountId;
+                if (!int.TryParse(stockInHandAccount, out stockInHandAccountId))
+                {
+                    lblMessage.Text = "Invalid Stock In Hand account number in settings.";
+                    lblMessage.CssClass = "alert alert-danger mt-3";
+                    return;
+                }
+
+                var stockInHand = _context.Accounts.FirstOrDefault(a => a.AccountId == stockInHandAccountId);
+
+                if (vendor != null)
+                {
+                    var vendorEntry = new Models.Data
+                    {
+                        Vr = purchase.PurchaseId,
+                        VrDate = DateTime.Now,
+                        AccountId = vendor.AccountId,
+                        AccountTitle = vendor.AccountName,
+                        Dr = 0,
+                        Cr = purchase.NetAmount,
+                        Type = vendor.AccountType,
+                        Status = "unconfirmed",
+                        Creator = "system",
+                        Vtype = "PIRS",
+                        Remarks = $"PIR {purchase.PurchaseId}, {purchase.PurchaseDate:yyyy-MM-dd}, {purchase.PoNumber}, {purchase.Reference}"
+                    };
+
+                    var stockEntry = new Models.Data
+                    {
+                        Vr = purchase.PurchaseId,
+                        VrDate = DateTime.Now,
+                        AccountId = stockInHand.AccountId,
+                        AccountTitle = stockInHand.AccountName,
+                        Dr = purchase.NetAmount,
+                        Cr = 0,
+                        Type = stockInHand.AccountType,
+                        Status = "unconfirmed",
+                        Creator = "system",
+                        Vtype = "PIRS",
+                        Remarks = $"PIR {purchase.PurchaseId}, {purchase.PurchaseDate:yyyy-MM-dd}, {purchase.PoNumber}, {purchase.Reference}"
+                    };
+
+                    _context.Data.Add(vendorEntry);
+                    _context.Data.Add(stockEntry);
+                    _context.SaveChanges();
+                }
+
                 lblMessage.Text = "Purchase saved successfully.";
                 lblMessage.CssClass = "alert alert-success mt-3";
                 ClearUI();
