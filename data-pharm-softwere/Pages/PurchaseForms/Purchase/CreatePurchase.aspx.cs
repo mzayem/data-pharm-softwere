@@ -8,7 +8,6 @@ using data_pharm_softwere.Models;
 using System.Linq;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using static data_pharm_softwere.Pages.PurchaseForms.Purchase.CreatePurchase;
 
 namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
 {
@@ -374,6 +373,8 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
             public decimal DiscountPercent { get; set; }
             public decimal GSTPercent { get; set; }
             public string GstType { get; set; }
+            public int BonusQty { get; set; }
+            public bool IsManualBonus { get; set; }
             public decimal GrossAmount => CartonQty * CartonPrice;
             public decimal DiscountAmount => Math.Round(GrossAmount * (DiscountPercent / 100m), 2);
             public decimal TaxBase => GstType == "Net" ? (GrossAmount - DiscountAmount) : GrossAmount;
@@ -420,7 +421,8 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
                 CartonPrice = batchStock.DP,
                 DiscountPercent = batchStock.Product?.PurchaseDiscount ?? 0,
                 GSTPercent = batchStock.Product?.ReqGST ?? 0,
-                GstType = ddlGstType.SelectedValue
+                GstType = ddlGstType.SelectedValue,
+                BonusQty = CalculateBonusQty(batchStock.ProductID, parsedQty)
             };
 
             list.Add(item);
@@ -492,12 +494,71 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
             if (item != null)
             {
                 item.CartonQty = qty;
+                if (!item.IsManualBonus)
+                {
+                    if (int.TryParse(item.ProductId, out int prodId))
+                        item.BonusQty = CalculateBonusQty(prodId, qty);
+                    else
+                        item.BonusQty = 0;
+                }
             }
 
             Session["PurchaseDetails"] = list;
             BindGrid();
             KeepFocus(sender as Control);
             UpdateTotals(list);
+        }
+
+        protected void BonusQty_TextChanged(object sender, EventArgs e)
+        {
+            TextBox txt = (TextBox)sender;
+            GridViewRow row = (GridViewRow)txt.NamingContainer;
+
+            int id = Convert.ToInt32(gvPurchaseDetails.DataKeys[row.RowIndex].Value);
+            int bonusQty = int.TryParse(txt.Text, out int parsed) ? parsed : 0;
+
+            var list = GetPurchaseList();
+            var item = list.FirstOrDefault(x => x.BatchStockID == id);
+            if (item != null)
+            {
+                item.BonusQty = bonusQty;
+                item.IsManualBonus = true;
+            }
+
+            Session["PurchaseDetails"] = list;
+            BindGrid();
+            KeepFocus(sender as Control);
+        }
+
+        private int CalculateBonusQty(int productId, int totalQty)
+        {
+            if (totalQty <= 0) return 0;
+
+            // load active slabs for the product, largest MinQty first
+            var slabs = _context.ProductBonuses
+                .Where(b => b.ProductID == productId && b.IsActive)
+                .OrderByDescending(b => b.MinQty)
+                .Select(b => new { b.MinQty, b.BonusItems })
+                .ToList();
+
+            if (!slabs.Any()) return 0;
+
+            int remaining = totalQty;
+            int totalBonus = 0;
+
+            foreach (var slab in slabs)
+            {
+                if (remaining < slab.MinQty) continue;
+
+                int count = remaining / slab.MinQty;
+                totalBonus += count * slab.BonusItems;
+
+                remaining -= count * slab.MinQty;
+
+                if (remaining == 0) break;
+            }
+
+            return totalBonus;
         }
 
         protected void gvPurchaseDetails_RowDeleting(object sender, GridViewDeleteEventArgs e)
@@ -623,6 +684,7 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
                     if (batch != null)
                     {
                         batch.InTransitQty += item.CartonQty;
+                        batch.BonusQty += item.BonusQty;
                         batch.UpdatedAt = DateTime.Now;
                         batch.UpdatedBy = "system";
                     }
@@ -659,7 +721,7 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
                         Type = vendor.AccountType,
                         Status = "unconfirmed",
                         Creator = "system",
-                        Vtype = "PIRS",
+                        Vtype = "PIR",
                         Remarks = $"PIR {purchase.PurchaseId}, {purchase.PurchaseDate:yyyy-MM-dd}, {purchase.PoNumber}, {purchase.Reference}"
                     };
 
@@ -675,7 +737,7 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
                         Status = "unconfirmed",
                         Creator = "system",
                         Vtype = "PIRS",
-                        Remarks = $"PIR {purchase.PurchaseId}, {purchase.PurchaseDate:yyyy-MM-dd}, {purchase.PoNumber}, {purchase.Reference}"
+                        Remarks = $"PIRS {purchase.PurchaseId}, {purchase.PurchaseDate:yyyy-MM-dd}, {purchase.PoNumber}, {purchase.Reference}"
                     };
 
                     _context.Data.Add(vendorEntry);

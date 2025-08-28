@@ -206,10 +206,24 @@
                                 <asp:BoundField HeaderText="Rate" DataField="CartonPrice" DataFormatString="{0:N2}" />
                                 <asp:BoundField HeaderText="Dist%" DataField="DiscountPercent" />
                                 <asp:BoundField HeaderText="GST%" DataField="GSTPercent" />
+                                 <asp:TemplateField HeaderText="Bonus Qty">
+                                     <ItemTemplate>
+                                         <asp:TextBox ID="txtBonusQty" runat="server"
+                                             CssClass="form-control form-control-sm qty-box"
+                                             style="width:70px;"
+                                             Text='<%# Bind("BonusQty") %>'
+                                             AutoPostBack="true"
+                                             TextMode="Number"
+                                             OnTextChanged="BonusQty_TextChanged" 
+                                             />
+                                     </ItemTemplate>
+                                     <ItemStyle Width="90px" />
+                                 </asp:TemplateField>
                                 <asp:BoundField HeaderText="Gross Amount" DataField="GrossAmount" DataFormatString="{0:N2}" />
                                 <asp:BoundField HeaderText="Net Amount" DataField="NetAmount" DataFormatString="{0:N2}" />
                                 <asp:BoundField HeaderText="Dist Amnt" DataField="DiscountAmount" DataFormatString="{0:N2}" />
                                 <asp:BoundField HeaderText="GST Amnt" DataField="GSTAmount" DataFormatString="{0:N2}" />
+
                                    <asp:CommandField ShowDeleteButton="True" />
                             </Columns>
                         </asp:GridView>
