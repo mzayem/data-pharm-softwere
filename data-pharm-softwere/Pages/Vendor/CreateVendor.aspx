@@ -55,6 +55,21 @@
                             ValidationGroup="VendorForm" />
                     </div>
 
+                    <!-- Contact -->
+                    <div class="col-md-6">
+                        <label for="txtContact" class="form-label fw-semibold">Contact</label>
+                        <asp:TextBox ID="txtContact" runat="server" CssClass="form-control rounded-pill" />
+                        <asp:RegularExpressionValidator 
+                            ID="revContact" 
+                            runat="server"
+                            ControlToValidate="txtContact"
+                            ValidationExpression="^(\+?\d{1,4}[\s-]?)?(\(?\d{3,4}\)?[\s-]?)?\d{3,4}[\s-]?\d{3,4}$"
+                            ErrorMessage="Invalid phone number format"
+                            CssClass="text-danger"
+                            Display="Dynamic"
+                            ValidationGroup="VendorForm" />
+                    </div>
+
                     <!-- Address -->
                     <div class="col-md-6">
                         <label for="txtAddress" class="form-label fw-semibold">Address</label>
@@ -91,6 +106,18 @@
                             ValidationGroup="VendorForm" />
                     </div>
 
+                    <!-- Company Code -->
+                    <div class="col-md-6">
+                        <label for="txtCompanyCode" class="form-label fw-semibold">Company Code</label>
+                        <asp:TextBox ID="txtCompanyCode" runat="server" CssClass="form-control rounded-pill" />
+                        <asp:RequiredFieldValidator ID="rfvCompanyCode" runat="server"
+                            ControlToValidate="txtCompanyCode"
+                            ErrorMessage="Company Code is required"
+                            CssClass="text-danger"
+                            Display="Dynamic"
+                            ValidationGroup="VendorForm" />
+                    </div>
+
                     <!-- Licence No -->
                     <div class="col-md-6">
                         <label for="txtLicenceNo" class="form-label fw-semibold">Licence No</label>
@@ -109,23 +136,10 @@
                             ValidationGroup="VendorForm" />
                     </div>
 
-                    <!-- Contact -->
-                    <div class="col-md-6">
-                        <label for="txtContact" class="form-label fw-semibold">Contact</label>
-                        <asp:TextBox ID="txtContact" runat="server" CssClass="form-control rounded-pill" />
-                        <asp:RegularExpressionValidator 
-                            ID="revContact" 
-                            runat="server"
-                            ControlToValidate="txtContact"
-                            ValidationExpression="^(\+?\d{1,4}[\s-]?)?(\(?\d{3,4}\)?[\s-]?)?\d{3,4}[\s-]?\d{3,4}$"
-                            ErrorMessage="Invalid phone number format"
-                            CssClass="text-danger"
-                            Display="Dynamic"
-                            ValidationGroup="VendorForm" />
-                    </div>
+
 
                     <!-- GST No -->
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label for="txtGstNo" class="form-label fw-semibold">GST No</label>
                         <asp:TextBox ID="txtGstNo" runat="server" CssClass="form-control rounded-pill" />
                         <asp:RequiredFieldValidator ID="rfvGstNo" runat="server"
@@ -137,7 +151,7 @@
                     </div>
 
                     <!-- NTN No -->
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label for="txtNtnNo" class="form-label fw-semibold">NTN No</label>
                         <asp:TextBox ID="txtNtnNo" runat="server" CssClass="form-control rounded-pill" />
                         <asp:RequiredFieldValidator ID="rfvNtnNo" runat="server"
@@ -148,17 +162,26 @@
                             ValidationGroup="VendorForm" />
                     </div>
 
-                    <!-- Company Code -->
-                    <div class="col-md-6">
-                        <label for="txtCompanyCode" class="form-label fw-semibold">Company Code</label>
-                        <asp:TextBox ID="txtCompanyCode" runat="server" CssClass="form-control rounded-pill" />
-                        <asp:RequiredFieldValidator ID="rfvCompanyCode" runat="server"
-                            ControlToValidate="txtCompanyCode"
-                            ErrorMessage="Company Code is required"
-                            CssClass="text-danger"
-                            Display="Dynamic"
-                            ValidationGroup="VendorForm" />
-                    </div>
+                    <!-- Adv Tax Rate -->
+                     <div class="col-md-4">
+                         <label class="form-label fw-semibold">Adv Tax Rate(%)</label>
+                         <asp:TextBox ID="txtAdvTax" runat="server"
+                             CssClass="form-control rounded-pill"
+                             TextMode="Number" />
+                         <asp:RequiredFieldValidator ID="rfvAdvTax" runat="server"
+                             ControlToValidate="txtAdvTax"
+                             ErrorMessage="AdvTax is required"
+                             CssClass="text-danger"
+                             Display="Dynamic"
+                             ValidationGroup="VendorForm" />
+                         <asp:RegularExpressionValidator ID="revAdvTax" runat="server"
+                             ControlToValidate="txtAdvTax"
+                             ValidationExpression="^(100(\.0{1,2})?|[0-9]{1,2}(\.[0-9]{1,2})?)$"
+                             ErrorMessage="Enter valid AdvTax (0–100%)"
+                             CssClass="text-danger"
+                             Display="Dynamic"
+                             ValidationGroup="VendorForm" />
+                     </div>
 
                     <!-- SRA Code -->
                     <div class="col-md-6">

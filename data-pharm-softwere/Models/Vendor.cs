@@ -48,6 +48,10 @@ namespace data_pharm_softwere.Models
         public string NtnNo { get; set; }
 
         [Required]
+        [Range(0, 100)]
+        public decimal AdvTaxRate { get; set; } = 0;
+
+        [Required]
         [StringLength(20)]
         public string CompanyCode { get; set; }
 

@@ -129,7 +129,7 @@ namespace data_pharm_softwere.Pages.Vendor
                 pdfDoc.Add(new Paragraph(" "));
 
                 // Table with all columns
-                PdfPTable table = new PdfPTable(15)
+                PdfPTable table = new PdfPTable(16)
                 {
                     WidthPercentage = 100,
                     HeaderRows = 1
@@ -137,7 +137,7 @@ namespace data_pharm_softwere.Pages.Vendor
 
                 string[] headers = {
             "ID", "Name", "Email", "Contact", "Address", "Town", "City", "License No",
-            "Expiry", "SRA Code", "GST No", "NTN No", "Company Code", "Remarks", "Created"
+            "Expiry", "SRA Code", "GST No", "NTN No", "AdvTax", "Company Code", "Remarks", "Created"
                 };
 
                 foreach (string header in headers)
@@ -150,7 +150,7 @@ namespace data_pharm_softwere.Pages.Vendor
                 foreach (var v in vendors)
                 {
                     table.AddCell(new Phrase(v.AccountId.ToString(), bodyFont));
-                    table.AddCell(new Phrase(v.Account.AccountName ,bodyFont));
+                    table.AddCell(new Phrase(v.Account.AccountName, bodyFont));
                     table.AddCell(new Phrase(v.Email ?? "-", bodyFont));
                     table.AddCell(new Phrase(v.Contact ?? "-", bodyFont));
                     table.AddCell(new Phrase(v.Address, bodyFont));
@@ -161,6 +161,7 @@ namespace data_pharm_softwere.Pages.Vendor
                     table.AddCell(new Phrase(v.SRACode, bodyFont));
                     table.AddCell(new Phrase(v.GstNo, bodyFont));
                     table.AddCell(new Phrase(v.NtnNo, bodyFont));
+                    table.AddCell(new Phrase(v.AdvTaxRate.ToString("0.#") + "%", bodyFont));
                     table.AddCell(new Phrase(v.CompanyCode, bodyFont));
                     table.AddCell(new Phrase(v.Remarks ?? "-", bodyFont));
                     table.AddCell(new Phrase(v.CreatedAt.ToString("yyyy-MM-dd"), bodyFont));
@@ -200,7 +201,7 @@ namespace data_pharm_softwere.Pages.Vendor
             var sb = new System.Text.StringBuilder();
 
             // Header
-            sb.AppendLine("ID,Name,Email,Contact,Address,Town,City,LicenceNo,Expiry,SRACode,GstNo,NtnNo,CompanyCode,Remarks,Created");
+            sb.AppendLine("ID,Name,Email,Contact,Address,Town,City,LicenceNo,Expiry,SRACode,GstNo,NtnNo,AdvTax,CompanyCode,Remarks,Created");
 
             // Rows
             foreach (var v in vendors)
@@ -218,6 +219,7 @@ namespace data_pharm_softwere.Pages.Vendor
                     EscapeCsv(v.SRACode),
                     EscapeCsv(v.GstNo),
                     EscapeCsv(v.NtnNo),
+                    v.AdvTaxRate.ToString("0.#") + "%",
                     EscapeCsv(v.CompanyCode),
                     EscapeCsv(v.Remarks ?? "-"),
                     v.CreatedAt.ToString("yyyy-MM-dd")
@@ -286,8 +288,8 @@ namespace data_pharm_softwere.Pages.Vendor
             Response.ContentType = "text/csv";
             Response.AddHeader("Content-Disposition", "attachment;filename=vendor_sample.csv");
 
-            Response.Write("ID,Email,Contact,Address,Town,City,LicenceNo,ExpiryDate,SRACode,GstNo,NtnNo,CompanyCode,MaxDiscountAllowed,Remarks\r\n");
-            Response.Write("10001,abc@email.com,03001234567,Main Street,Town1,City1,LIC123,2025-12-31,SRA001,GST123,NTN789,CODE123,15,Trusted vendor\r\n");
+            Response.Write("ID,Email,Contact,Address,Town,City,LicenceNo,ExpiryDate,SRACode,GstNo,NtnNo,AdvTax,CompanyCode,MaxDiscountAllowed,Remarks\r\n");
+            Response.Write("10001,abc@email.com,03001234567,Main Street,Town1,City1,LIC123,2025-12-31,SRA001,GST123,NTN789,0.5,CODE123,15,Trusted vendor\r\n");
 
             Response.End();
         }
@@ -327,6 +329,7 @@ namespace data_pharm_softwere.Pages.Vendor
                     int colSraCode = headers.IndexOf("SRACode");
                     int colGstNo = headers.IndexOf("GstNo");
                     int colNtnNo = headers.IndexOf("NtnNo");
+                    int colAdvTax = headers.IndexOf("AdvTax");
                     int colMaxDiscount = headers.IndexOf("MaxDiscountAllowed");
                     int colRemarks = headers.IndexOf("Remarks");
 
@@ -383,6 +386,7 @@ namespace data_pharm_softwere.Pages.Vendor
                                 if (colSraCode != -1) existingVendor.SRACode = SafeGet(fields, colSraCode);
                                 if (colGstNo != -1) existingVendor.GstNo = SafeGet(fields, colGstNo);
                                 if (colNtnNo != -1) existingVendor.NtnNo = SafeGet(fields, colNtnNo);
+                                if (colAdvTax != -1 && decimal.TryParse(SafeGet(fields, colAdvTax), out decimal Rate)) existingVendor.AdvTaxRate = Rate;
                                 if (colRemarks != -1) existingVendor.Remarks = SafeGet(fields, colRemarks);
 
                                 updateCount++;
@@ -404,6 +408,7 @@ namespace data_pharm_softwere.Pages.Vendor
                                     SRACode = SafeGet(fields, colSraCode),
                                     GstNo = SafeGet(fields, colGstNo),
                                     NtnNo = SafeGet(fields, colNtnNo),
+                                    AdvTaxRate = (colAdvTax != -1 && decimal.TryParse(SafeGet(fields, colAdvTax), out decimal Rate)) ? Rate : 0,
                                     Remarks = SafeGet(fields, colRemarks),
                                     CreatedAt = DateTime.Now
                                 };

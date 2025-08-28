@@ -34,6 +34,7 @@ namespace data_pharm_softwere.Components.Control
                                    "<li><b>SRACode</b> (required)</li>" +
                                    "<li><b>GstNo</b> (required)</li>" +
                                    "<li><b>NtnNo</b> (required)</li>" +
+                                   "<li><b>AdvTax</b> (0 - 100)</li>" +
                                    "<li><b>CompanyCode</b> (required)</li>" +
                                    "<li><b>MaxDiscountAllowed</b> (0 - 100)</li>" +
                                    "<li><b>Email</b></li>" +

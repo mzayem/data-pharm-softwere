@@ -243,10 +243,8 @@
                          <div class="col-md-1">
                             <label class="form-label fw-semibold">AdvTax%</label>
                             <asp:TextBox ID="txtAdvTaxRate" runat="server"
-                                AutoPostBack="true" 
-                                OnTextChanged="TotalValuesChanged"
-                                CssClass="form-control rounded-pill"
-                                TextMode="Number" />
+                                CssClass="form-control rounded-pill bg-light" ReadOnly="true"
+                              />
                         </div>
                         <div class="col-md-2">
                             <label class="form-label fw-semibold">Advance Tax</label>

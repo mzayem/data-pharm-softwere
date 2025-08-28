@@ -30,6 +30,10 @@ namespace data_pharm_softwere.Pages.Vendor
             {
                 lblMessage.Text = string.Empty;
             }
+            txtAdvTax.Attributes["step"] = "0.1";
+            txtAdvTax.Attributes["min"] = "0";
+            txtAdvTax.Attributes["max"] = "100";
+            txtAdvTax.Text = "0.5";
         }
 
         protected void btnFetchAccount_Click(object sender, EventArgs e)
@@ -123,6 +127,7 @@ namespace data_pharm_softwere.Pages.Vendor
                         SRACode = txtSRACode.Text.Trim(),
                         GstNo = txtGstNo.Text.Trim(),
                         NtnNo = txtNtnNo.Text.Trim(),
+                        AdvTaxRate = decimal.TryParse(txtAdvTax.Text, out var advTax) ? advTax : 0,
                         CompanyCode = txtCompanyCode.Text.Trim(),
                         Remarks = txtRemarks.Text.Trim(),
                         CreatedAt = DateTime.Now

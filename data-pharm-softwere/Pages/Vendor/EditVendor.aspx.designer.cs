@@ -78,6 +78,24 @@ namespace data_pharm_softwere.Pages.Vendor
         protected global::System.Web.UI.WebControls.TextBox txtEmail;
 
         /// <summary>
+        /// txtContact control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtContact;
+
+        /// <summary>
+        /// revContact control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RegularExpressionValidator revContact;
+
+        /// <summary>
         /// txtAddress control.
         /// </summary>
         /// <remarks>
@@ -105,6 +123,15 @@ namespace data_pharm_softwere.Pages.Vendor
         protected global::System.Web.UI.WebControls.TextBox txtCity;
 
         /// <summary>
+        /// txtCompanyCode control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtCompanyCode;
+
+        /// <summary>
         /// txtLicenceNo control.
         /// </summary>
         /// <remarks>
@@ -121,24 +148,6 @@ namespace data_pharm_softwere.Pages.Vendor
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtExpiryDate;
-
-        /// <summary>
-        /// txtContact control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtContact;
-
-        /// <summary>
-        /// revContact control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RegularExpressionValidator revContact;
 
         /// <summary>
         /// txtGstNo control.
@@ -159,13 +168,31 @@ namespace data_pharm_softwere.Pages.Vendor
         protected global::System.Web.UI.WebControls.TextBox txtNtnNo;
 
         /// <summary>
-        /// txtCompanyCode control.
+        /// txtAdvTax control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtCompanyCode;
+        protected global::System.Web.UI.WebControls.TextBox txtAdvTax;
+
+        /// <summary>
+        /// rfvAdvTax control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvAdvTax;
+
+        /// <summary>
+        /// revAdvTax control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RegularExpressionValidator revAdvTax;
 
         /// <summary>
         /// txtSraCode control.

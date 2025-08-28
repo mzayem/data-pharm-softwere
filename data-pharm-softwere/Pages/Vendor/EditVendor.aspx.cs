@@ -31,6 +31,9 @@ namespace data_pharm_softwere.Pages.Vendor
                 {
                     Response.Redirect("/vendor/create/");
                 }
+                txtAdvTax.Attributes["step"] = "0.1";
+                txtAdvTax.Attributes["min"] = "0";
+                txtAdvTax.Attributes["max"] = "100";
             }
         }
 
@@ -121,6 +124,7 @@ namespace data_pharm_softwere.Pages.Vendor
             txtSraCode.Text = vendor.SRACode;
             txtGstNo.Text = vendor.GstNo;
             txtNtnNo.Text = vendor.NtnNo;
+            txtAdvTax.Text = vendor.AdvTaxRate.ToString("0.#");
             txtCompanyCode.Text = vendor.CompanyCode;
             txtRemarks.Text = vendor.Remarks;
         }
@@ -160,6 +164,7 @@ namespace data_pharm_softwere.Pages.Vendor
             vendor.SRACode = txtSraCode.Text;
             vendor.GstNo = txtGstNo.Text;
             vendor.NtnNo = txtNtnNo.Text;
+            vendor.AdvTaxRate = decimal.TryParse(txtAdvTax.Text, out var advTax) ? advTax : 0;
             vendor.CompanyCode = txtCompanyCode.Text;
             vendor.Remarks = txtRemarks.Text;
 

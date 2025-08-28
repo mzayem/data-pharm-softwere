@@ -38,6 +38,19 @@
                     </div>
 
                     <div class="col-md-6">
+                        <label for="txtContact" class="form-label fw-semibold mt-3">Contact</label>
+                        <asp:TextBox ID="txtContact" runat="server" CssClass="form-control rounded-pill" />
+                        <asp:RegularExpressionValidator 
+                            ID="revContact" 
+                            runat="server"
+                            ControlToValidate="txtContact"
+                            ValidationExpression="^$|^(\+?\d{1,4}[\s-]?)?(\(?\d{3,4}\)?[\s-]?)?\d{3,4}[\s-]?\d{3,4}$"
+                            ErrorMessage="Invalid phone number format"
+                            CssClass="text-danger"
+                            Display="Dynamic" />
+                    </div>
+
+                    <div class="col-md-6">
                         <label for="txtAddress" class="form-label fw-semibold mt-3">Address</label>
                         <asp:TextBox ID="txtAddress" runat="server" CssClass="form-control rounded-pill" />
                         <asp:RequiredFieldValidator ControlToValidate="txtAddress" runat="server" ErrorMessage="Address is required" CssClass="text-danger" Display="Dynamic" />
@@ -56,6 +69,12 @@
                     </div>
 
                     <div class="col-md-6">
+                        <label for="txtCompanyCode" class="form-label fw-semibold mt-3">Company Code</label>
+                        <asp:TextBox ID="txtCompanyCode" runat="server" CssClass="form-control rounded-pill" />
+                        <asp:RequiredFieldValidator ControlToValidate="txtCompanyCode" runat="server" ErrorMessage="Company Code is required" CssClass="text-danger" Display="Dynamic" />
+                    </div>
+
+                    <div class="col-md-6">
                         <label for="txtLicenceNo" class="form-label fw-semibold mt-3">Licence No</label>
                         <asp:TextBox ID="txtLicenceNo" runat="server" CssClass="form-control rounded-pill" />
                     </div>
@@ -66,35 +85,39 @@
                         <asp:RequiredFieldValidator ControlToValidate="txtExpiryDate" runat="server" ErrorMessage="Expiry Date is required" CssClass="text-danger" Display="Dynamic" />
                     </div>
 
-                    <div class="col-md-6">
-                        <label for="txtContact" class="form-label fw-semibold mt-3">Contact</label>
-                        <asp:TextBox ID="txtContact" runat="server" CssClass="form-control rounded-pill" />
-                        <asp:RegularExpressionValidator 
-                            ID="revContact" 
-                            runat="server"
-                            ControlToValidate="txtContact"
-                            ValidationExpression="^$|^(\+?\d{1,4}[\s-]?)?(\(?\d{3,4}\)?[\s-]?)?\d{3,4}[\s-]?\d{3,4}$"
-                            ErrorMessage="Invalid phone number format"
-                            CssClass="text-danger"
-                            Display="Dynamic" />
-                    </div>
 
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label for="txtGstNo" class="form-label fw-semibold mt-3">GST No</label>
                         <asp:TextBox ID="txtGstNo" runat="server" CssClass="form-control rounded-pill" />
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label for="txtNtnNo" class="form-label fw-semibold mt-3">NTN No</label>
                         <asp:TextBox ID="txtNtnNo" runat="server" CssClass="form-control rounded-pill" />
                         <asp:RequiredFieldValidator ControlToValidate="txtNtnNo" runat="server" ErrorMessage="NTN No is required" CssClass="text-danger" Display="Dynamic" />
                     </div>
 
-                    <div class="col-md-6">
-                        <label for="txtCompanyCode" class="form-label fw-semibold mt-3">Company Code</label>
-                        <asp:TextBox ID="txtCompanyCode" runat="server" CssClass="form-control rounded-pill" />
-                        <asp:RequiredFieldValidator ControlToValidate="txtCompanyCode" runat="server" ErrorMessage="Company Code is required" CssClass="text-danger" Display="Dynamic" />
-                    </div>
+                    <!-- Adv Tax Rate -->
+                     <div class="col-md-4">
+                         <label class="form-label fw-semibold mt-3">Adv Tax Rate(%)</label>
+                         <asp:TextBox ID="txtAdvTax" runat="server"
+                             CssClass="form-control rounded-pill"
+                             TextMode="Number" />
+                         <asp:RequiredFieldValidator ID="rfvAdvTax" runat="server"
+                             ControlToValidate="txtAdvTax"
+                             ErrorMessage="AdvTax is required"
+                             CssClass="text-danger"
+                             Display="Dynamic"
+                             ValidationGroup="VendorForm" />
+                         <asp:RegularExpressionValidator ID="revAdvTax" runat="server"
+                             ControlToValidate="txtAdvTax"
+                             ValidationExpression="^(100(\.0{1,2})?|[0-9]{1,2}(\.[0-9]{1,2})?)$"
+                             ErrorMessage="Enter valid AdvTax (0–100%)"
+                             CssClass="text-danger"
+                             Display="Dynamic"
+                             ValidationGroup="VendorForm" />
+                     </div>
+
 
                      <div class="col-md-6">
                         <label for="txtSraCode" class="form-label fw-semibold">SRA Code</label>

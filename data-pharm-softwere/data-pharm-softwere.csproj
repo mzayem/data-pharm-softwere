@@ -256,6 +256,10 @@
     <Compile Include="Migrations\202508261028328_DataTables.Designer.cs">
       <DependentUpon>202508261028328_DataTables.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202508280706093_update-vendor.cs" />
+    <Compile Include="Migrations\202508280706093_update-vendor.Designer.cs">
+      <DependentUpon>202508280706093_update-vendor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\BatchStock.cs" />
@@ -645,6 +649,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202508261028328_DataTables.resx">
       <DependentUpon>202508261028328_DataTables.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202508280706093_update-vendor.resx">
+      <DependentUpon>202508280706093_update-vendor.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

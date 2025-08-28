@@ -26,20 +26,16 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
                 LoadAllAvailableBatches();
                 LoadProduct();
                 ClearUI();
+                txtAdvTaxRate.Text = "0.00";
             }
         }
 
         private void SetDefaultFooterValues()
         {
-            txtAdvTaxRate.Attributes["step"] = "0.1";
-            txtAdvTaxRate.Attributes["min"] = "0";
-            txtAdvTaxRate.Attributes["value"] = "0.5";
-
             // Footer default values
-            txtAdvTaxRate.Text = "0.5";
             txtAdditionalCharges.Text = "0.00";
-
             lblGross.Text = "0.00";
+            txtAdvTaxRate.Text = "0.00";
             lblDiscount.Text = "0.00";
             lblAdvTaxAmount.Text = "0.00";
             lblNetAmount.Text = "0.00";
@@ -71,11 +67,14 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
             if (vendor != null)
             {
                 ddlVendor.SelectedValue = vendor.AccountId.ToString();
+                txtAdvTaxRate.Text = vendor.AdvTaxRate.ToString("0.#");
+                TotalValuesChanged(sender, e);
                 lblMessage.Text = "";
             }
             else
             {
                 ddlVendor.SelectedIndex = 0;
+                txtAdvTaxRate.Text = "0.00";
                 lblMessage.Text = "Vendor code not found.";
                 lblMessage.CssClass = "alert alert-warning";
             }
@@ -85,11 +84,17 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
         {
             if (!string.IsNullOrEmpty(ddlVendor.SelectedValue))
             {
+                var vendor = _context.Vendors.Include(v => v.Account)
+                            .FirstOrDefault(v => v.AccountId.ToString() == ddlVendor.SelectedValue);
+
                 txtVendorCode.Text = ddlVendor.SelectedValue;
+                txtAdvTaxRate.Text = vendor.AdvTaxRate.ToString("0.#");
+                TotalValuesChanged(sender, e);
             }
             else
             {
                 txtVendorCode.Text = "";
+                txtAdvTaxRate.Text = "0.00";
             }
         }
 
@@ -98,19 +103,23 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
             try
             {
                 var vendors = _context.Vendors
-               .Include(v => v.Account)
-               .OrderBy(v => v.Account.AccountName)
-               .Select(v => new
-               {
-                   v.AccountId,
-                   AccountName = v.Account.AccountName
-               })
-               .ToList();
+                   .Include(v => v.Account)
+                   .OrderBy(v => v.Account.AccountName)
+                   .Select(v => new
+                   {
+                       v.AccountId,
+                       AccountName = v.Account.AccountName,
+                       v.AdvTaxRate
+                   })
+                   .ToList();
 
+                ddlVendor.Items.Clear();
                 ddlVendor.DataSource = vendors;
                 ddlVendor.DataTextField = "AccountName";
                 ddlVendor.DataValueField = "AccountId";
                 ddlVendor.DataBind();
+                txtAdvTaxRate.Text = "0";
+
                 ddlVendor.Items.Insert(0, new ListItem("-- Select Vendor --", ""));
             }
             catch (Exception ex)
@@ -159,8 +168,9 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
                                 .ToList() ?? new List<string>();
 
             var allBatches = _context.BatchesStock
-                .Where(b => !addedBatchNos.Contains(b.BatchNo.Trim().ToLower()))
-                .OrderByDescending(b => b.BatchNo)
+                .Where(b => !addedBatchNos.Contains(b.BatchNo.Trim().ToLower())
+                            && b.ExpiryDate >= DateTime.Today)
+                .OrderBy(b => b.ExpiryDate)
                 .Select(b => new { b.BatchNo })
                 .ToList();
 
@@ -182,7 +192,6 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
             if (!string.IsNullOrEmpty(ddlProduct.SelectedValue))
             {
                 txtProductId.Text = ddlProduct.SelectedValue;
-                txtProductId_TextChanged(sender, e);
             }
             else
             {
@@ -190,6 +199,7 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
                 ddlBatch.Items.Clear();
                 ddlBatch.Items.Insert(0, new ListItem("-- Select Batch --", ""));
             }
+            txtProductId_TextChanged(sender, e);
         }
 
         protected void txtProductId_TextChanged(object sender, EventArgs e)
@@ -205,10 +215,11 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
             {
                 // Load ALL batches not in purchase
                 var allBatches = _context.BatchesStock
-                    .Where(b => !addedBatchNos.Contains(b.BatchNo.Trim().ToLower()))
-                    .OrderByDescending(b => b.BatchNo)
-                    .Select(b => new { b.BatchNo })
-                    .ToList();
+                .Where(b => !addedBatchNos.Contains(b.BatchNo.Trim().ToLower())
+                            && b.ExpiryDate >= DateTime.Today)
+                .OrderBy(b => b.ExpiryDate)
+                .Select(b => new { b.BatchNo })
+                .ToList();
 
                 ddlBatch.DataSource = allBatches;
                 ddlBatch.DataTextField = "BatchNo";
@@ -285,7 +296,6 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
 
             int productId;
 
-            // Try to find the batch regardless of hiddenProductId
             var batch = _context.BatchesStock
                 .FirstOrDefault(b => b.BatchNo.Trim().Equals(batchNo, StringComparison.OrdinalIgnoreCase));
 
@@ -328,16 +338,23 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
             LoadBatches(productId, addedBatchNos, batchNo);
         }
 
-        private void LoadBatches(long productId, List<string> excludeBatchNos, string selectedBatch = null)
+        private void LoadBatches(long? productId, List<string> excludeBatchNos, string selectedBatch = null)
         {
             ddlBatch.Items.Clear();
 
-            var batches = _context.BatchesStock
-                .Where(b => b.ProductID == productId &&
-                            !excludeBatchNos.Contains(b.BatchNo.Trim().ToLower()))
-                .OrderByDescending(b => b.BatchNo)
-                .Select(b => new { b.BatchNo })
-                .ToList();
+            var query = _context.BatchesStock
+         .Where(b => !excludeBatchNos.Contains(b.BatchNo.Trim().ToLower())
+                     && b.ExpiryDate >= DateTime.Today);
+
+            if (productId.HasValue)
+            {
+                query = query.Where(b => b.ProductID == productId.Value);
+            }
+
+            var batches = query
+            .OrderBy(b => b.ExpiryDate)
+            .Select(b => new { b.BatchNo, b.ExpiryDate })
+            .ToList();
 
             if (batches.Any())
             {
