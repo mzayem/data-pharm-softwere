@@ -11,7 +11,7 @@
                 "dbo.PurchaseDetail",
                 c => new
                 {
-                    PurchaseDetailId = c.Int(nullable: false, identity: true),
+                    PurchaseDetailId = c.Int(nullable: false, identity: false),
                     NetAmount = c.Decimal(nullable: false, precision: 18, scale: 2),
                     PurchaseId = c.Int(nullable: false),
                     BatchStockID = c.Int(nullable: false),

@@ -260,6 +260,10 @@
     <Compile Include="Migrations\202508280706093_update-vendor.Designer.cs">
       <DependentUpon>202508280706093_update-vendor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202508291107121_VoucherHeads.cs" />
+    <Compile Include="Migrations\202508291107121_VoucherHeads.Designer.cs">
+      <DependentUpon>202508291107121_VoucherHeads.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\BatchStock.cs" />
@@ -652,6 +656,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202508280706093_update-vendor.resx">
       <DependentUpon>202508280706093_update-vendor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202508291107121_VoucherHeads.resx">
+      <DependentUpon>202508291107121_VoucherHeads.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

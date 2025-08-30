@@ -11,10 +11,10 @@ namespace data_pharm_softwere.Models
         Gross
     }
 
-    public enum PurchaseType
+    public enum VoucherType
     {
-        Purchase,
-        Return
+        PIR,
+        POR
     }
 
     [Table("Purchases")]
@@ -23,6 +23,10 @@ namespace data_pharm_softwere.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int PurchaseId { get; set; }
+
+        [Required]
+        [StringLength(20)]
+        public string VoucherNumber { get; set; }
 
         public bool Posted { get; set; }
 
@@ -45,7 +49,7 @@ namespace data_pharm_softwere.Models
         public string Reference { get; set; }
 
         [Required]
-        public PurchaseType PurchaseType { get; set; }
+        public VoucherType VoucherType { get; set; }
 
         [Required]
         [Range(0, 100)]

@@ -19,7 +19,7 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
         {
             if (!IsPostBack)
             {
-                LoadInvoiceNumber();
+                LoadVoucherNumber();
                 Session["PurchaseDetails"] = new List<PurchaseLineItem>();
                 LoadVendors();
                 LoadTaxType();
@@ -35,7 +35,6 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
             // Footer default values
             txtAdditionalCharges.Text = "0.00";
             lblGross.Text = "0.00";
-            txtAdvTaxRate.Text = "0.00";
             lblDiscount.Text = "0.00";
             lblAdvTaxAmount.Text = "0.00";
             lblNetAmount.Text = "0.00";
@@ -43,18 +42,40 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
             ddlGstType.SelectedValue = "Net";
         }
 
-        private void LoadInvoiceNumber()
+        private void LoadVoucherNumber()
         {
             try
             {
-                var lastPurchase = _context.Purchases.OrderByDescending(p => p.PurchaseId).FirstOrDefault();
+                var settings = _context.Settings.FirstOrDefault();
+                if (settings == null)
+                {
+                    lblMessage.Text = "Settings not configured.";
+                    lblMessage.CssClass = "alert alert-warning mt-3";
+                    return;
+                }
 
-                int nextInvoice = (lastPurchase?.PurchaseId ?? 1) + 1;
-                txtInvoiceNo.Text = nextInvoice.ToString();
+                string prefix = settings.PurchaseHead;
+
+                var lastVoucher = _context.Purchases
+                    .Where(p => p.VoucherType == VoucherType.PIR && p.VoucherNumber.Contains("-"))
+                    .OrderByDescending(p => p.PurchaseId)
+                    .Select(p => p.VoucherNumber)
+                    .FirstOrDefault();
+
+                int lastNumber = 0;
+
+                if (!string.IsNullOrEmpty(lastVoucher))
+                {
+                    var numPart = lastVoucher.Split('-').Last();
+                    int.TryParse(numPart, out lastNumber);
+                }
+
+                string nextVoucher = prefix + "-" + (lastNumber + 1).ToString("D3");
+                txtVoucherNo.Text = nextVoucher;
             }
             catch (Exception ex)
             {
-                lblMessage.Text = "Error fetching Product ID: " + ex.Message;
+                lblMessage.Text = "Error fetching Voucher No: " + ex.Message;
                 lblMessage.CssClass = "alert alert-danger mt-3";
             }
         }
@@ -668,12 +689,13 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
 
                 var purchase = new Models.Purchase
                 {
+                    VoucherNumber = txtVoucherNo.Text,
                     PurchaseDate = DateTime.TryParse(txtPurchaseDate.Text, out var d) ? d : DateTime.Now,
                     PoNumber = txtPoNumber.Text,
                     Reference = txtReference.Text,
                     AdvTaxOn = (TaxBaseType)Enum.Parse(typeof(TaxBaseType), ddlAdvTaxType.SelectedValue),
                     GSTType = (TaxBaseType)Enum.Parse(typeof(TaxBaseType), ddlGstType.SelectedValue),
-                    PurchaseType = PurchaseType.Purchase,
+                    VoucherType = VoucherType.PIR,
                     AdvTaxRate = ParseDecimal(txtAdvTaxRate.Text),
                     AdvTaxAmount = ParseDecimal(lblAdvTaxAmount.Text),
                     AdditionalCharges = ParseDecimal(txtAdditionalCharges.Text),
@@ -725,11 +747,19 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
 
                 var stockInHand = _context.Accounts.FirstOrDefault(a => a.AccountId == stockInHandAccountId);
 
+                string[] parts = purchase.VoucherNumber.Split('-');
+                int voucherNo = 0;
+
+                if (parts.Length > 1)
+                {
+                    int.TryParse(parts[parts.Length - 1], out voucherNo);
+                }
+
                 if (vendor != null)
                 {
                     var vendorEntry = new Models.Data
                     {
-                        Vr = purchase.PurchaseId,
+                        Vr = voucherNo,
                         VrDate = DateTime.Now,
                         AccountId = vendor.AccountId,
                         AccountTitle = vendor.AccountName,
@@ -739,12 +769,12 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
                         Status = "unconfirmed",
                         Creator = "system",
                         Vtype = "PIR",
-                        Remarks = $"PIR {purchase.PurchaseId}, {purchase.PurchaseDate:yyyy-MM-dd}, {purchase.PoNumber}, {purchase.Reference}"
+                        Remarks = $"PIR {purchase.VoucherNumber}, {purchase.PurchaseDate:yyyy-MM-dd}, {purchase.PoNumber}, {purchase.Reference}"
                     };
 
                     var stockEntry = new Models.Data
                     {
-                        Vr = purchase.PurchaseId,
+                        Vr = voucherNo,
                         VrDate = DateTime.Now,
                         AccountId = stockInHand.AccountId,
                         AccountTitle = stockInHand.AccountName,
@@ -754,7 +784,7 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
                         Status = "unconfirmed",
                         Creator = "system",
                         Vtype = "PIRS",
-                        Remarks = $"PIRS {purchase.PurchaseId}, {purchase.PurchaseDate:yyyy-MM-dd}, {purchase.PoNumber}, {purchase.Reference}"
+                        Remarks = $"PIRS {purchase.VoucherNumber}, {purchase.PurchaseDate:yyyy-MM-dd}, {purchase.PoNumber}, {purchase.Reference}"
                     };
 
                     _context.Data.Add(vendorEntry);
@@ -764,6 +794,7 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Purchase
 
                 lblMessage.Text = "Purchase saved successfully.";
                 lblMessage.CssClass = "alert alert-success mt-3";
+                LoadVoucherNumber();
                 ClearUI();
             }
             catch (DbEntityValidationException dbEx)

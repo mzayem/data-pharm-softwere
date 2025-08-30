@@ -25,6 +25,25 @@ namespace data_pharm_softwere.Models
         [StringLength(50)]
         public string StockInHandAccountNo { get; set; }
 
+        // ✅ Transaction Heads
+        [Required, StringLength(50)]
+        public string PurchaseHead { get; set; } = "P";
+
+        [Required, StringLength(50)]
+        public string PurchaseReturnHead { get; set; } = "PR";
+
+        [Required, StringLength(50)]
+        public string TransferInHead { get; set; } = "TI";
+
+        [Required, StringLength(50)]
+        public string TransferOutHead { get; set; } = "TO";
+
+        [Required, StringLength(50)]
+        public string SalesHead { get; set; } = "S";
+
+        [Required, StringLength(50)]
+        public string SalesReturnHead { get; set; } = "SR";
+
         [Required]
         public DateTime CreatedAt { get; set; } = DateTime.Now;
     }

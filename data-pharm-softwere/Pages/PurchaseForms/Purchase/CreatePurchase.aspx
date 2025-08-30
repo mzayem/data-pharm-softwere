@@ -28,8 +28,8 @@
                         <asp:Label ID="lblMessage" runat="server" EnableViewState="false" />
                         
                         <div class="col-md-3">
-                            <label class="form-label fw-semibold">Invoice #</label>
-                            <asp:TextBox ID="txtInvoiceNo" runat="server" CssClass="form-control rounded-pill bg-light text-secondary" ReadOnly="true" />
+                            <label class="form-label fw-semibold">Voucher #</label>
+                            <asp:TextBox ID="txtVoucherNo" runat="server" CssClass="form-control rounded-pill bg-light text-secondary" ReadOnly="true" />
                         </div>
                         <div class="col-md-3">
                             <label class="form-label fw-semibold">Purchase Date</label>
@@ -281,7 +281,7 @@
             }).length > 0;
 
             if (!exists && typedBatch !== "") {
-                $("#newBatchModal").modal("show"); // Bootstrap modal
+                $("#newBatchModal").modal("show");
             }
         }
 
