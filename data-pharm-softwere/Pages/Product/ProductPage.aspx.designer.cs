@@ -15,15 +15,6 @@ namespace data_pharm_softwere.Pages.Product
     {
 
         /// <summary>
-        /// ScriptManager1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.ScriptManager ScriptManager1;
-
-        /// <summary>
         /// ImportInfoControl control.
         /// </summary>
         /// <remarks>
@@ -33,13 +24,13 @@ namespace data_pharm_softwere.Pages.Product
         protected global::data_pharm_softwere.Components.Control.ImportInfo ImportInfoControl;
 
         /// <summary>
-        /// lblImportStatus control.
+        /// lblStatus control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblImportStatus;
+        protected global::System.Web.UI.WebControls.Label lblStatus;
 
         /// <summary>
         /// btnCreateProduct control.

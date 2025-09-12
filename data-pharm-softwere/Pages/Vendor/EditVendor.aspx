@@ -11,27 +11,32 @@
         <asp:Panel ID="pnlForm" runat="server" CssClass="card shadow-sm p-4 rounded-4">
             <div class="row g-3">
 
-                <div class="col-md-6">
-                    <label for="txtID" class="form-label fw-semibold">Account ID</label>
-                   <div class="d-flex gap-2 align-items-end">
-                        <asp:TextBox ID="txtID" runat="server" CssClass="form-control rounded-pill" />
-                        <asp:Button ID="btnFetchAccount" runat="server" Text="Get Account" OnClick="btnFetchAccount_Click" CssClass="btn btn-outline-primary" />
-                        <asp:RequiredFieldValidator ID="revID" runat="server"
-                            ControlToValidate="txtID"
-                            ErrorMessage="ID is required"
-                            CssClass="text-danger"
-                            Display="Dynamic"
-                            ValidationGroup="VendorForm" 
-                            />
-                        </div>
-                    </div>
+                 <div class="col-md-4">
+                     <label for="txtID" class="form-label fw-semibold">Account ID</label>
+                     <div class="d-flex gap-2">
+                         <asp:TextBox ID="txtID" runat="server" CssClass="form-control rounded-pill " />
+                         <asp:Button ID="btnFetchAccount" runat="server" Text="Get Account" OnClick="btnFetchAccount_Click" CssClass="btn btn-outline-primary" />
+                     </div>
+                     <asp:RequiredFieldValidator ID="revID" runat="server"
+                         ControlToValidate="txtID"
+                         ErrorMessage="ID is required"
+                         CssClass="text-danger"
+                         Display="Dynamic"
+                         ValidationGroup="VendorForm" />
+                 </div>
 
-                    <div class="col-md-6">
-                        <label for="txtName" class="form-label fw-semibold">Vendor Name</label>
-                        <asp:TextBox ID="txtName" runat="server" CssClass="form-control rounded-pill bg-light text-secondary" ReadOnly="true" />
-                    </div>
-        
+                  <!-- Vendor Type -->
+                  <div class="col-md-3">
+                      <label for="txtName" class="form-label fw-semibold">Vendor Type</label>
+                      <asp:TextBox ID="txtType" runat="server" CssClass="form-control rounded-pill bg-light text-secondary" ReadOnly="true" />
+                  </div>
 
+                 <!-- Vendor Name -->
+                 <div class="col-md-5">
+                     <label for="txtName" class="form-label fw-semibold">Vendor Name</label>
+                     <asp:TextBox ID="txtName" runat="server" CssClass="form-control rounded-pill bg-light text-secondary" ReadOnly="true" />
+                 </div>
+       
                     <div class="col-md-6">
                         <label for="txtEmail" class="form-label fw-semibold mt-3">Email</label>
                         <asp:TextBox ID="txtEmail" runat="server" CssClass="form-control rounded-pill" TextMode="Email" />

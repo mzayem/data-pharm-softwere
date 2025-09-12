@@ -158,6 +158,20 @@ namespace data_pharm_softwere.Components.Control
                                    "<p><b>Note:</b> If a town name is misspelled but close to an existing town in the system, it will still be matched using fuzzy logic.</p>";
                     break;
 
+                case "discountpolicy":
+                    litHeader.Text = "Discount Policy Import Guide";
+                    litBody.Text = "Upload a CSV file with the following columns:<br><ul>" +
+                                   "<li><b>CustomerId</b> (required)</li>" +
+                                   "<li><b>ProductID</b> (required)</li>" +
+                                   "<li><b>FlatDiscount</b> (required, numeric)</li>" +
+                                   "<li><b>FlatDiscountExpiry</b> (optional, format: yyyy-MM-dd)</li>" +
+                                   "<li><b>CreditDiscount</b> (required, numeric)</li>" +
+                                   "<li><b>CreditDiscountExpiry</b> (optional, format: yyyy-MM-dd)</li>" +
+                                   "</ul>" +
+                                   "<p><b>Note:</b> Discounts must be numeric values. Expiry dates are optional but required if a discount is greater than 0. " +
+                                   "Ensure that each CustomerId and ProductID combination is unique in the file.</p>";
+                    break;
+
                 default:
                     litHeader.Text = "Import Guide";
                     litBody.Text = "Please upload a valid CSV file.";

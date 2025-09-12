@@ -60,6 +60,15 @@ namespace data_pharm_softwere.Pages.Vendor
         protected global::System.Web.UI.WebControls.RequiredFieldValidator revID;
 
         /// <summary>
+        /// txtType control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtType;
+
+        /// <summary>
         /// txtName control.
         /// </summary>
         /// <remarks>

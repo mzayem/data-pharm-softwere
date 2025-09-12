@@ -17,16 +17,25 @@
             <ContentTemplate>
                 <div class="row g-3">
 
+                     <!-- ID + Button -->
+                     <div class="col-md-6">
+                         <label for="txtID" class="form-label fw-semibold">Account ID</label>
+                         <div class="d-flex gap-2">
+                             <asp:TextBox ID="txtID" runat="server" CssClass="form-control rounded-pill " />
+                             <asp:Button ID="btnFetchAccount" runat="server" Text="Get Account" OnClick="btnFetchAccount_Click" CssClass="btn btn-outline-primary" />
+                         </div>
+                         <asp:RequiredFieldValidator ID="revID" runat="server"
+                             ControlToValidate="txtID"
+                             ErrorMessage="ID is required"
+                             CssClass="text-danger"
+                             Display="Dynamic"
+                             ValidationGroup="CustomerForm" />
+                     </div>
+
                     <!-- Name -->
                     <div class="col-md-6">
                         <label class="form-label fw-semibold">Customer Name</label>
-                        <asp:TextBox ID="txtName" runat="server" CssClass="form-control rounded-pill" />
-                        <asp:RequiredFieldValidator ID="rfvName" runat="server"
-                                                    ControlToValidate="txtName"
-                                                    ErrorMessage="Customer Name is required"
-                                                    CssClass="text-danger"
-                                                    Display="Dynamic"
-                                                    ValidationGroup="CustomerForm" />
+                        <asp:TextBox ID="txtName" runat="server" CssClass="form-control rounded-pill bg-light text-secondary" ReadOnly="true" />
                     </div>
 
                     <!-- Email -->

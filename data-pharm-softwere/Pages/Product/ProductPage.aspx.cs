@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
 using System.Text.RegularExpressions;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -169,13 +170,13 @@ namespace data_pharm_softwere.Pages.Product
 
         protected void ddlVendor_SelectedIndexChanged(object sender, EventArgs e)
         {
-            LoadGroups(); 
+            LoadGroups();
             LoadProducts(txtSearch.Text.Trim());
         }
 
         protected void ddlGroup_SelectedIndexChanged(object sender, EventArgs e)
         {
-            LoadSubGroups(); 
+            LoadSubGroups();
             LoadProducts(txtSearch.Text.Trim());
         }
 
@@ -200,11 +201,19 @@ namespace data_pharm_softwere.Pages.Product
                 }
                 else if (action == "Delete")
                 {
-                    var product = _context.Products.Find(productId);
+                    var product = _context.Products
+                    .Include(p => p.DiscountPolicies)
+                    .FirstOrDefault(p => p.ProductID == productId);
                     if (product != null)
                     {
+                        if (product.DiscountPolicies.Any())
+                        {
+                            _context.DiscountPolicies.RemoveRange(product.DiscountPolicies);
+                        }
                         _context.Products.Remove(product);
                         _context.SaveChanges();
+                        lblStatus.Text = "Product deleted successfully.";
+                        lblStatus.CssClass = "alert alert-success d-block";
                         LoadProducts(txtSearch.Text.Trim());
                     }
                 }
@@ -488,8 +497,8 @@ namespace data_pharm_softwere.Pages.Product
         {
             if (!fuCSV.HasFile || !fuCSV.FileName.EndsWith(".csv"))
             {
-                lblImportStatus.Text = "Please upload a valid CSV file.";
-                lblImportStatus.CssClass = "alert alert-danger d-block";
+                lblStatus.Text = "Please upload a valid CSV file.";
+                lblStatus.CssClass = "alert alert-danger d-block";
                 return;
             }
             try
@@ -499,8 +508,8 @@ namespace data_pharm_softwere.Pages.Product
                     string headerLine = reader.ReadLine();
                     if (string.IsNullOrWhiteSpace(headerLine))
                     {
-                        lblImportStatus.Text = "CSV file is empty.";
-                        lblImportStatus.CssClass = "alert alert-danger d-block";
+                        lblStatus.Text = "CSV file is empty.";
+                        lblStatus.CssClass = "alert alert-danger d-block";
                         return;
                     }
 
@@ -524,8 +533,8 @@ namespace data_pharm_softwere.Pages.Product
 
                     if (colName == -1 || colSubGroupID == -1)
                     {
-                        lblImportStatus.Text = "Missing required columns: Name and SubGroupID.";
-                        lblImportStatus.CssClass = "alert alert-danger d-block";
+                        lblStatus.Text = "Missing required columns: Name and SubGroupID.";
+                        lblStatus.CssClass = "alert alert-danger d-block";
                         return;
                     }
 
@@ -582,7 +591,6 @@ namespace data_pharm_softwere.Pages.Product
                             }
                             else
                             {
-                                
                                 var newProduct = new Models.Product
                                 {
                                     ProductID = nextProductId++,
@@ -617,16 +625,16 @@ namespace data_pharm_softwere.Pages.Product
 
                     if (errorMessages.Any())
                     {
-                        lblImportStatus.Text = $"Import completed: {insertCount} added, {updateCount} updated." +
+                        lblStatus.Text = $"Import completed: {insertCount} added, {updateCount} updated." +
                             "<br><b>Errors:</b><br>" +
                             string.Join("<br>", errorMessages.Take(10)) +
                             (errorMessages.Count > 10 ? "<br>...and more." : "");
-                        lblImportStatus.CssClass = "alert alert-danger d-block";
+                        lblStatus.CssClass = "alert alert-danger d-block";
                     }
                     else
                     {
-                        lblImportStatus.Text = $"Import completed: {insertCount} added, {updateCount} updated.";
-                        lblImportStatus.CssClass = "alert alert-success mt-3 d-block";
+                        lblStatus.Text = $"Import completed: {insertCount} added, {updateCount} updated.";
+                        lblStatus.CssClass = "alert alert-success mt-3 d-block";
                     }
 
                     LoadProducts(txtSearch.Text.Trim());
@@ -634,8 +642,8 @@ namespace data_pharm_softwere.Pages.Product
             }
             catch (Exception ex)
             {
-                lblImportStatus.Text = $"Import failed: {ex.Message}";
-                lblImportStatus.CssClass = "alert alert-danger mt-3 d-block";
+                lblStatus.Text = $"Import failed: {ex.Message}";
+                lblStatus.CssClass = "alert alert-danger mt-3 d-block";
             }
         }
 

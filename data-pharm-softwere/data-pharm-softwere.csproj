@@ -81,6 +81,9 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Z.EntityFramework.Extensions, Version=9.103.9.3, Culture=neutral, PublicKeyToken=59b66d028979105b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Z.EntityFramework.Extensions.9.103.9.3\lib\net45\Z.EntityFramework.Extensions.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Components\Control\ImportInfo.ascx" />
@@ -132,9 +135,12 @@
     <Content Include="Pages\PurchaseForms\Purchase\CreatePurchase.aspx" />
     <Content Include="Pages\PurchaseForms\Purchase\EditPurchase.aspx" />
     <Content Include="Pages\PurchaseForms\Purchase\PurchasesPage.aspx" />
+    <Content Include="Pages\PurchaseForms\Transfer\TranferOut.aspx" />
+    <Content Include="Pages\PurchaseForms\Transfer\TransferIn.aspx" />
     <Content Include="Pages\Salesman\CreateSalesman.aspx" />
     <Content Include="Pages\Salesman\EditSalesman.aspx" />
     <Content Include="Pages\Salesman\SalesmanPage.aspx" />
+    <Content Include="Pages\sales\DiscountPolicy.aspx" />
     <Content Include="Pages\Settings.aspx" />
     <Content Include="Pages\SubGroup\CreateSubGroup.aspx" />
     <Content Include="Pages\SubGroup\EditSubGroup.aspx" />
@@ -264,6 +270,14 @@
     <Compile Include="Migrations\202508291107121_VoucherHeads.Designer.cs">
       <DependentUpon>202508291107121_VoucherHeads.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202509050803504_DiscountPolicyCustomerUpdate.cs" />
+    <Compile Include="Migrations\202509050803504_DiscountPolicyCustomerUpdate.Designer.cs">
+      <DependentUpon>202509050803504_DiscountPolicyCustomerUpdate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202509060804544_update1.cs" />
+    <Compile Include="Migrations\202509060804544_update1.Designer.cs">
+      <DependentUpon>202509060804544_update1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\BatchStock.cs" />
@@ -271,6 +285,7 @@
     <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\Data.cs" />
     <Compile Include="Models\DataPharmaContext.cs" />
+    <Compile Include="Models\DiscountPolicy.cs" />
     <Compile Include="Models\Division.cs" />
     <Compile Include="Models\Group.cs" />
     <Compile Include="Models\MedicalRep.cs" />
@@ -495,6 +510,20 @@
     <Compile Include="Pages\PurchaseForms\Purchase\PurchasesPage.aspx.designer.cs">
       <DependentUpon>PurchasesPage.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Pages\PurchaseForms\Transfer\TranferOut.aspx.cs">
+      <DependentUpon>TranferOut.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\PurchaseForms\Transfer\TranferOut.aspx.designer.cs">
+      <DependentUpon>TranferOut.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PurchaseForms\Transfer\TransferIn.aspx.cs">
+      <DependentUpon>TransferIn.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\PurchaseForms\Transfer\TransferIn.aspx.designer.cs">
+      <DependentUpon>TransferIn.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Salesman\CreateSalesman.aspx.cs">
       <DependentUpon>CreateSalesman.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -515,6 +544,13 @@
     </Compile>
     <Compile Include="Pages\Salesman\SalesmanPage.aspx.designer.cs">
       <DependentUpon>SalesmanPage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\sales\DiscountPolicy.aspx.cs">
+      <DependentUpon>DiscountPolicy.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\sales\DiscountPolicy.aspx.designer.cs">
+      <DependentUpon>DiscountPolicy.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\Settings.aspx.cs">
       <DependentUpon>Settings.aspx</DependentUpon>
@@ -659,6 +695,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202508291107121_VoucherHeads.resx">
       <DependentUpon>202508291107121_VoucherHeads.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202509050803504_DiscountPolicyCustomerUpdate.resx">
+      <DependentUpon>202509050803504_DiscountPolicyCustomerUpdate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202509060804544_update1.resx">
+      <DependentUpon>202509060804544_update1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

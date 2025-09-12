@@ -15,15 +15,6 @@ namespace data_pharm_softwere.Pages.Customer
     {
 
         /// <summary>
-        /// ScriptManager1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.ScriptManager ScriptManager1;
-
-        /// <summary>
         /// ValidationSummary1 control.
         /// </summary>
         /// <remarks>
@@ -51,6 +42,33 @@ namespace data_pharm_softwere.Pages.Customer
         protected global::System.Web.UI.UpdatePanel upForm;
 
         /// <summary>
+        /// txtID control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtID;
+
+        /// <summary>
+        /// btnFetchAccount control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnFetchAccount;
+
+        /// <summary>
+        /// revID control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator revID;
+
+        /// <summary>
         /// txtName control.
         /// </summary>
         /// <remarks>
@@ -58,15 +76,6 @@ namespace data_pharm_softwere.Pages.Customer
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtName;
-
-        /// <summary>
-        /// rfvName control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvName;
 
         /// <summary>
         /// txtEmail control.

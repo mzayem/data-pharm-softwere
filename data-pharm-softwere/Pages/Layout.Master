@@ -11,7 +11,6 @@
     
 
     <style>
-    /* Hide the default dropdown arrow */
     .custom-dropdown {
         appearance: none;
         -webkit-appearance: none;
@@ -20,25 +19,24 @@
         cursor: pointer;
     }
 
-    /* Style the dots (first option) */
     .custom-dropdown option:first-child {
         display: none;
     }
 
-    /* Optional: reduce focus outline */
     .custom-dropdown:focus {
         box-shadow: none;
     }
-        /* Light background for all rows */
+
     .light-grid .grid-row td,
     .light-grid .grid-row-alt td {
-        background-color: #f8f9fa; /* Bootstrap light gray */
+        background-color: #f8f9fa;
     }
 
-    /* Keep Qty textbox white */
     .qty-box {
         background-color: #ffffff !important;
     }
+  
+
 
 </style>
 

@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Pages/Layout.Master" AutoEventWireup="true" CodeBehind="CreateSalesman.aspx.cs" Inherits="data_pharm_softwere.Pages.Salesman.CreateSalesman" %>
+﻿<%@ Page Title="Create Salesman" Language="C#" MasterPageFile="~/Pages/Layout.Master" AutoEventWireup="true" CodeBehind="CreateSalesman.aspx.cs" Inherits="data_pharm_softwere.Pages.Salesman.CreateSalesman" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
    

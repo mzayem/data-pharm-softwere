@@ -1,13 +1,12 @@
-﻿<%@ Page Title="Create Purchase" Language="C#" MasterPageFile="~/Pages/Layout.Master" AutoEventWireup="true" CodeBehind="CreatePurchase.aspx.cs" Inherits="data_pharm_softwere.Pages.PurchaseForms.Purchase.CreatePurchase" %>
-<%@ Register Src="~/Pages/Batch/Controls/BatchModal.ascx" TagName="BatchModal" TagPrefix="uc" %>
-
+﻿<%@ Page Title="Transfer Out" Language="C#" MasterPageFile="~/Pages/Layout.Master" AutoEventWireup="true" CodeBehind="TranferOut.aspx.cs" Inherits="data_pharm_softwere.Pages.PurchaseForms.Transfer.TranferOut" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-    <uc:BatchModal ID="BatchModalControl" runat="server" />
-
     <div class="container my-5">
         <div class="card shadow-sm rounded-4 p-4">
+
+
             <asp:ValidationSummary ID="ValidationSummary1" runat="server" CssClass="alert alert-danger" />
+
 
             <asp:UpdatePanel ID="upPurchase" runat="server">
                 <ContentTemplate>
@@ -16,7 +15,7 @@
                     <!-- Header -->
                     <div class="row mb-3">
                         <div class="col-12">
-                            <h3 class="fw-semibold mb-2">Create Purchase</h3>
+                            <h3 class="fw-semibold mb-2">Transfer Out</h3>
                         </div>
                     </div>
 
@@ -72,7 +71,7 @@
                     <!-- Row 2 -->
                     <div class="row g-3 align-items-end mt-1 ">
                         <div class="col-md-5 ">
-                            <label class="form-label fw-semibold">Vendor</label>
+                            <label class="form-label fw-semibold">Distributor</label>
                             <div class="input-group d-flex justify-content-between align-content-between gap-3">
                                  <asp:TextBox ID="txtVendorCode" runat="server" 
                                      CssClass="form-control rounded-pill" 
@@ -137,6 +136,7 @@
                         <div class="col-md-1">
                             <label class="form-label fw-semibold">Qty</label>
                             <asp:TextBox ID="txtQty" runat="server" CssClass="form-control rounded-pill"
+                                         AutoPostBack="true" OnTextChanged="txtQty_TextChanged"
                                          placeholder="0"
                                          TextMode="Number"
                                 />
@@ -192,7 +192,7 @@
                                         <asp:TextBox ID="txtQtyList" runat="server"
                                             CssClass="form-control form-control-sm qty-box"
                                             style="width:70px;"
-                                            Text='<%# Bind("CartonQty") %>'
+                                            Text='<%# Bind("Qty") %>'
                                             AutoPostBack="true"
                                             TextMode="Number"
                                             OnTextChanged="Qty_TextChanged" 
@@ -200,7 +200,7 @@
                                     </ItemTemplate>
                                     <ItemStyle Width="90px" />
                                 </asp:TemplateField>  
-                                <asp:BoundField HeaderText="Rate" DataField="CartonPrice" DataFormatString="{0:N2}" />
+                                <asp:BoundField HeaderText="Rate" DataField="UnitPrice" DataFormatString="{0:N2}" />
                                 <asp:BoundField HeaderText="Dist%" DataField="DiscountPercent" />
                                 <asp:BoundField HeaderText="GST%" DataField="GSTPercent" />
                                  <asp:TemplateField HeaderText="Bonus Qty">
@@ -263,7 +263,7 @@
 
                     <!-- Save Button -->
                     <div class="mt-4 d-flex justify-content-between">
-                        <asp:Button ID="btnSave" runat="server" Text="Save Purchase" CssClass="btn btn-primary px-5 py-2 rounded-pill" OnClick="btnSave_Click" ValidationGroup="PurchaseForm"/>
+                        <asp:Button ID="btnSave" runat="server" Text="Create Return" CssClass="btn btn-primary px-5 py-2 rounded-pill" OnClick="btnSave_Click" ValidationGroup="PurchaseForm"/>
                         <asp:HyperLink NavigateUrl="/purchase" Text="Back to List" CssClass="btn btn-secondary px-5 py-2 rounded-pill" runat="server" />
                     </div>
                 </ContentTemplate>
@@ -284,3 +284,5 @@
 
     </script>
 </asp:Content>
+
+

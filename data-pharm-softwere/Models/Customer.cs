@@ -21,13 +21,8 @@ namespace data_pharm_softwere.Models
     [Table("Customers")]
     public class Customer
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int CustomerId { get; set; }
-
-        [Required]
-        [StringLength(100)]
-        public string Name { get; set; }
+        [Key, ForeignKey("Account")]
+        public int AccountId { get; set; }
 
         [EmailAddress]
         public string Email { get; set; }
@@ -70,5 +65,7 @@ namespace data_pharm_softwere.Models
         public bool FBRInActiveTax236H { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public virtual Account Account { get; set; }
+        public virtual ICollection<DiscountPolicy> DiscountPolicies { get; set; }
     }
 }

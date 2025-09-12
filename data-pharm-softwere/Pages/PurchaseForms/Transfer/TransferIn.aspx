@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Create Purchase" Language="C#" MasterPageFile="~/Pages/Layout.Master" AutoEventWireup="true" CodeBehind="CreatePurchase.aspx.cs" Inherits="data_pharm_softwere.Pages.PurchaseForms.Purchase.CreatePurchase" %>
+﻿<%@ Page Title="Transfer In" Language="C#" MasterPageFile="~/Pages/Layout.Master" AutoEventWireup="true" CodeBehind="TransferIn.aspx.cs" Inherits="data_pharm_softwere.Pages.PurchaseForms.Transfer.TransferIn" %>
 <%@ Register Src="~/Pages/Batch/Controls/BatchModal.ascx" TagName="BatchModal" TagPrefix="uc" %>
 
 
@@ -7,7 +7,10 @@
 
     <div class="container my-5">
         <div class="card shadow-sm rounded-4 p-4">
+
+
             <asp:ValidationSummary ID="ValidationSummary1" runat="server" CssClass="alert alert-danger" />
+
 
             <asp:UpdatePanel ID="upPurchase" runat="server">
                 <ContentTemplate>
@@ -16,7 +19,7 @@
                     <!-- Header -->
                     <div class="row mb-3">
                         <div class="col-12">
-                            <h3 class="fw-semibold mb-2">Create Purchase</h3>
+                            <h3 class="fw-semibold mb-2">Transfer In</h3>
                         </div>
                     </div>
 
@@ -72,7 +75,7 @@
                     <!-- Row 2 -->
                     <div class="row g-3 align-items-end mt-1 ">
                         <div class="col-md-5 ">
-                            <label class="form-label fw-semibold">Vendor</label>
+                            <label class="form-label fw-semibold">Distributor</label>
                             <div class="input-group d-flex justify-content-between align-content-between gap-3">
                                  <asp:TextBox ID="txtVendorCode" runat="server" 
                                      CssClass="form-control rounded-pill" 
@@ -284,3 +287,4 @@
 
     </script>
 </asp:Content>
+

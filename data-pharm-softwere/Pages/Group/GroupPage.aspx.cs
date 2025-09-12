@@ -289,7 +289,6 @@ namespace data_pharm_softwere.Pages.Group
 
                             if (existing != null)
                             {
-                                // Optionally update — for now we skip duplicates
                                 skipCount++;
                                 continue;
                             }

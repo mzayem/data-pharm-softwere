@@ -75,10 +75,11 @@ namespace data_pharm_softwere.Pages.Customer
                 return;
             }
             var query = _context.Customers
+                .Include(c => c.Account)
                 .Select(c => new
                 {
-                    c.CustomerId,
-                    c.Name,
+                    AccountId = c.AccountId,
+                    AccountName = c.Account.AccountName,
                     c.Contact,
                     c.CNIC,
                     TownName = c.Town.Name,
@@ -93,8 +94,8 @@ namespace data_pharm_softwere.Pages.Customer
             if (!string.IsNullOrWhiteSpace(search))
             {
                 query = query.Where(c =>
-                    c.Name.Contains(search) ||
-                    c.CustomerId.ToString().Contains(search) ||
+                    c.AccountName.Contains(search) ||
+                    c.AccountId.ToString().Contains(search) ||
                     c.NtnNo.Contains(search) ||
                     c.CNIC.Replace("-", "").Contains(search.Replace("-", "")));
             }
@@ -131,7 +132,7 @@ namespace data_pharm_softwere.Pages.Customer
                     query = query.Where(c => c.InActive == true);
                 }
             }
-            var result = query.OrderBy(c => c.CustomerId).ToList();
+            var result = query.OrderBy(c => c.AccountId).ToList();
 
             gvCustomers.DataSource = result;
             gvCustomers.DataBind();
@@ -222,10 +223,12 @@ namespace data_pharm_softwere.Pages.Customer
         private List<dynamic> GetFilteredCustomerList(string search = "")
         {
             var query = _context.Customers
+                .Include(c => c.Account)
+                .Include("Town")
                 .Select(c => new
                 {
-                    c.CustomerId,
-                    c.Name,
+                    c.AccountId,
+                    AccountName = c.Account.AccountName,
                     c.Email,
                     c.Contact,
                     c.CNIC,
@@ -249,10 +252,11 @@ namespace data_pharm_softwere.Pages.Customer
             {
                 string normalizedSearch = search.Replace("-", "");
                 query = query.Where(c =>
-                    c.Name.Contains(search) ||
-                    c.CustomerId.ToString().Contains(search) ||
+                    c.AccountName.Contains(search) ||
+                    c.AccountId.ToString().Contains(search) ||
                     c.NtnNo.Contains(search) ||
-                    c.CNIC.Replace("-", "").Contains(normalizedSearch));
+                    c.CNIC.Replace("-", "").Contains(normalizedSearch) ||
+                    c.Contact.Contains(search));
             }
 
             // CityRoute Filter
@@ -288,14 +292,14 @@ namespace data_pharm_softwere.Pages.Customer
             }
 
             // Materialize the result from DB
-            var result = query.OrderBy(c => c.CustomerId).ToList();
+            var result = query.OrderBy(c => c.AccountId).ToList();
 
             // Now convert to export-ready dynamic object
             return result
                 .Select(c => new
                 {
-                    c.CustomerId,
-                    c.Name,
+                    c.AccountId,
+                    AccountName = c.AccountName,
                     c.Email,
                     c.Contact,
                     c.CNIC,
@@ -335,8 +339,8 @@ namespace data_pharm_softwere.Pages.Customer
             foreach (var c in customers)
             {
                 sb.AppendLine(string.Join(",", new string[] {
-                    c.CustomerId.ToString("D4"),
-                    EscapeCsv(c.Name),
+                    c.AccountId.ToString("D4"),
+                    EscapeCsv(c.AccountName),
                     EscapeCsv(c.Email),
                     EscapeCsv(c.Contact),
                     EscapeCsv(c.CNIC),
@@ -353,7 +357,7 @@ namespace data_pharm_softwere.Pages.Customer
                     c.FbrInActiveGST,
                     c.FBRInActiveTax236H,
                     "=\"" + c.CreatedAt + "\""
-                }));
+                            }));
             }
 
             Response.Clear();
@@ -406,8 +410,8 @@ namespace data_pharm_softwere.Pages.Customer
 
                 foreach (var c in customers)
                 {
-                    table.AddCell(new Phrase(c.CustomerId.ToString("D4"), bodyFont));
-                    table.AddCell(new Phrase(c.Name, bodyFont));
+                    table.AddCell(new Phrase(c.AccountId.ToString("D4"), bodyFont));
+                    table.AddCell(new Phrase(c.AccountName, bodyFont));
                     table.AddCell(new Phrase(c.Email, bodyFont));
                     table.AddCell(new Phrase(c.Contact, bodyFont));
                     table.AddCell(new Phrase(c.CNIC, bodyFont));
@@ -444,8 +448,8 @@ namespace data_pharm_softwere.Pages.Customer
             Response.ContentType = "text/csv";
             Response.AddHeader("Content-Disposition", "attachment;filename=customer_sample.csv");
 
-            Response.Write("Name,Email,Contact,CNIC,Address,TownID,LicenceNo,ExpiryDate,CustomerType,NtnNo,NorcoticsSaleAllowed,InActive,IsAdvTaxExempted,FbrInActiveGST,FBRInActiveTax236H\r\n");
-            Response.Write("Customer 1,ali@example.com,03001234567,31234-1234567-1,123 Street,2,LN-1023,2026-12-31,Pharmacy,1234567-8,false,yes,no,no,yes\r\n");
+            Response.Write("Code,Email,Contact,CNIC,Address,TownID,LicenceNo,ExpiryDate,CustomerType,NtnNo,NorcoticsSaleAllowed,InActive,IsAdvTaxExempted,FbrInActiveGST,FBRInActiveTax236H\r\n");
+            Response.Write("10001,ali@example.com,03001234567,31234-1234567-1,123 Street,2,LN-1023,2026-12-31,Pharmacy,1234567-8,false,yes,no,no,yes\r\n");
 
             Response.End();
         }
@@ -474,7 +478,7 @@ namespace data_pharm_softwere.Pages.Customer
                     var headers = headerLine.Split(',').Select(h => h.Trim()).ToList();
 
                     // Required
-                    int colName = headers.IndexOf("Name");
+                    int colCode = headers.IndexOf("Code");
                     int colContact = headers.IndexOf("Contact");
                     int colCNIC = headers.IndexOf("CNIC");
                     int colAddress = headers.IndexOf("Address");
@@ -490,7 +494,7 @@ namespace data_pharm_softwere.Pages.Customer
                     int colFbrInActiveGST = headers.IndexOf("FbrInActiveGST");
                     int colFBRInActiveTax236H = headers.IndexOf("FBRInActiveTax236H");
 
-                    if (colName == -1 || colContact == -1 || colCNIC == -1 || colAddress == -1 || colTownID == -1 || colCustomerType == -1 || colNtnNo == -1)
+                    if (colCode == -1 || colContact == -1 || colCNIC == -1 || colAddress == -1 || colTownID == -1 || colCustomerType == -1 || colNtnNo == -1)
                     {
                         lblImportStatus.Text = "Missing required columns.";
                         lblImportStatus.CssClass = "alert alert-danger d-block";
@@ -510,7 +514,7 @@ namespace data_pharm_softwere.Pages.Customer
 
                         try
                         {
-                            string name = SafeGet(fields, colName);
+                            string rawID = SafeGet(fields, colCode);
                             string contact = SafeGet(fields, colContact);
                             string cnic = SafeGet(fields, colCNIC);
                             string address = SafeGet(fields, colAddress);
@@ -518,7 +522,21 @@ namespace data_pharm_softwere.Pages.Customer
                             string rawCustomerType = SafeGet(fields, colCustomerType);
                             string ntnNo = SafeGet(fields, colNtnNo);
 
-                            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(contact) ||
+                            if (string.IsNullOrWhiteSpace(rawID) || !int.TryParse(rawID, out int accountId))
+                                throw new Exception("Invalid or missing 'ID'.");
+
+                            var account = _context.Accounts.FirstOrDefault(a => a.AccountId == accountId);
+
+                            if (account == null)
+                                throw new Exception("Account not found for ID: " + accountId);
+
+                            if (!string.Equals(account.AccountType, "CUSTOMERS", StringComparison.OrdinalIgnoreCase))
+                                throw new Exception("Account ID " + accountId + " is not of type 'CUSTOMERS'.");
+
+                            if (!string.Equals(account.Status, "ACTIVE", StringComparison.OrdinalIgnoreCase))
+                                throw new Exception("Account ID " + accountId + " is not ACTIVE.");
+
+                            if (string.IsNullOrWhiteSpace(contact) ||
                                 string.IsNullOrWhiteSpace(cnic) || string.IsNullOrWhiteSpace(address) ||
                                 string.IsNullOrWhiteSpace(rawTownID) || string.IsNullOrWhiteSpace(rawCustomerType) ||
                                 string.IsNullOrWhiteSpace(ntnNo))
@@ -531,7 +549,7 @@ namespace data_pharm_softwere.Pages.Customer
 
                             // Check if customer exists
                             var existing = _context.Customers
-                                .FirstOrDefault(c => c.Name == name && c.CNIC == cnic && c.TownID == townId);
+                                .FirstOrDefault(c => c.AccountId == accountId && c.CNIC == cnic && c.TownID == townId);
 
                             if (existing != null)
                             {
@@ -556,7 +574,7 @@ namespace data_pharm_softwere.Pages.Customer
                             {
                                 var newCustomer = new Models.Customer
                                 {
-                                    Name = name,
+                                    AccountId = accountId,
                                     Contact = contact,
                                     CNIC = cnic,
                                     Address = address,

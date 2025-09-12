@@ -14,7 +14,9 @@ namespace data_pharm_softwere.Models
     public enum VoucherType
     {
         PIR,
-        POR
+        POR,
+        TIR,
+        TOR
     }
 
     [Table("Purchases")]

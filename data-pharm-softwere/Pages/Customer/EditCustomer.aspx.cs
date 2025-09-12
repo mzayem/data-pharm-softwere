@@ -11,7 +11,7 @@ namespace data_pharm_softwere.Pages.Customer
     {
         private readonly DataPharmaContext _context = new DataPharmaContext();
 
-        private int CutomerId
+        private int CustomerId
         {
             get
             {
@@ -31,7 +31,7 @@ namespace data_pharm_softwere.Pages.Customer
                 LoadCityRoutes();
                 LoadTowns();
                 LoadCustomerTypes();
-                if (CutomerId > 0)
+                if (CustomerId > 0)
                 {
                     LoadCustomer();
                 }
@@ -86,13 +86,75 @@ namespace data_pharm_softwere.Pages.Customer
             }
         }
 
+        protected void btnFetchAccount_Click(object sender, EventArgs e)
+        {
+            int newAccountId;
+            txtName.Text = string.Empty;
+
+            if (!int.TryParse(txtID.Text.Trim(), out newAccountId))
+            {
+                ShowMessage("Invalid Account ID.", "danger");
+                return;
+            }
+
+            if (!FetchAccount(newAccountId, out var validAccount)) return;
+
+            // Check if customer already exists
+            var customer = _context.Customers.FirstOrDefault(v => v.AccountId == newAccountId);
+            if (customer == null)
+            {
+                Response.Redirect($"/customer/create?id={newAccountId}", false);
+                Context.ApplicationInstance.CompleteRequest();
+                return;
+            }
+
+            // If customer exists, reload this page with new ID
+            Response.Redirect($"/customer/edit?id={newAccountId}", false);
+            Context.ApplicationInstance.CompleteRequest();
+        }
+
+        private bool FetchAccount(int accountId, out Account validAccount)
+        {
+            validAccount = null;
+
+            using (var db = new DataPharmaContext())
+            {
+                var account = db.Accounts.FirstOrDefault(a => a.AccountId == accountId);
+
+                if (account == null)
+                {
+                    Response.Redirect($"/customer/create?id={accountId}", false);
+                    Context.ApplicationInstance.CompleteRequest();
+                    return false;
+                }
+
+                if (!account.AccountType?.Equals("CUSTOMERS", StringComparison.OrdinalIgnoreCase) ?? true)
+                {
+                    Response.Redirect($"/customer/create?id={accountId}", false);
+                    Context.ApplicationInstance.CompleteRequest();
+                    return false;
+                }
+
+                if (!account.Status?.Equals("ACTIVE", StringComparison.OrdinalIgnoreCase) ?? true)
+                {
+                    Response.Redirect($"/customer/create?id={accountId}", false);
+                    Context.ApplicationInstance.CompleteRequest();
+                    return false;
+                }
+
+                txtName.Text = account.AccountName;
+                validAccount = account;
+                return true;
+            }
+        }
+
         protected void LoadCustomer()
         {
             try
             {
                 var customer = _context.Customers
                     .Include("Town.CityRoute")
-                    .FirstOrDefault(c => c.CustomerId == CutomerId);
+                    .FirstOrDefault(c => c.AccountId == CustomerId);
 
                 if (customer == null)
                 {
@@ -100,7 +162,6 @@ namespace data_pharm_softwere.Pages.Customer
                     return;
                 }
 
-                txtName.Text = customer.Name;
                 txtEmail.Text = customer.Email;
                 txtContact.Text = customer.Contact;
                 txtCNIC.Text = customer.CNIC;
@@ -110,7 +171,7 @@ namespace data_pharm_softwere.Pages.Customer
                 if (customer.Town?.CityRouteID != null)
                 {
                     ddlCityRoute.SelectedValue = customer.Town.CityRouteID.ToString();
-                    LoadTowns(customer.Town.CityRouteID); // Reload Towns based on CityRoute
+                    LoadTowns(customer.Town.CityRouteID);
                 }
 
                 ddlTown.SelectedValue = customer.TownID.ToString();
@@ -127,7 +188,7 @@ namespace data_pharm_softwere.Pages.Customer
             }
             catch (Exception ex)
             {
-                ShowError("Error loading customer: " + ex.Message);
+                ShowMessage("Error loading customer: " + ex.Message, "danger");
             }
         }
 
@@ -141,7 +202,7 @@ namespace data_pharm_softwere.Pages.Customer
         {
             if (Page.IsValid)
             {
-                var customer = _context.Customers.FirstOrDefault(v => v.CustomerId == CutomerId);
+                var customer = _context.Customers.FirstOrDefault(c => c.AccountId == CustomerId);
                 if (customer == null)
                 {
                     Response.Redirect("/customer/create/");
@@ -149,7 +210,6 @@ namespace data_pharm_softwere.Pages.Customer
                 }
                 try
                 {
-                    customer.Name = txtName.Text.Trim();
                     customer.Email = txtEmail.Text.Trim();
                     customer.Contact = txtContact.Text.Trim();
                     customer.CNIC = txtCNIC.Text.Trim();
@@ -180,10 +240,10 @@ namespace data_pharm_softwere.Pages.Customer
             }
         }
 
-        private void ShowError(string message)
+        private void ShowMessage(string message, string cssType)
         {
             lblMessage.Text = message;
-            lblMessage.CssClass = "text-danger fw-semibold";
+            lblMessage.CssClass = "alert alert-" + cssType;
         }
     }
 }

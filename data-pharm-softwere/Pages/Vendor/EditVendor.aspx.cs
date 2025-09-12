@@ -114,6 +114,7 @@ namespace data_pharm_softwere.Pages.Vendor
                 return;
             }
             txtName.Text = vendor.Account.AccountName;
+            txtType.Text = vendor.Account.AccountType;
             txtEmail.Text = vendor.Email;
             txtContact.Text = vendor.Contact;
             txtAddress.Text = vendor.Address;

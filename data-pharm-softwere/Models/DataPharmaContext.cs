@@ -12,6 +12,8 @@ namespace data_pharm_softwere.Data
         }
 
         public virtual DbSet<Account> Accounts { get; set; }
+        public DbSet<DataModel> Data { get; set; }
+        public DbSet<Setting> Settings { get; set; }
         public DbSet<Vendor> Vendors { get; set; }
         public DbSet<Division> Divisions { get; set; }
         public DbSet<Group> Groups { get; set; }
@@ -28,8 +30,7 @@ namespace data_pharm_softwere.Data
         public DbSet<MedicalRepSubGroup> MedicalRepSubGroups { get; set; }
         public DbSet<Purchase> Purchases { get; set; }
         public DbSet<PurchaseDetail> PurchaseDetails { get; set; }
-        public DbSet<DataModel> Data { get; set; }
-        public DbSet<Setting> Settings { get; set; }
+        public DbSet<DiscountPolicy> DiscountPolicies { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -154,6 +155,26 @@ namespace data_pharm_softwere.Data
                 .HasRequired(pd => pd.BatchStock)
                 .WithMany()
                 .HasForeignKey(pd => pd.BatchStockID)
+                .WillCascadeOnDelete(false);
+
+            // Customer → Account
+            modelBuilder.Entity<Account>()
+                .HasOptional(a => a.Customer)
+                .WithRequired(c => c.Account)
+                .WillCascadeOnDelete(true);
+
+            // DiscountPolicy → Customer (cascade allowed)
+            modelBuilder.Entity<DiscountPolicy>()
+                .HasRequired(dp => dp.Customer)
+                .WithMany(c => c.DiscountPolicies)
+                .HasForeignKey(dp => dp.CustomerAccountId)
+                .WillCascadeOnDelete(true);
+
+            // DiscountPolicy → Product (disable cascade to avoid multiple paths)
+            modelBuilder.Entity<DiscountPolicy>()
+                .HasRequired(dp => dp.Product)
+                .WithMany(p => p.DiscountPolicies)
+                .HasForeignKey(dp => dp.ProductID)
                 .WillCascadeOnDelete(false);
         }
     }

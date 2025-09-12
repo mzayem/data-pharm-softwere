@@ -296,7 +296,6 @@ namespace data_pharm_softwere.Pages.Product
         {
             var list = Bonuses;
 
-            // Find which row triggered the event
             RepeaterItem item = (RepeaterItem)((Control)sender).NamingContainer;
             int index = item.ItemIndex;
 

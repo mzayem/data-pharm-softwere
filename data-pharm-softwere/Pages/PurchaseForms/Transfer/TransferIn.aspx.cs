@@ -1,17 +1,17 @@
-﻿using data_pharm_softwere.Data;
-using data_pharm_softwere.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Validation;
 using System.Globalization;
+using data_pharm_softwere.Data;
+using data_pharm_softwere.Models;
 using System.Linq;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace data_pharm_softwere.Pages.PurchaseForms.PurchaseReturn
+namespace data_pharm_softwere.Pages.PurchaseForms.Transfer
 {
-    public partial class CreatePurchaseReturn : System.Web.UI.Page
+    public partial class TransferIn : System.Web.UI.Page
     {
         private readonly DataPharmaContext _context = new DataPharmaContext();
 
@@ -54,10 +54,10 @@ namespace data_pharm_softwere.Pages.PurchaseForms.PurchaseReturn
                     return;
                 }
 
-                string prefix = settings.PurchaseReturnHead;
+                string prefix = settings.TransferInHead;
 
                 var lastVoucher = _context.Purchases
-                    .Where(p => p.VoucherType == VoucherType.POR && p.VoucherNumber.Contains("-"))
+                    .Where(p => p.VoucherType == VoucherType.TIR && p.VoucherNumber.Contains("-"))
                     .OrderByDescending(p => p.PurchaseId)
                     .Select(p => p.VoucherNumber)
                     .FirstOrDefault();
@@ -82,31 +82,43 @@ namespace data_pharm_softwere.Pages.PurchaseForms.PurchaseReturn
 
         protected void txtVendorCode_TextChanged(object sender, EventArgs e)
         {
-            var vendor = _context.Vendors.Include(v => v.Account)
-                            .FirstOrDefault(v => v.AccountId.ToString() == txtVendorCode.Text.Trim());
+            var vendor = _context.Vendors
+                        .Include(v => v.Account)
+                        .FirstOrDefault(v => v.AccountId.ToString() == txtVendorCode.Text.Trim());
 
-            if (vendor != null)
-            {
-                ddlVendor.SelectedValue = vendor.AccountId.ToString();
-                txtAdvTaxRate.Text = vendor.AdvTaxRate.ToString("0.#");
-                TotalValuesChanged(sender, e);
-                lblMessage.Text = "";
-            }
-            else
+            if (vendor == null)
             {
                 ddlVendor.SelectedIndex = 0;
                 txtAdvTaxRate.Text = "0.00";
-                lblMessage.Text = "Vendor code not found.";
+                lblMessage.Text = "Account not found.";
                 lblMessage.CssClass = "alert alert-warning";
+                return;
             }
+
+            if (!vendor.Account.AccountType.Equals("DISTRIBUTOR", StringComparison.OrdinalIgnoreCase))
+            {
+                ddlVendor.SelectedIndex = 0;
+                txtAdvTaxRate.Text = "0.00";
+                lblMessage.Text = "Account is not a Distributor.";
+                lblMessage.CssClass = "alert alert-warning";
+                return;
+            }
+
+            // Valid distributor
+            ddlVendor.SelectedValue = vendor.AccountId.ToString();
+            txtAdvTaxRate.Text = vendor.AdvTaxRate.ToString("0.#");
+            TotalValuesChanged(sender, e);
+            lblMessage.Text = "";
         }
 
         protected void ddlVendor_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (!string.IsNullOrEmpty(ddlVendor.SelectedValue))
             {
-                var vendor = _context.Vendors.Include(v => v.Account)
-                            .FirstOrDefault(v => v.AccountId.ToString() == ddlVendor.SelectedValue);
+                var vendor = _context.Vendors
+                    .Include(v => v.Account)
+                    .FirstOrDefault(v => v.AccountId.ToString() == ddlVendor.SelectedValue &&
+                                         v.Account.AccountType.Equals("DISTRIBUTOR", StringComparison.OrdinalIgnoreCase));
 
                 txtVendorCode.Text = ddlVendor.SelectedValue;
                 txtAdvTaxRate.Text = vendor.AdvTaxRate.ToString("0.#");
@@ -124,15 +136,16 @@ namespace data_pharm_softwere.Pages.PurchaseForms.PurchaseReturn
             try
             {
                 var vendors = _context.Vendors
-                   .Include(v => v.Account)
-                   .OrderBy(v => v.Account.AccountName)
-                   .Select(v => new
-                   {
-                       v.AccountId,
-                       AccountName = v.Account.AccountName,
-                       v.AdvTaxRate
-                   })
-                   .ToList();
+                    .Include(v => v.Account)
+                    .Where(v => v.Account.AccountType.Equals("DISTRIBUTOR", StringComparison.OrdinalIgnoreCase))
+                    .OrderBy(v => v.Account.AccountName)
+                    .Select(v => new
+                    {
+                        v.AccountId,
+                        AccountName = v.Account.AccountName,
+                        v.AdvTaxRate
+                    })
+                    .ToList();
 
                 ddlVendor.Items.Clear();
                 ddlVendor.DataSource = vendors;
@@ -141,11 +154,11 @@ namespace data_pharm_softwere.Pages.PurchaseForms.PurchaseReturn
                 ddlVendor.DataBind();
                 txtAdvTaxRate.Text = "0";
 
-                ddlVendor.Items.Insert(0, new ListItem("-- Select Vendor --", ""));
+                ddlVendor.Items.Insert(0, new ListItem("-- Select Distributor --", ""));
             }
             catch (Exception ex)
             {
-                lblMessage.Text = "Error loading vendors: " + ex.Message;
+                lblMessage.Text = "Error loading Distributor: " + ex.Message;
                 lblMessage.CssClass = "alert alert-danger mt-3";
             }
         }
@@ -279,51 +292,6 @@ namespace data_pharm_softwere.Pages.PurchaseForms.PurchaseReturn
             LoadBatches(product.ProductID, addedBatchNos);
         }
 
-        protected void txtQty_TextChanged(object sender, EventArgs e)
-        {
-            int qty;
-            if (!int.TryParse(txtQty.Text, out qty))
-            {
-                lblMessage.Text = "Invalid quantity!";
-                lblMessage.CssClass = "alert alert-warning";
-                txtQty.Text = "0";
-                return;
-            }
-
-            // Ensure BatchNo is selected
-            if (string.IsNullOrEmpty(ddlBatch.SelectedValue))
-            {
-                lblMessage.Text = "Please select a batch first!";
-                lblMessage.CssClass = "alert alert-warning";
-            }
-
-            string selectedBatch = ddlBatch.SelectedValue;
-
-            var batch = _context.BatchesStock
-                .Include("Product")
-                .FirstOrDefault(b => b.BatchNo.Trim().Equals(selectedBatch, StringComparison.OrdinalIgnoreCase));
-
-            if (batch == null)
-            {
-                lblMessage.Text = "Invalid batch selected!";
-                lblMessage.CssClass = "alert alert-danger";
-                txtQty.Text = "0";
-                return;
-            }
-
-            // Validate against OnHoldQty
-            if (qty > batch.OnHoldQty)
-            {
-                lblMessage.Text = "OnHold Quantity exceeds!";
-                lblMessage.CssClass = "alert alert-warning";
-
-                qty = batch.OnHoldQty; // cap at max allowed
-                txtQty.Text = qty.ToString();
-            }
-
-            KeepFocus(sender as Control);
-        }
-
         protected void ddlBatch_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(ddlBatch.SelectedValue))
@@ -350,12 +318,6 @@ namespace data_pharm_softwere.Pages.PurchaseForms.PurchaseReturn
                     ?.Select(i => i.BatchNo.Trim().ToLower())
                     .ToList() ?? new List<string>();
 
-                if (batch.OnHoldQty <= 0)
-                {
-                    lblMessage.Text = "Batch has no OnHold quantity. Cannot proceed!";
-                    lblMessage.CssClass = "alert alert-warning";
-                    return;
-                }
                 LoadBatches(batch.ProductID, addedBatchNos, selectedBatch);
             }
         }
@@ -373,16 +335,21 @@ namespace data_pharm_softwere.Pages.PurchaseForms.PurchaseReturn
 
             if (batch == null)
             {
-                lblMessage.Text = "Batch not found. Enter a valid batch number.";
+                // Pass current product ID if available
+                string productValue = !string.IsNullOrEmpty(txtProductId.Text) ? txtProductId.Text : null;
 
-                lblMessage.CssClass = "alert alert-warning";
-                return;
-            }
+                BatchModalControl.SetBatchNo(batchNo, productValue);
+                string script = $@"
+                    $('#batchModal').modal('show');
+                ";
+                ScriptManager.RegisterStartupScript(
+                    this,
+                    this.GetType(),
+                    "ShowBatchModal",
+                    script,
+                    true
+                );
 
-            if (batch.OnHoldQty <= 0)
-            {
-                lblMessage.Text = "Batch has no OnHold quantity. Cannot proceed!";
-                lblMessage.CssClass = "alert alert-warning";
                 return;
             }
 
@@ -452,15 +419,14 @@ namespace data_pharm_softwere.Pages.PurchaseForms.PurchaseReturn
             public string ProductName { get; set; }
             public string BatchNo { get; set; }
             public DateTime ExpiryDate { get; set; }
-            public int Qty { get; set; }
-            public decimal UnitPrice { get; set; }
+            public int CartonQty { get; set; }
+            public decimal CartonPrice { get; set; }
             public decimal DiscountPercent { get; set; }
             public decimal GSTPercent { get; set; }
             public string GstType { get; set; }
             public int BonusQty { get; set; }
-            public int OnHoldQty { get; set; }
             public bool IsManualBonus { get; set; }
-            public decimal GrossAmount => Qty * UnitPrice;
+            public decimal GrossAmount => CartonQty * CartonPrice;
             public decimal DiscountAmount => Math.Round(GrossAmount * (DiscountPercent / 100m), 2);
             public decimal TaxBase => GstType == "Net" ? (GrossAmount - DiscountAmount) : GrossAmount;
             public decimal GSTAmount => Math.Round(TaxBase * (GSTPercent / 100m), 2);
@@ -493,21 +459,6 @@ namespace data_pharm_softwere.Pages.PurchaseForms.PurchaseReturn
                 return;
             }
 
-            int parsedQty;
-            if (!int.TryParse(txtQty.Text, out parsedQty) || parsedQty <= 0)
-            {
-                lblMessage.Text = "Please enter some quantity.";
-                lblMessage.CssClass = "alert alert-warning";
-                return;
-            }
-
-            if (parsedQty > batchStock.OnHoldQty)
-            {
-                lblMessage.Text = "OnHold Quantity exceeds!";
-                lblMessage.CssClass = "alert alert-warning";
-                return;
-            }
-
             var list = Session["PurchaseDetails"] as List<PurchaseLineItem> ?? new List<PurchaseLineItem>();
 
             var item = new PurchaseLineItem
@@ -517,9 +468,8 @@ namespace data_pharm_softwere.Pages.PurchaseForms.PurchaseReturn
                 ProductName = batchStock.Product?.Name,
                 BatchNo = batchStock.BatchNo,
                 ExpiryDate = batchStock.ExpiryDate,
-                Qty = parsedQty,
-                UnitPrice = batchStock.DP,
-
+                CartonQty = int.TryParse(txtQty.Text, out var parsedQty) ? parsedQty : 0,
+                CartonPrice = batchStock.DP,
                 DiscountPercent = batchStock.Product?.PurchaseDiscount ?? 0,
                 GSTPercent = batchStock.Product?.ReqGST ?? 0,
                 GstType = ddlGstType.SelectedValue,
@@ -594,15 +544,7 @@ namespace data_pharm_softwere.Pages.PurchaseForms.PurchaseReturn
             var item = list.FirstOrDefault(x => x.BatchStockID == id);
             if (item != null)
             {
-                if (qty > item.OnHoldQty)
-                {
-                    lblMessage.Text = "OnHold Quantity exceeds!.";
-                    lblMessage.CssClass = "alert alert-danger";
-                    qty = item.OnHoldQty;
-                    txt.Text = qty.ToString();
-                }
-
-                item.Qty = qty;
+                item.CartonQty = qty;
                 if (!item.IsManualBonus)
                 {
                     if (int.TryParse(item.ProductId, out int prodId))
@@ -746,6 +688,7 @@ namespace data_pharm_softwere.Pages.PurchaseForms.PurchaseReturn
                 lblMessage.CssClass = "alert alert-warning";
                 return;
             }
+
             try
             {
                 decimal ParseDecimal(string input)
@@ -765,7 +708,7 @@ namespace data_pharm_softwere.Pages.PurchaseForms.PurchaseReturn
                     Reference = txtReference.Text,
                     AdvTaxOn = (TaxBaseType)Enum.Parse(typeof(TaxBaseType), ddlAdvTaxType.SelectedValue),
                     GSTType = (TaxBaseType)Enum.Parse(typeof(TaxBaseType), ddlGstType.SelectedValue),
-                    VoucherType = VoucherType.POR,
+                    VoucherType = VoucherType.TIR,
                     AdvTaxRate = ParseDecimal(txtAdvTaxRate.Text),
                     AdvTaxAmount = ParseDecimal(lblAdvTaxAmount.Text),
                     AdditionalCharges = ParseDecimal(txtAdditionalCharges.Text),
@@ -792,8 +735,8 @@ namespace data_pharm_softwere.Pages.PurchaseForms.PurchaseReturn
                     var batch = _context.BatchesStock.FirstOrDefault(b => b.BatchStockID == item.BatchStockID);
                     if (batch != null)
                     {
-                        batch.OnHoldQty -= item.Qty;
-                        batch.BonusQty -= item.BonusQty;
+                        batch.AvailableQty += item.CartonQty;
+                        batch.BonusQty += item.BonusQty;
                         batch.UpdatedAt = DateTime.Now;
                         batch.UpdatedBy = "system";
                     }
@@ -833,13 +776,13 @@ namespace data_pharm_softwere.Pages.PurchaseForms.PurchaseReturn
                         VrDate = DateTime.Now,
                         AccountId = vendor.AccountId,
                         AccountTitle = vendor.AccountName,
-                        Dr = purchase.NetAmount,
-                        Cr = 0,
+                        Dr = 0,
+                        Cr = purchase.NetAmount,
                         Type = vendor.AccountType,
                         Status = "unconfirmed",
                         Creator = "system",
-                        Vtype = purchase.VoucherType.ToString(),
-                        Remarks = $"POR {purchase.PurchaseId}, {purchase.PurchaseDate:yyyy-MM-dd}, {purchase.PoNumber}, {purchase.Reference}"
+                        Vtype = "TIR",
+                        Remarks = $"TIR {purchase.VoucherNumber}, {purchase.PurchaseDate:yyyy-MM-dd}, {purchase.PoNumber}, {purchase.Reference}"
                     };
 
                     var stockEntry = new Models.Data
@@ -848,13 +791,13 @@ namespace data_pharm_softwere.Pages.PurchaseForms.PurchaseReturn
                         VrDate = DateTime.Now,
                         AccountId = stockInHand.AccountId,
                         AccountTitle = stockInHand.AccountName,
-                        Cr = purchase.NetAmount,
-                        Dr = 0,
+                        Dr = purchase.NetAmount,
+                        Cr = 0,
                         Type = stockInHand.AccountType,
                         Status = "unconfirmed",
                         Creator = "system",
-                        Vtype = "PORS",
-                        Remarks = $"PORS {purchase.PurchaseId}, {purchase.PurchaseDate:yyyy-MM-dd}, {purchase.PoNumber}, {purchase.Reference}"
+                        Vtype = "TIRS",
+                        Remarks = $"TIRS {purchase.VoucherNumber}, {purchase.PurchaseDate:yyyy-MM-dd}, {purchase.PoNumber}, {purchase.Reference}"
                     };
 
                     _context.Data.Add(vendorEntry);
@@ -862,8 +805,9 @@ namespace data_pharm_softwere.Pages.PurchaseForms.PurchaseReturn
                     _context.SaveChanges();
                 }
 
-                lblMessage.Text = "Purchase return Initiated successfully.";
+                lblMessage.Text = "Transfer In saved successfully.";
                 lblMessage.CssClass = "alert alert-success mt-3";
+                LoadVoucherNumber();
                 ClearUI();
             }
             catch (DbEntityValidationException dbEx)

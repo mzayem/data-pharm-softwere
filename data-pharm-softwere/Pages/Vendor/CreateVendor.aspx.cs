@@ -25,15 +25,12 @@ namespace data_pharm_softwere.Pages.Vendor
                     txtID.Text = AccountId.ToString();
                     FetchAccount(AccountId, out _);
                 }
-            }
-            else
-            {
                 lblMessage.Text = string.Empty;
+                txtAdvTax.Attributes["step"] = "0.1";
+                txtAdvTax.Attributes["min"] = "0";
+                txtAdvTax.Attributes["max"] = "100";
+                txtAdvTax.Text = "0.5";
             }
-            txtAdvTax.Attributes["step"] = "0.1";
-            txtAdvTax.Attributes["min"] = "0";
-            txtAdvTax.Attributes["max"] = "100";
-            txtAdvTax.Text = "0.5";
         }
 
         protected void btnFetchAccount_Click(object sender, EventArgs e)
@@ -63,9 +60,10 @@ namespace data_pharm_softwere.Pages.Vendor
                     return false;
                 }
 
-                if (!account.AccountType?.Equals("VENDORS", StringComparison.OrdinalIgnoreCase) ?? true)
+                if (!(account.AccountType?.Equals("VENDORS", StringComparison.OrdinalIgnoreCase) == true ||
+                     account.AccountType?.Equals("DISTRIBUTOR", StringComparison.OrdinalIgnoreCase) == true))
                 {
-                    ShowMessage("This Account is not of type 'Vendor'.", "warning");
+                    ShowMessage("This Account is not of type 'Vendor' or 'Distributor'.", "warning");
                     return false;
                 }
 
@@ -84,6 +82,7 @@ namespace data_pharm_softwere.Pages.Vendor
                 }
 
                 txtName.Text = account.AccountName;
+                txtType.Text = account.AccountType;
                 ShowMessage("Account is valid. Please fill vendor details.", "success");
                 validAccount = account;
                 return true;
@@ -142,7 +141,7 @@ namespace data_pharm_softwere.Pages.Vendor
             }
             catch (Exception ex)
             {
-                ShowMessage("Error: " + ex.Message, "danger");
+                ShowMessage("Error: " + ex.ToString(), "danger");
             }
         }
 

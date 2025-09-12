@@ -35,5 +35,7 @@ namespace data_pharm_softwere
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         public virtual Vendor Vendor { get; set; }
+
+        public virtual Customer Customer { get; set; }
     }
 }

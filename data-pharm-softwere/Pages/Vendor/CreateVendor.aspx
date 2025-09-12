@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Pages/Layout.Master" AutoEventWireup="true" CodeBehind="CreateVendor.aspx.cs" Inherits="data_pharm_softwere.Pages.Vendor.CreateVendor" %>
+﻿<%@ Page Title="Create Vendors" Language="C#" MasterPageFile="~/Pages/Layout.Master" AutoEventWireup="true" CodeBehind="CreateVendor.aspx.cs" Inherits="data_pharm_softwere.Pages.Vendor.CreateVendor" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <div class="container-fluid my-5">
@@ -14,7 +14,6 @@
 
             <asp:UpdatePanel ID="UpdatePanelForm" runat="server" UpdateMode="Conditional">
             <ContentTemplate>
-                
                 <asp:Panel ID="pnlForm" runat="server" CssClass="card shadow-sm p-4 rounded-4">
                     <asp:Label ID="lblMessage" runat="server" CssClass="text-success fw-semibold"></asp:Label>
 
@@ -22,7 +21,7 @@
                 <div class="row g-3">
 
                     <!-- ID + Button -->
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label for="txtID" class="form-label fw-semibold">Account ID</label>
                         <div class="d-flex gap-2">
                             <asp:TextBox ID="txtID" runat="server" CssClass="form-control rounded-pill " />
@@ -36,8 +35,14 @@
                             ValidationGroup="VendorForm" />
                     </div>
 
+                     <!-- Vendor Type -->
+                     <div class="col-md-3">
+                         <label for="txtType" class="form-label fw-semibold">Vendor Type</label>
+                         <asp:TextBox ID="txtType" runat="server" CssClass="form-control rounded-pill bg-light text-secondary" ReadOnly="true" />
+                     </div>
+
                     <!-- Vendor Name -->
-                    <div class="col-md-6">
+                    <div class="col-md-5">
                         <label for="txtName" class="form-label fw-semibold">Vendor Name</label>
                         <asp:TextBox ID="txtName" runat="server" CssClass="form-control rounded-pill bg-light text-secondary" ReadOnly="true" />
                     </div>

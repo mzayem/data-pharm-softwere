@@ -89,11 +89,11 @@ namespace data_pharm_softwere.Models
 
         [Required]
         [Range(0, 100)]
-        public decimal Dist1 { get; set; }
+        public decimal Dist1 { get; set; } = 0;
 
         [Required]
         [Range(0, 100)]
-        public decimal Dist2 { get; set; }
+        public decimal Dist2 { get; set; } = 0;
 
         [Required]
         public int SubGroupID { get; set; }
@@ -113,5 +113,6 @@ namespace data_pharm_softwere.Models
 
         public virtual ICollection<BatchStock> BatchesStock { get; set; }
         public virtual ICollection<ProductBonus> ProductBonuses { get; set; }
+        public virtual ICollection<DiscountPolicy> DiscountPolicies { get; set; }
     }
 }

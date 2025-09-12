@@ -7,12 +7,21 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace data_pharm_softwere.Pages.Customer
+namespace data_pharm_softwere.Pages.PurchaseForms.Transfer
 {
 
 
-    public partial class CreateCustomer
+    public partial class TransferIn
     {
+
+        /// <summary>
+        /// BatchModalControl control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::data_pharm_softwere.Pages.Batch.Controls.BatchModal BatchModalControl;
 
         /// <summary>
         /// ValidationSummary1 control.
@@ -24,22 +33,22 @@ namespace data_pharm_softwere.Pages.Customer
         protected global::System.Web.UI.WebControls.ValidationSummary ValidationSummary1;
 
         /// <summary>
-        /// upForm control.
+        /// upPurchase control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.UpdatePanel upForm;
+        protected global::System.Web.UI.UpdatePanel upPurchase;
 
         /// <summary>
-        /// pnlForm control.
+        /// hiddenProductId control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlForm;
+        protected global::System.Web.UI.WebControls.HiddenField hiddenProductId;
 
         /// <summary>
         /// lblMessage control.
@@ -51,274 +60,238 @@ namespace data_pharm_softwere.Pages.Customer
         protected global::System.Web.UI.WebControls.Label lblMessage;
 
         /// <summary>
-        /// txtID control.
+        /// txtVoucherNo control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtID;
+        protected global::System.Web.UI.WebControls.TextBox txtVoucherNo;
 
         /// <summary>
-        /// btnFetchAccount control.
+        /// txtPurchaseDate control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnFetchAccount;
+        protected global::System.Web.UI.WebControls.TextBox txtPurchaseDate;
 
         /// <summary>
-        /// revID control.
+        /// ddlAdvTaxType control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator revID;
+        protected global::System.Web.UI.WebControls.DropDownList ddlAdvTaxType;
 
         /// <summary>
-        /// txtName control.
+        /// rfvAdvTaxType control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtName;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvAdvTaxType;
 
         /// <summary>
-        /// txtEmail control.
+        /// ddlGstType control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtEmail;
+        protected global::System.Web.UI.WebControls.DropDownList ddlGstType;
 
         /// <summary>
-        /// revEmail control.
+        /// rfvGstType control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RegularExpressionValidator revEmail;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvGstType;
 
         /// <summary>
-        /// txtContact control.
+        /// txtVendorCode control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtContact;
+        protected global::System.Web.UI.WebControls.TextBox txtVendorCode;
 
         /// <summary>
-        /// rfvContactreq control.
+        /// ddlVendor control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvContactreq;
+        protected global::System.Web.UI.WebControls.DropDownList ddlVendor;
 
         /// <summary>
-        /// revContact control.
+        /// rfvVendor control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RegularExpressionValidator revContact;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvVendor;
 
         /// <summary>
-        /// txtCNIC control.
+        /// txtPoNumber control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtCNIC;
+        protected global::System.Web.UI.WebControls.TextBox txtPoNumber;
 
         /// <summary>
-        /// rfvCNIC control.
+        /// rfvPoNumber control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvCNIC;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvPoNumber;
 
         /// <summary>
-        /// revCNIC control.
+        /// txtReference control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RegularExpressionValidator revCNIC;
+        protected global::System.Web.UI.WebControls.TextBox txtReference;
 
         /// <summary>
-        /// txtAddress control.
+        /// rfvReference control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtAddress;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvReference;
 
         /// <summary>
-        /// rfvAddress control.
+        /// txtProductId control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvAddress;
+        protected global::System.Web.UI.WebControls.TextBox txtProductId;
 
         /// <summary>
-        /// ddlCityRoute control.
+        /// ddlProduct control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlCityRoute;
+        protected global::System.Web.UI.WebControls.DropDownList ddlProduct;
 
         /// <summary>
-        /// ddlTown control.
+        /// txtQty control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlTown;
+        protected global::System.Web.UI.WebControls.TextBox txtQty;
 
         /// <summary>
-        /// rfvTown control.
+        /// txtBatchNo control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvTown;
+        protected global::System.Web.UI.WebControls.TextBox txtBatchNo;
 
         /// <summary>
-        /// txtLicenceNo control.
+        /// ddlBatch control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtLicenceNo;
+        protected global::System.Web.UI.WebControls.DropDownList ddlBatch;
 
         /// <summary>
-        /// rfvLicenceNo control.
+        /// btnAddBatch control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvLicenceNo;
+        protected global::System.Web.UI.WebControls.Button btnAddBatch;
 
         /// <summary>
-        /// txtExpiryDate control.
+        /// gvPurchaseDetails control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtExpiryDate;
+        protected global::System.Web.UI.WebControls.GridView gvPurchaseDetails;
 
         /// <summary>
-        /// rfvExpiryDate control.
+        /// lblGross control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvExpiryDate;
+        protected global::System.Web.UI.WebControls.Label lblGross;
 
         /// <summary>
-        /// txtNtnNo control.
+        /// lblDiscount control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtNtnNo;
+        protected global::System.Web.UI.WebControls.Label lblDiscount;
 
         /// <summary>
-        /// rfvNtnNo control.
+        /// txtAdvTaxRate control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvNtnNo;
+        protected global::System.Web.UI.WebControls.TextBox txtAdvTaxRate;
 
         /// <summary>
-        /// ddlCustomerType control.
+        /// lblAdvTaxAmount control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlCustomerType;
+        protected global::System.Web.UI.WebControls.Label lblAdvTaxAmount;
 
         /// <summary>
-        /// rfvCustomerType control.
+        /// txtAdditionalCharges control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvCustomerType;
+        protected global::System.Web.UI.WebControls.TextBox txtAdditionalCharges;
 
         /// <summary>
-        /// chkNorcoticsSaleAllowed control.
+        /// lblNetAmount control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chkNorcoticsSaleAllowed;
-
-        /// <summary>
-        /// chkInActive control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chkInActive;
-
-        /// <summary>
-        /// chkAdvTaxExempted control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chkAdvTaxExempted;
-
-        /// <summary>
-        /// chkFbrInActiveGST control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chkFbrInActiveGST;
-
-        /// <summary>
-        /// chkFBRInActiveTax236H control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chkFBRInActiveTax236H;
+        protected global::System.Web.UI.WebControls.Label lblNetAmount;
 
         /// <summary>
         /// btnSave control.
