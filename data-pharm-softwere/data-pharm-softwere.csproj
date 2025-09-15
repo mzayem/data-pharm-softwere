@@ -196,6 +196,7 @@
     <Compile Include="Components\Control\ImportInfo.ascx.designer.cs">
       <DependentUpon>ImportInfo.ascx</DependentUpon>
     </Compile>
+    <Compile Include="Components\Utilities\PdfFooter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

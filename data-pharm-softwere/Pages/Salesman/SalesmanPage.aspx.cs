@@ -1,4 +1,5 @@
-﻿using data_pharm_softwere.Data;
+﻿using data_pharm_softwere.Components.Utilities;
+using data_pharm_softwere.Data;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System;
@@ -235,7 +236,8 @@ namespace data_pharm_softwere.Pages.Salesman
             Document pdfDoc = new Document(PageSize.A4, 10f, 10f, 20f, 10f);
             using (MemoryStream memoryStream = new MemoryStream())
             {
-                PdfWriter.GetInstance(pdfDoc, memoryStream);
+                PdfWriter writer = PdfWriter.GetInstance(pdfDoc, memoryStream);
+                writer.PageEvent = new PdfFooter();
                 pdfDoc.Open();
 
                 var titleFont = FontFactory.GetFont("Arial", 14, iTextSharp.text.Font.BOLD);
@@ -244,7 +246,6 @@ namespace data_pharm_softwere.Pages.Salesman
                 var bodyFont = FontFactory.GetFont("Arial", 8);
 
                 pdfDoc.Add(new Paragraph("Data Pharma - Salesman Report", titleFont));
-                pdfDoc.Add(new Paragraph("Generated on: " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), bodyFont));
                 string searchText = string.IsNullOrWhiteSpace(txtSearch.Text) ? "All Salesmen" : $"Search: \"{txtSearch.Text}\"";
                 string townText = string.IsNullOrEmpty(ddlTown.SelectedValue) || ddlTown.SelectedValue == "0"
                     ? "All Towns"
