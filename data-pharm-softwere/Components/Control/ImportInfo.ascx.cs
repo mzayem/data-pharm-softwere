@@ -154,9 +154,13 @@ namespace data_pharm_softwere.Components.Control
                                    "<li><b>Email</b> (optional)</li>" +
                                    "<li><b>Contact</b> (required)</li>" +
                                    "<li><b>Towns</b> (required) — pipe-separated list (e.g., TownA|TownB). Town names are matched using fuzzy spelling correction.</li>" +
+                                   "<li><b>Type</b> (required) — pipe-separated list corresponding to each town (e.g., Booker|Supplier|Driver).</li>" +
+                                   "<li><b>Percentage</b> (optional) — pipe-separated list of percentages corresponding to each town (e.g., 60|40). Must total 100 if provided.</li>" +
                                    "</ul>" +
-                                   "<p><b>Note:</b> If a town name is misspelled but close to an existing town in the system, it will still be matched using fuzzy logic.</p>";
+                                   "<p><b>Note:</b> If a town name is misspelled but close to an existing town in the system, it will still be matched using fuzzy logic. " +
+                                   "Ensure that the number of entries in <b>Towns</b>, <b>Type</b>, and <b>Percentage</b> columns align (e.g., TownA|TownB with Type Primary|Secondary and Percentage 60|40).</p>";
                     break;
+
 
                 case "discountpolicy":
                     litHeader.Text = "Discount Policy Import Guide";

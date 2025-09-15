@@ -75,24 +75,54 @@
 
                     </div>
 
-                    <!-- Assigned Towns -->
-                    <div class="col-md-12">
-                        <label class="form-label fw-semibold">Assigned Towns</label>
-                        <div class="d-flex flex-wrap gap-2 mt-1">
-                            <asp:Repeater ID="rptAssignedTowns" runat="server">
-                                <ItemTemplate>
-                                    <div class="badge text-dark bg-light px-3 py-2 rounded-pill">
-                                        <%# Eval("Name") %>
-                                        <asp:LinkButton ID="btnRemoveTown" runat="server"
-                                            CssClass="btn-close ms-2 small border-0 shadow-none focus-ring-0"
-                                            CommandArgument='<%# Eval("TownID") %>'
-                                            OnClick="btnRemoveTown_Click"
-                                            ToolTip="Remove Town">
-                                        </asp:LinkButton>
-                                    </div>
-                                </ItemTemplate>
-                            </asp:Repeater>
-                        </div>
+                     <!-- Assigned Towns -->
+                     <div class="mt-4 d-flex flex-column align-content-center align-items-center ">
+                        <table class="table table-borderless align-middle text-center">
+                            <thead class="table-light text-black ">
+                                <tr>
+                                    <th style="width: 25%;">Town</th>
+                                    <th style="width: 25%;">Type</th>
+                                    <th style="width: 25%;">Percentage</th>
+                                    <th style="width: 15%;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <asp:Repeater ID="rptAssignedTowns" runat="server" 
+                                    OnItemDataBound="rptAssignedTowns_ItemDataBound" 
+                                    OnItemCommand="rptAssignedTowns_ItemCommand">
+                                    <ItemTemplate>
+                                        <asp:HiddenField ID="hfTownID" runat="server" Value='<%# Eval("TownID") %>' />
+                                        <tr>
+                                            <td>
+                                                <asp:TextBox ID="txtTownName" runat="server" 
+                                                    CssClass="form-control rounded-pill text-center bg-light text-secondary" 
+                                                    Text='<%# Eval("TownName") %>' ReadOnly="true" />
+                                            </td>
+                                            <td>
+                                                <asp:DropDownList ID="ddlAssignmentType" runat="server" 
+                                                    CssClass="form-select rounded-pill text-center" 
+                                                    AutoPostBack="true" 
+                                                    OnSelectedIndexChanged="BonusFieldChanged">
+                                                </asp:DropDownList>
+                                            </td>
+                                            <td>
+                                                <asp:TextBox ID="txtPercentage" runat="server" 
+                                                    CssClass="form-control rounded-pill text-center" 
+                                                    Text='<%# Eval("Percentage") %>' AutoPostBack="true" 
+                                                    OnTextChanged="BonusFieldChanged" TextMode="Number" />
+                                            </td>
+                                            <td class="text-center">
+                                                <asp:LinkButton ID="btnRemove" runat="server" CommandName="Remove" 
+                                                    CommandArgument='<%# Container.ItemIndex %>' 
+                                                    CssClass="btn btn-sm btn-outline-danger rounded-pill">
+                                                    <i class="bi bi-trash"></i>
+                                                </asp:LinkButton>
+                                            </td>
+                                        </tr>
+                                    </ItemTemplate>
+                                </asp:Repeater>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
@@ -110,6 +140,7 @@
             </ContentTemplate>
             <Triggers>
                 <asp:AsyncPostBackTrigger ControlID="ddlTown" EventName="SelectedIndexChanged" />
+                <asp:AsyncPostBackTrigger ControlID="rptAssignedTowns" EventName="ItemCommand" />
             </Triggers>
         </asp:UpdatePanel>
     </asp:Panel>

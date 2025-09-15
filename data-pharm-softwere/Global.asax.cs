@@ -242,6 +242,15 @@ namespace data_pharm_softwere
                 "purchase",
                 "~/pages/PurchaseForms/Purchase/PurchasePage.aspx"
             );
+
+            //Discount Policy
+            routes.MapPageRoute(
+                "Discount Policy",
+                "discount-policy",
+                "~/Pages/sales/DiscountPolicy.aspx"
+            );
+
+
         }
 
         // Default event hooks

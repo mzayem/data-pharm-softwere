@@ -3,6 +3,7 @@ using data_pharm_softwere.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web.UI;
 using System.Web.UI.WebControls;
 
 namespace data_pharm_softwere.Pages.Salesman
@@ -32,22 +33,11 @@ namespace data_pharm_softwere.Pages.Salesman
             }
             if (!IsPostBack)
             {
-                ViewState["AssignedTownIDs"] = new List<int>();
                 LoadSalesman();
                 LoadTowns();
-                LoadAssignedTownIDs();
+                LoadAssignedTowns();
                 BindAssignedTowns();
             }
-        }
-
-        private void LoadAssignedTownIDs()
-        {
-            var assignedTownIDs = _context.SalesmanTowns
-                .Where(st => st.SalesmanID == SalesmanID)
-                .Select(st => st.TownID)
-                .ToList();
-
-            ViewState["AssignedTownIDs"] = assignedTownIDs;
         }
 
         private void LoadSalesman()
@@ -58,6 +48,7 @@ namespace data_pharm_softwere.Pages.Salesman
                 Response.Redirect("/salesman");
                 return;
             }
+
             txtName.Text = salesman.Name;
             txtEmail.Text = salesman.Email;
             txtContact.Text = salesman.Contact;
@@ -73,16 +64,31 @@ namespace data_pharm_softwere.Pages.Salesman
             ddlTown.Items.Insert(0, new ListItem("-- Assign Towns --", ""));
         }
 
-        private void BindAssignedTowns()
+        private List<AssignedTownViewModel> AssignedTowns
         {
-            var assignedTownIDs = ViewState["AssignedTownIDs"] as List<int> ?? new List<int>();
+            get => ViewState["AssignedTowns"] as List<AssignedTownViewModel> ?? new List<AssignedTownViewModel>();
+            set => ViewState["AssignedTowns"] = value;
+        }
 
-            var towns = _context.Towns
-                .Where(t => assignedTownIDs.Contains(t.TownID))
-                .Select(t => new { t.TownID, t.Name })
+        private void LoadAssignedTowns()
+        {
+            var towns = _context.SalesmanTowns
+                .Where(st => st.SalesmanID == SalesmanID)
+                .Select(st => new AssignedTownViewModel
+                {
+                    TownID = st.TownID,
+                    TownName = st.Town.Name,
+                    AssignmentType = st.AssignmentType,
+                    Percentage = st.Percentage
+                })
                 .ToList();
 
-            rptAssignedTowns.DataSource = towns;
+            AssignedTowns = towns;
+        }
+
+        private void BindAssignedTowns()
+        {
+            rptAssignedTowns.DataSource = AssignedTowns;
             rptAssignedTowns.DataBind();
         }
 
@@ -90,28 +96,91 @@ namespace data_pharm_softwere.Pages.Salesman
         {
             if (int.TryParse(ddlTown.SelectedValue, out int selectedTownId))
             {
-                var assignedTownIDs = ViewState["AssignedTownIDs"] as List<int> ?? new List<int>();
+                var list = AssignedTowns;
 
-                if (!assignedTownIDs.Contains(selectedTownId))
+                if (!list.Any(x => x.TownID == selectedTownId))
                 {
-                    assignedTownIDs.Add(selectedTownId);
-                    ViewState["AssignedTownIDs"] = assignedTownIDs;
-                    BindAssignedTowns();
+                    list.Add(new AssignedTownViewModel
+                    {
+                        TownID = selectedTownId,
+                        TownName = ddlTown.SelectedItem.Text,
+                        AssignmentType = AssignmentType.Booker,
+                        Percentage = 0
+                    });
                 }
 
+                AssignedTowns = list;
+                BindAssignedTowns();
                 ddlTown.SelectedIndex = 0;
             }
         }
 
-        protected void btnRemoveTown_Click(object sender, EventArgs e)
+        protected void rptAssignedTowns_ItemCommand(object source, RepeaterCommandEventArgs e)
         {
-            var btn = sender as LinkButton;
-            if (int.TryParse(btn.CommandArgument, out int townId))
+            if (e.CommandName == "Remove" && int.TryParse(e.CommandArgument.ToString(), out int index))
             {
-                var assignedTownIDs = ViewState["AssignedTownIDs"] as List<int> ?? new List<int>();
-                assignedTownIDs.Remove(townId);
-                ViewState["AssignedTownIDs"] = assignedTownIDs;
-                BindAssignedTowns();
+                if (index >= 0 && index < AssignedTowns.Count)
+                {
+                    AssignedTowns.RemoveAt(index);
+                    AssignedTowns = AssignedTowns;
+                    BindAssignedTowns();
+                }
+            }
+        }
+
+        protected void rptAssignedTowns_ItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+            if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            {
+                var item = (AssignedTownViewModel)e.Item.DataItem;
+
+                var ddl = (DropDownList)e.Item.FindControl("ddlAssignmentType");
+                if (ddl != null)
+                {
+                    ddl.DataSource = Enum.GetValues(typeof(AssignmentType));
+                    ddl.DataBind();
+                    ddl.SelectedValue = item.AssignmentType.ToString();
+                }
+            }
+        }
+
+        protected void BonusFieldChanged(object sender, EventArgs e)
+        {
+            foreach (RepeaterItem item in rptAssignedTowns.Items)
+            {
+                var ddlType = item.FindControl("ddlAssignmentType") as DropDownList;
+                var txtPercentage = item.FindControl("txtPercentage") as TextBox;
+                var hfTownID = item.FindControl("hfTownID") as HiddenField;
+
+                if (int.TryParse(hfTownID.Value, out int townId))
+                {
+                    var town = AssignedTowns.FirstOrDefault(x => x.TownID == townId);
+                    if (town != null)
+                    {
+                        if (Enum.TryParse<AssignmentType>(ddlType.SelectedValue, out var parsedType))
+                            town.AssignmentType = parsedType;
+
+                        if (decimal.TryParse(txtPercentage.Text, out var percentage))
+                            town.Percentage = percentage;
+                    }
+                }
+            }
+
+            AssignedTowns = AssignedTowns;
+            KeepFocus((Control)sender);
+        }
+
+        private void KeepFocus(Control control)
+        {
+            if (control != null)
+            {
+                ScriptManager.RegisterStartupScript(
+                    this,
+                    this.GetType(),
+                    "setFocus",
+                    $"setTimeout(function(){{document.getElementById('{control.ClientID}').focus();}}, 0);",
+                    true
+                );
             }
         }
 
@@ -132,27 +201,19 @@ namespace data_pharm_softwere.Pages.Salesman
                 salesman.Email = txtEmail.Text.Trim();
                 salesman.Contact = txtContact.Text.Trim();
 
-                var assignedTownIDs = ViewState["AssignedTownIDs"] as List<int> ?? new List<int>();
+                // Remove all old towns
+                var oldTowns = _context.SalesmanTowns.Where(st => st.SalesmanID == SalesmanID).ToList();
+                _context.SalesmanTowns.RemoveRange(oldTowns);
 
-                var existingTownIDs = _context.SalesmanTowns
-                    .Where(st => st.SalesmanID == SalesmanID)
-                    .Select(st => st.TownID)
-                    .ToList();
-
-                var townsToAdd = assignedTownIDs.Except(existingTownIDs).ToList();
-                var townsToRemove = existingTownIDs.Except(assignedTownIDs).ToList();
-
-                var townsToRemoveEntities = _context.SalesmanTowns
-                    .Where(st => st.SalesmanID == SalesmanID && townsToRemove.Contains(st.TownID))
-                    .ToList();
-                _context.SalesmanTowns.RemoveRange(townsToRemoveEntities);
-
-                foreach (var townId in townsToAdd)
+                // Add updated towns
+                foreach (var townVm in AssignedTowns)
                 {
                     _context.SalesmanTowns.Add(new SalesmanTown
                     {
                         SalesmanID = SalesmanID,
-                        TownID = townId,
+                        TownID = townVm.TownID,
+                        AssignmentType = townVm.AssignmentType,
+                        Percentage = townVm.Percentage,
                         AssignedOn = DateTime.Now
                     });
                 }

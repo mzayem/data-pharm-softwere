@@ -180,6 +180,7 @@
     <Content Include="Content\bootstrap-grid.rtl.min.css.map" />
     <Content Include="Content\bootstrap-grid.rtl.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
+    <Content Include="Content\bootstrap-grid.css.map" />
     <None Include="Scripts\jquery-3.7.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.1.js" />
     <Content Include="Scripts\jquery-3.7.1.min.js" />
@@ -277,6 +278,10 @@
     <Compile Include="Migrations\202509060804544_update1.cs" />
     <Compile Include="Migrations\202509060804544_update1.Designer.cs">
       <DependentUpon>202509060804544_update1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202509130754537_TablesUpdates.cs" />
+    <Compile Include="Migrations\202509130754537_TablesUpdates.Designer.cs">
+      <DependentUpon>202509130754537_TablesUpdates.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
@@ -526,7 +531,6 @@
     </Compile>
     <Compile Include="Pages\Salesman\CreateSalesman.aspx.cs">
       <DependentUpon>CreateSalesman.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Pages\Salesman\CreateSalesman.aspx.designer.cs">
       <DependentUpon>CreateSalesman.aspx</DependentUpon>
@@ -625,7 +629,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\bootstrap-grid.css.map" />
     <Content Include="Pages\Layout.Master" />
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.7.1.slim.min.map" />
@@ -701,6 +704,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202509060804544_update1.resx">
       <DependentUpon>202509060804544_update1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202509130754537_TablesUpdates.resx">
+      <DependentUpon>202509130754537_TablesUpdates.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

@@ -156,7 +156,6 @@ namespace data_pharm_softwere.Pages.Salesman
         }
 
         //Excel Export
-
         private string EscapeCsv(string input)
         {
             if (string.IsNullOrEmpty(input)) return "";
@@ -195,13 +194,18 @@ namespace data_pharm_softwere.Pages.Salesman
             var salesmen = query.OrderBy(s => s.SalesmanID).ToList();
 
             var sb = new System.Text.StringBuilder();
-            sb.AppendLine("ID,Name,Email,Contact,Towns,Created At");
+            sb.AppendLine("ID,Name,Email,Contact,Towns,Percentages,Types,Created At");
 
             foreach (var s in salesmen)
             {
                 var townNames = string.Join(" | ", s.SalesmanTowns
                     .Select(st => st.Town?.Name)
                     .Where(t => !string.IsNullOrEmpty(t)));
+                var percentages = string.Join(" | ", s.SalesmanTowns
+            .Select(st => st.Percentage.ToString("0.##") + " %"));
+
+                var types = string.Join(" | ", s.SalesmanTowns
+                    .Select(st => st.AssignmentType.ToString()));
 
                 sb.AppendLine(string.Join(",", new string[] {
             s.SalesmanID.ToString("D4"),
@@ -209,6 +213,8 @@ namespace data_pharm_softwere.Pages.Salesman
             EscapeCsv(s.Email),
             EscapeCsv(s.Contact),
             EscapeCsv(townNames),
+            EscapeCsv(percentages),
+            EscapeCsv(types),
             "=\"" + s.CreatedAt.ToString("yyyy-MM-dd HH:mm") + "\""
         }));
             }
@@ -233,13 +239,12 @@ namespace data_pharm_softwere.Pages.Salesman
                 pdfDoc.Open();
 
                 var titleFont = FontFactory.GetFont("Arial", 14, iTextSharp.text.Font.BOLD);
-                var headerFont = FontFactory.GetFont("Arial", 9, iTextSharp.text.Font.BOLD);
+                var subTitleFont = FontFactory.GetFont("Arial", 12, iTextSharp.text.Font.BOLD, BaseColor.DARK_GRAY);
+                var labelFont = FontFactory.GetFont("Arial", 9, iTextSharp.text.Font.BOLD);
                 var bodyFont = FontFactory.GetFont("Arial", 8);
 
                 pdfDoc.Add(new Paragraph("Data Pharma - Salesman Report", titleFont));
                 pdfDoc.Add(new Paragraph("Generated on: " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), bodyFont));
-
-                // Filter summary
                 string searchText = string.IsNullOrWhiteSpace(txtSearch.Text) ? "All Salesmen" : $"Search: \"{txtSearch.Text}\"";
                 string townText = string.IsNullOrEmpty(ddlTown.SelectedValue) || ddlTown.SelectedValue == "0"
                     ? "All Towns"
@@ -247,23 +252,6 @@ namespace data_pharm_softwere.Pages.Salesman
                 string filterSummary = $"This report includes data for {searchText}, filtered by {townText}.";
                 pdfDoc.Add(new Paragraph(filterSummary, bodyFont));
                 pdfDoc.Add(new Paragraph(" "));
-
-                PdfPTable table = new PdfPTable(4) { WidthPercentage = 100 };
-                table.SetWidths(new float[] { 2f, 3f, 2f, 5f });
-
-                string[] headers = { "Name", "Email", "Contact", "Towns" };
-
-                foreach (var h in headers)
-                {
-                    PdfPCell headerCell = new PdfPCell(new Phrase(h, headerFont))
-                    {
-                        BackgroundColor = BaseColor.LIGHT_GRAY,
-                        Padding = 5,
-                        HorizontalAlignment = Element.ALIGN_CENTER,
-                        VerticalAlignment = Element.ALIGN_MIDDLE
-                    };
-                    table.AddCell(headerCell);
-                }
 
                 var search = txtSearch.Text.Trim();
                 int.TryParse(ddlTown.SelectedValue, out int townId);
@@ -289,16 +277,50 @@ namespace data_pharm_softwere.Pages.Salesman
 
                 foreach (var s in salesmen)
                 {
-                    var townNames = s.SalesmanTowns.Select(st => st.Town.Name).ToList();
-                    string townsFormatted = string.Join(" | ", townNames);
+                    // Salesman Section Title
+                    pdfDoc.Add(new Paragraph($"Name: {s.Name}", subTitleFont));
 
-                    table.AddCell(CreateWrappedCell(s.Name, bodyFont));
-                    table.AddCell(CreateWrappedCell(s.Email, bodyFont));
-                    table.AddCell(CreateWrappedCell(s.Contact, bodyFont));
-                    table.AddCell(CreateWrappedCell(townsFormatted, bodyFont));
+
+                    // Inline details (ID, Email, Contact)
+                    Paragraph detailsLine = new Paragraph();
+                    detailsLine.Add(new Chunk("ID: ", labelFont));
+                    detailsLine.Add(new Chunk(s.SalesmanID.ToString(), bodyFont));
+                    detailsLine.Add(new Chunk("   Email: ", labelFont));
+                    detailsLine.Add(new Chunk(string.IsNullOrEmpty(s.Email) ? "-" : s.Email, bodyFont));
+                    detailsLine.Add(new Chunk("   Contact: ", labelFont));
+                    detailsLine.Add(new Chunk(string.IsNullOrEmpty(s.Contact) ? "-" : s.Contact, bodyFont));
+
+                    pdfDoc.Add(detailsLine);
+                    pdfDoc.Add(new Paragraph(" ")); // spacing
+
+                    // Towns Table for this salesman
+                    PdfPTable table = new PdfPTable(3) { WidthPercentage = 100, SpacingAfter = 15f };
+                    table.SetWidths(new float[] { 3f, 2f, 2f });
+
+                    string[] headers = { "Town", "Percentage", "Type" };
+
+                    foreach (var h in headers)
+                    {
+                        PdfPCell headerCell = new PdfPCell(new Phrase(h, labelFont))
+                        {
+                            BackgroundColor = BaseColor.LIGHT_GRAY,
+                            Padding = 5,
+                            HorizontalAlignment = Element.ALIGN_CENTER,
+                            VerticalAlignment = Element.ALIGN_MIDDLE
+                        };
+                        table.AddCell(headerCell);
+                    }
+
+                    // Town rows
+                    foreach (var st in s.SalesmanTowns)
+                    {
+                        table.AddCell(CreateWrappedCell(st.Town.Name, bodyFont));
+                        table.AddCell(CreateWrappedCell(st.Percentage.ToString("0.##") + " %", bodyFont));
+                        table.AddCell(CreateWrappedCell(st.AssignmentType.ToString(), bodyFont));
+                    }
+
+                    pdfDoc.Add(table);
                 }
-
-                pdfDoc.Add(table);
                 pdfDoc.Close();
 
                 Response.ContentType = "application/pdf";
@@ -328,8 +350,8 @@ namespace data_pharm_softwere.Pages.Salesman
             Response.ContentType = "text/csv";
             Response.AddHeader("Content-Disposition", "attachment;filename=Salesman_sample.csv");
 
-            Response.Write("Name,Email,Contact,Towns\r\n");
-            Response.Write("John Doe,john@email.com,03001234567,TownA|TownB|TownC\r\n");
+            Response.Write("Name,Email,Contact,Towns,Percentages,Types\r\n");
+            Response.Write("John Doe,john@email.com,03001234567,TownA|TownB|TownC,50|30|20,Booker|Supplier|Driver\r\n");
 
             Response.End();
         }
@@ -361,6 +383,8 @@ namespace data_pharm_softwere.Pages.Salesman
                     int colEmail = headers.IndexOf("Email");
                     int colContact = headers.IndexOf("Contact");
                     int colTowns = headers.IndexOf("Towns");
+                    int colPercentages = headers.IndexOf("Percentages");
+                    int colTypes = headers.IndexOf("Types");
 
                     if (colName == -1 || colContact == -1 || colTowns == -1)
                     {
@@ -385,6 +409,8 @@ namespace data_pharm_softwere.Pages.Salesman
                             string contact = SafeGet(fields, colContact);
                             string email = SafeGet(fields, colEmail);
                             string townRaw = SafeGet(fields, colTowns);
+                            string percentageRaw = SafeGet(fields, colPercentages);
+                            string typeRaw = SafeGet(fields, colTypes);
 
                             if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(contact) || string.IsNullOrWhiteSpace(townRaw))
                                 throw new Exception("Name, Contact, and Towns are required.");
@@ -411,10 +437,17 @@ namespace data_pharm_softwere.Pages.Salesman
                             }
 
                             var townNames = townRaw.Split(new[] { '|', ',' }, StringSplitOptions.RemoveEmptyEntries)
-                       .Select(t => t.Trim()).Where(t => !string.IsNullOrEmpty(t)).Distinct();
+                                           .Select(t => t.Trim()).ToList();
 
-                            foreach (var townName in townNames)
+                            var percentages = (percentageRaw ?? "").Split(new[] { '|', ',' }, StringSplitOptions.RemoveEmptyEntries)
+                                                   .Select(p => p.Trim()).ToList();
+
+                            var types = (typeRaw ?? "").Split(new[] { '|', ',' }, StringSplitOptions.RemoveEmptyEntries)
+                                                   .Select(t => t.Trim()).ToList();
+
+                            for (int i = 0; i < townNames.Count; i++)
                             {
+                                var townName = townNames[i];
                                 var town = MatchTown(townName, out string suggestion);
                                 if (town == null)
                                 {
@@ -424,14 +457,32 @@ namespace data_pharm_softwere.Pages.Salesman
                                     throw new Exception(msg);
                                 }
 
+                                // Try to parse percentage (default 0)
+                                decimal percentage = 0;
+                                if (i < percentages.Count && decimal.TryParse(percentages[i].Replace("%", "").Trim(), out var parsedPct))
+                                    percentage = parsedPct;
+
+                                // Try to parse type (default Primary)
+                                Models.AssignmentType type = Models.AssignmentType.Booker;
+                                if (i < types.Count && Enum.TryParse(types[i], true, out Models.AssignmentType parsedType))
+                                    type = parsedType;
+
                                 bool alreadyAssigned = existing.SalesmanTowns.Any(st => st.TownID == town.TownID);
                                 if (!alreadyAssigned)
                                 {
                                     existing.SalesmanTowns.Add(new Models.SalesmanTown
                                     {
                                         TownID = town.TownID,
+                                        Percentage = percentage,
+                                        AssignmentType = type,
                                         AssignedOn = DateTime.Now
                                     });
+                                }
+                                else
+                                {
+                                    var st = existing.SalesmanTowns.First(x => x.TownID == town.TownID);
+                                    st.Percentage = percentage;
+                                    st.AssignmentType = type;
                                 }
                             }
                         }
@@ -446,7 +497,7 @@ namespace data_pharm_softwere.Pages.Salesman
                     if (errorMessages.Any())
                     {
                         lblImportStatus.Text = $"Imported: {insertCount} added, {updateCount} updated.<br><strong>Errors:</strong><br>{string.Join("<br>", errorMessages.Take(10))}" +
-                                               (errorMessages.Count > 10 ? "<br>...and more." : "");
+                                       (errorMessages.Count > 10 ? "<br>...and more." : "");
                         lblImportStatus.CssClass = "alert alert-danger d-block";
                     }
                     else
