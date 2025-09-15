@@ -277,11 +277,8 @@ namespace data_pharm_softwere.Pages.Salesman
 
                 foreach (var s in salesmen)
                 {
-                    // Salesman Section Title
                     pdfDoc.Add(new Paragraph($"Name: {s.Name}", subTitleFont));
 
-
-                    // Inline details (ID, Email, Contact)
                     Paragraph detailsLine = new Paragraph();
                     detailsLine.Add(new Chunk("ID: ", labelFont));
                     detailsLine.Add(new Chunk(s.SalesmanID.ToString(), bodyFont));
@@ -293,9 +290,10 @@ namespace data_pharm_softwere.Pages.Salesman
                     pdfDoc.Add(detailsLine);
                     pdfDoc.Add(new Paragraph(" ")); // spacing
 
-                    // Towns Table for this salesman
                     PdfPTable table = new PdfPTable(3) { WidthPercentage = 100, SpacingAfter = 15f };
                     table.SetWidths(new float[] { 3f, 2f, 2f });
+
+                    table.DefaultCell.Border = Rectangle.NO_BORDER;
 
                     string[] headers = { "Town", "Percentage", "Type" };
 
@@ -303,11 +301,17 @@ namespace data_pharm_softwere.Pages.Salesman
                     {
                         PdfPCell headerCell = new PdfPCell(new Phrase(h, labelFont))
                         {
-                            BackgroundColor = BaseColor.LIGHT_GRAY,
+                            BackgroundColor = BaseColor.WHITE,
                             Padding = 5,
-                            HorizontalAlignment = Element.ALIGN_CENTER,
-                            VerticalAlignment = Element.ALIGN_MIDDLE
+                            HorizontalAlignment = Element.ALIGN_LEFT,
+                            VerticalAlignment = Element.ALIGN_MIDDLE,
+                            Border = Rectangle.NO_BORDER
                         };
+
+                        // Solid border for header row
+                        headerCell.BorderWidthBottom = 1f;
+                        headerCell.BorderColorBottom = BaseColor.BLACK;
+
                         table.AddCell(headerCell);
                     }
 
@@ -319,6 +323,10 @@ namespace data_pharm_softwere.Pages.Salesman
                         table.AddCell(CreateWrappedCell(st.AssignmentType.ToString(), bodyFont));
                     }
 
+                    table.CompleteRow();
+                    table.SpacingBefore = 5f;
+                    table.SpacingAfter = 15f;
+                    table.TableEvent = new TableBoxBorder();
                     pdfDoc.Add(table);
                 }
                 pdfDoc.Close();
@@ -332,13 +340,49 @@ namespace data_pharm_softwere.Pages.Salesman
 
         private PdfPCell CreateWrappedCell(string text, Font font)
         {
-            return new PdfPCell(new Phrase(text, font))
+            var cell = new PdfPCell(new Phrase(text, font))
             {
                 NoWrap = false,
                 Padding = 5,
                 HorizontalAlignment = Element.ALIGN_LEFT,
-                VerticalAlignment = Element.ALIGN_TOP
+                VerticalAlignment = Element.ALIGN_TOP,
+                Border = Rectangle.NO_BORDER
             };
+
+            cell.CellEvent = new DottedCellBorder();
+
+            return cell;
+        }
+
+        public class DottedCellBorder : IPdfPCellEvent
+        {
+            public void CellLayout(PdfPCell cell, Rectangle position, PdfContentByte[] canvases)
+            {
+                PdfContentByte cb = canvases[PdfPTable.LINECANVAS];
+                cb.SetLineDash(1f, 2f);
+                cb.SetLineWidth(0.5f);
+                cb.SetColorStroke(new BaseColor(200, 200, 200));
+                cb.MoveTo(position.Left, position.Bottom);
+                cb.LineTo(position.Right, position.Bottom);
+                cb.Stroke();
+                cb.SetLineDash(1f);
+            }
+        }
+
+        public class TableBoxBorder : IPdfPTableEvent
+        {
+            public void TableLayout(PdfPTable table, float[][] widths, float[] heights,
+                                    int headerRows, int rowStart, PdfContentByte[] canvases)
+            {
+                Rectangle rect = new Rectangle(widths[0][0], heights[heights.Length - 1],
+                                               widths[0][widths[0].Length - 1], heights[0]);
+
+                PdfContentByte cb = canvases[PdfPTable.LINECANVAS];
+                cb.SetLineWidth(1f);
+                cb.SetColorStroke(BaseColor.BLACK);
+                cb.Rectangle(rect.Left, rect.Bottom, rect.Width, rect.Height);
+                cb.Stroke();
+            }
         }
 
         //Import functions
