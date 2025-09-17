@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace data_pharm_softwere.Pages.sales
+namespace data_pharm_softwere.Pages.sales.DiscountPolicy
 {
 
 

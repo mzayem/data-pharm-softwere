@@ -4,18 +4,18 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace data_pharm_softwere.Models
 {
-    [Table("PurchaseDetail")]
-    public class PurchaseDetail
+    [Table("SalesDetail")]
+    public class SalesDetail
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int PurchaseDetailId { get; set; }
+        public int SalesDetailId { get; set; }
 
         [Required]
-        public int PurchaseId { get; set; }
+        public int SalesId { get; set; }
 
-        [ForeignKey("PurchaseId")]
-        public virtual Purchase Purchase { get; set; }
+        [ForeignKey("SalesId")]
+        public virtual Sales Sales { get; set; }
 
         [Required]
         public int BatchStockID { get; set; }

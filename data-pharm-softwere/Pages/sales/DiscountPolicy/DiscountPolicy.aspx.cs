@@ -1,5 +1,4 @@
 ﻿using data_pharm_softwere.Data;
-using data_pharm_softwere.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -7,7 +6,7 @@ using System.Linq;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace data_pharm_softwere.Pages.sales
+namespace data_pharm_softwere.Pages.sales.DiscountPolicy
 {
     public partial class DiscountPolicy : System.Web.UI.Page
     {

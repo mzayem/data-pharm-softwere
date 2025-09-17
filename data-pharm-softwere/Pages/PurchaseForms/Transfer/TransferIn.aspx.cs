@@ -419,14 +419,14 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Transfer
             public string ProductName { get; set; }
             public string BatchNo { get; set; }
             public DateTime ExpiryDate { get; set; }
-            public int CartonQty { get; set; }
-            public decimal CartonPrice { get; set; }
+            public int Qty { get; set; }
+            public decimal UnitPrice { get; set; }
             public decimal DiscountPercent { get; set; }
             public decimal GSTPercent { get; set; }
             public string GstType { get; set; }
             public int BonusQty { get; set; }
             public bool IsManualBonus { get; set; }
-            public decimal GrossAmount => CartonQty * CartonPrice;
+            public decimal GrossAmount => Qty * UnitPrice;
             public decimal DiscountAmount => Math.Round(GrossAmount * (DiscountPercent / 100m), 2);
             public decimal TaxBase => GstType == "Net" ? (GrossAmount - DiscountAmount) : GrossAmount;
             public decimal GSTAmount => Math.Round(TaxBase * (GSTPercent / 100m), 2);
@@ -468,8 +468,8 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Transfer
                 ProductName = batchStock.Product?.Name,
                 BatchNo = batchStock.BatchNo,
                 ExpiryDate = batchStock.ExpiryDate,
-                CartonQty = int.TryParse(txtQty.Text, out var parsedQty) ? parsedQty : 0,
-                CartonPrice = batchStock.DP,
+                Qty = int.TryParse(txtQty.Text, out var parsedQty) ? parsedQty : 0,
+                UnitPrice = batchStock.DP,
                 DiscountPercent = batchStock.Product?.PurchaseDiscount ?? 0,
                 GSTPercent = batchStock.Product?.ReqGST ?? 0,
                 GstType = ddlGstType.SelectedValue,
@@ -544,7 +544,7 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Transfer
             var item = list.FirstOrDefault(x => x.BatchStockID == id);
             if (item != null)
             {
-                item.CartonQty = qty;
+                item.Qty = qty;
                 if (!item.IsManualBonus)
                 {
                     if (int.TryParse(item.ProductId, out int prodId))
@@ -726,6 +726,10 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Transfer
                     var detail = new PurchaseDetail
                     {
                         BatchStockID = item.BatchStockID,
+                        Qty = item.Qty,
+                        BonusQty = item.BonusQty,
+                        DiscountAmount = item.DiscountAmount,
+                        GSTAmount = item.GSTAmount,
                         NetAmount = item.NetAmount,
                         CreatedAt = DateTime.Now
                     };
@@ -735,7 +739,7 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Transfer
                     var batch = _context.BatchesStock.FirstOrDefault(b => b.BatchStockID == item.BatchStockID);
                     if (batch != null)
                     {
-                        batch.AvailableQty += item.CartonQty;
+                        batch.AvailableQty += item.Qty;
                         batch.BonusQty += item.BonusQty;
                         batch.UpdatedAt = DateTime.Now;
                         batch.UpdatedBy = "system";

@@ -796,6 +796,10 @@ namespace data_pharm_softwere.Pages.PurchaseForms.Transfer
                     var detail = new PurchaseDetail
                     {
                         BatchStockID = item.BatchStockID,
+                        Qty = item.Qty,
+                        BonusQty = item.BonusQty,
+                        DiscountAmount = item.DiscountAmount,
+                        GSTAmount = item.GSTAmount,
                         NetAmount = item.NetAmount,
                         CreatedAt = DateTime.Now
                     };

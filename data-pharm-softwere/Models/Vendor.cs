@@ -60,6 +60,7 @@ namespace data_pharm_softwere.Models
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public ICollection<Division> Divisions { get; set; }
+        public ICollection<Purchase> purchases { get; set; }
         public virtual Account Account { get; set; }
     }
 }

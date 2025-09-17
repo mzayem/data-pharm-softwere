@@ -140,7 +140,7 @@
     <Content Include="Pages\Salesman\CreateSalesman.aspx" />
     <Content Include="Pages\Salesman\EditSalesman.aspx" />
     <Content Include="Pages\Salesman\SalesmanPage.aspx" />
-    <Content Include="Pages\sales\DiscountPolicy.aspx" />
+    <Content Include="Pages\sales\DiscountPolicy\DiscountPolicy.aspx" />
     <Content Include="Pages\Settings.aspx" />
     <Content Include="Pages\SubGroup\CreateSubGroup.aspx" />
     <Content Include="Pages\SubGroup\EditSubGroup.aspx" />
@@ -284,6 +284,14 @@
     <Compile Include="Migrations\202509130754537_TablesUpdates.Designer.cs">
       <DependentUpon>202509130754537_TablesUpdates.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202509160837253_PurchaseUpdate1.cs" />
+    <Compile Include="Migrations\202509160837253_PurchaseUpdate1.Designer.cs">
+      <DependentUpon>202509160837253_PurchaseUpdate1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202509170952063_SalesTable.cs" />
+    <Compile Include="Migrations\202509170952063_SalesTable.Designer.cs">
+      <DependentUpon>202509170952063_SalesTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\BatchStock.cs" />
@@ -293,6 +301,7 @@
     <Compile Include="Models\DataPharmaContext.cs" />
     <Compile Include="Models\DiscountPolicy.cs" />
     <Compile Include="Models\Division.cs" />
+    <Compile Include="Models\enum.cs" />
     <Compile Include="Models\Group.cs" />
     <Compile Include="Models\MedicalRep.cs" />
     <Compile Include="Models\MedicalRepSubGroup.cs" />
@@ -300,6 +309,8 @@
     <Compile Include="Models\ProductBonus.cs" />
     <Compile Include="Models\Purchase.cs" />
     <Compile Include="Models\PurchaseDetail.cs" />
+    <Compile Include="Models\Sales.cs" />
+    <Compile Include="Models\SalesDetail.cs" />
     <Compile Include="Models\Salesman.cs" />
     <Compile Include="Models\SalesmanTown.cs" />
     <Compile Include="Models\Settings.cs" />
@@ -550,11 +561,11 @@
     <Compile Include="Pages\Salesman\SalesmanPage.aspx.designer.cs">
       <DependentUpon>SalesmanPage.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Pages\sales\DiscountPolicy.aspx.cs">
+    <Compile Include="Pages\sales\DiscountPolicy\DiscountPolicy.aspx.cs">
       <DependentUpon>DiscountPolicy.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Pages\sales\DiscountPolicy.aspx.designer.cs">
+    <Compile Include="Pages\sales\DiscountPolicy\DiscountPolicy.aspx.designer.cs">
       <DependentUpon>DiscountPolicy.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\Settings.aspx.cs">
@@ -708,6 +719,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202509130754537_TablesUpdates.resx">
       <DependentUpon>202509130754537_TablesUpdates.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202509160837253_PurchaseUpdate1.resx">
+      <DependentUpon>202509160837253_PurchaseUpdate1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202509170952063_SalesTable.resx">
+      <DependentUpon>202509170952063_SalesTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

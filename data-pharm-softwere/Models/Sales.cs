@@ -6,22 +6,25 @@ using data_pharm_softwere.Models;
 
 namespace data_pharm_softwere.Models
 {
-    [Table("Purchases")]
-    public class Purchase
+    [Table("Sales")]
+    public class Sales
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int PurchaseId { get; set; }
+        public int SalesId { get; set; }
 
         [Required]
         [StringLength(20)]
         public string VoucherNumber { get; set; }
 
+        [Required]
+        public VoucherType VoucherType { get; set; }
+
         public bool Posted { get; set; }
 
         [Required]
         [DataType(DataType.Date)]
-        public DateTime PurchaseDate { get; set; }
+        public DateTime SalesDate { get; set; }
 
         [Required]
         public TaxBaseType AdvTaxOn { get; set; }
@@ -30,15 +33,8 @@ namespace data_pharm_softwere.Models
         public TaxBaseType GSTType { get; set; }
 
         [Required]
-        [StringLength(100)]
-        public string PoNumber { get; set; }
-
-        [Required]
         [StringLength(200)]
-        public string Reference { get; set; }
-
-        [Required]
-        public VoucherType VoucherType { get; set; }
+        public string Remark { get; set; }
 
         [Required]
         [Range(0, 100)]
@@ -70,7 +66,16 @@ namespace data_pharm_softwere.Models
         public decimal NetAmount { get; set; }
 
         [Required]
-        public int VendorId { get; set; }
+        public int CustomerId { get; set; }
+
+        [Required]
+        public int SalesmanBookerTownId { get; set; }
+
+        [Required]
+        public int SalesmanSupplierTownId { get; set; }
+
+        [Required]
+        public int SalesmanDriverTownId { get; set; }
 
         [Required]
         [StringLength(50)]
@@ -85,9 +90,18 @@ namespace data_pharm_softwere.Models
         [DataType(DataType.DateTime)]
         public DateTime? UpdatedAt { get; set; }
 
-        [ForeignKey("VendorId")]
-        public virtual Vendor Vendor { get; set; }
+        [ForeignKey("CustomerId")]
+        public virtual Customer Customer { get; set; }
 
-        public virtual ICollection<PurchaseDetail> PurchaseDetails { get; set; } = new List<PurchaseDetail>();
+        [ForeignKey("SalesmanBookerTownId")]
+        public virtual SalesmanTown SalesmanBooker { get; set; }
+
+        [ForeignKey("SalesmanSupplierTownId")]
+        public virtual SalesmanTown SalesmanSupplier { get; set; }
+
+        [ForeignKey("SalesmanDriverTownId")]
+        public virtual SalesmanTown SalesmanDriver { get; set; }
+
+        public virtual ICollection<SalesDetail> SalesDetails { get; set; } = new List<SalesDetail>();
     }
 }

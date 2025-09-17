@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -38,5 +39,9 @@ namespace data_pharm_softwere.Models
         public decimal Percentage { get; set; } = 0;
 
         public DateTime AssignedOn { get; set; } = DateTime.Now;
+
+        public virtual ICollection<Sales> SalesAsBooker { get; set; } = new List<Sales>();
+        public virtual ICollection<Sales> SalesAsSupplier { get; set; } = new List<Sales>();
+        public virtual ICollection<Sales> SalesAsDriver { get; set; } = new List<Sales>();
     }
 }

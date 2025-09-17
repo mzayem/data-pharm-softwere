@@ -31,6 +31,8 @@ namespace data_pharm_softwere.Data
         public DbSet<Purchase> Purchases { get; set; }
         public DbSet<PurchaseDetail> PurchaseDetails { get; set; }
         public DbSet<DiscountPolicy> DiscountPolicies { get; set; }
+        public DbSet<Sales> Sales { get; set; }
+        public DbSet<SalesDetail> SalesDetails { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -143,6 +145,13 @@ namespace data_pharm_softwere.Data
                 .HasForeignKey(ms => ms.SubGroupID)
                 .WillCascadeOnDelete(true);
 
+            // Purchase → Vendor
+            modelBuilder.Entity<Purchase>()
+                .HasRequired(p => p.Vendor)
+                .WithMany(v => v.purchases)
+                .HasForeignKey(p => p.VendorId)
+                .WillCascadeOnDelete(false);
+
             // Purchase → PurchaseDetails
             modelBuilder.Entity<Purchase>()
                 .HasMany(p => p.PurchaseDetails)
@@ -163,18 +172,58 @@ namespace data_pharm_softwere.Data
                 .WithRequired(c => c.Account)
                 .WillCascadeOnDelete(true);
 
-            // DiscountPolicy → Customer (cascade allowed)
+            // DiscountPolicy → Customer
             modelBuilder.Entity<DiscountPolicy>()
                 .HasRequired(dp => dp.Customer)
                 .WithMany(c => c.DiscountPolicies)
                 .HasForeignKey(dp => dp.CustomerAccountId)
                 .WillCascadeOnDelete(true);
 
-            // DiscountPolicy → Product (disable cascade to avoid multiple paths)
+            // DiscountPolicy → Product
             modelBuilder.Entity<DiscountPolicy>()
                 .HasRequired(dp => dp.Product)
                 .WithMany(p => p.DiscountPolicies)
                 .HasForeignKey(dp => dp.ProductID)
+                .WillCascadeOnDelete(false);
+
+            // Sales → Customer
+            modelBuilder.Entity<Sales>()
+                .HasRequired(s => s.Customer)
+                .WithMany(c => c.Sales)
+                .HasForeignKey(s => s.CustomerId)
+                .WillCascadeOnDelete(false);
+
+            // Sales → SalesDetails
+            modelBuilder.Entity<Sales>()
+                .HasMany(s => s.SalesDetails)
+                .WithRequired(sd => sd.Sales)
+                .HasForeignKey(sd => sd.SalesId)
+                .WillCascadeOnDelete(true);
+
+            // SalesDetail → BatchStock
+            modelBuilder.Entity<SalesDetail>()
+                .HasRequired(sd => sd.BatchStock)
+                .WithMany()
+                .HasForeignKey(sd => sd.BatchStockID)
+                .WillCascadeOnDelete(false);
+
+            // ================= Sales → SalesmanTown Relations =================
+            modelBuilder.Entity<Sales>()
+                .HasRequired(s => s.SalesmanBooker)
+                .WithMany()
+                .HasForeignKey(s => s.SalesmanBookerTownId)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<Sales>()
+                .HasRequired(s => s.SalesmanSupplier)
+                .WithMany()
+                .HasForeignKey(s => s.SalesmanSupplierTownId)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<Sales>()
+                .HasRequired(s => s.SalesmanDriver)
+                .WithMany()
+                .HasForeignKey(s => s.SalesmanDriverTownId)
                 .WillCascadeOnDelete(false);
         }
     }

@@ -1,6 +1,5 @@
-﻿<%@ Page Title="Discount Policy" Language="C#" MasterPageFile="~/Pages/Layout.Master"
-    AutoEventWireup="true" CodeBehind="DiscountPolicy.aspx.cs"
-    Inherits="data_pharm_softwere.Pages.sales.DiscountPolicy" %>
+﻿<%@ Page Title="Discount Policy" Language="C#" MasterPageFile="~/Pages/Layout.Master" AutoEventWireup="true" CodeBehind="DiscountPolicy.aspx.cs" Inherits="data_pharm_softwere.Pages.sales.DiscountPolicy.DiscountPolicy" %>
+
 <%@ Register TagPrefix="uc" TagName="ImportInfo" Src="~/Components/Control/ImportInfo.ascx" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
@@ -11,7 +10,6 @@
        <div class="d-flex justify-content-between align-content-between">
             <h3 class="mb-4 text-center fw-semibold">Discount Policy</h3>
             <div class="d-flex gap-2 align-items-start">
-                                         <!-- Help Icon with Tooltip -->
               <button type="button" 
                 class="btn btn-link p-0 m-0 border-0 text-dark" 
                 data-bs-toggle="modal" 
@@ -247,5 +245,5 @@
                         new bootstrap.Tooltip(tooltipTriggerEl);
                     });
                 });
-            </script>
+        </script>
 </asp:Content>

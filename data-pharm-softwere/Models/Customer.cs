@@ -67,5 +67,6 @@ namespace data_pharm_softwere.Models
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public virtual Account Account { get; set; }
         public virtual ICollection<DiscountPolicy> DiscountPolicies { get; set; }
+        public virtual ICollection<Sales> Sales { get; set; }
     }
 }
