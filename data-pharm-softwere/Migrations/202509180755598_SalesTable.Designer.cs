@@ -7,13 +7,13 @@ namespace data_pharm_softwere.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.5.1")]
-    public sealed partial class TablesUpdates : IMigrationMetadata
+    public sealed partial class SalesTable : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(TablesUpdates));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(SalesTable));
         
         string IMigrationMetadata.Id
         {
-            get { return "202509130754537_TablesUpdates"; }
+            get { return "202509180755598_SalesTable"; }
         }
         
         string IMigrationMetadata.Source

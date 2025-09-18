@@ -105,6 +105,60 @@ namespace data_pharm_softwere.Pages
         protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvStockInHand;
 
         /// <summary>
+        /// txtPurchaseHead control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtPurchaseHead;
+
+        /// <summary>
+        /// txtPurchaseReturnHead control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtPurchaseReturnHead;
+
+        /// <summary>
+        /// txtTransferInHead control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtTransferInHead;
+
+        /// <summary>
+        /// txtTransferOutHead control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtTransferOutHead;
+
+        /// <summary>
+        /// txtSalesHead control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtSalesHead;
+
+        /// <summary>
+        /// txtSalesReturnHead control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtSalesReturnHead;
+
+        /// <summary>
         /// btnSave control.
         /// </summary>
         /// <remarks>

@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Discount Policy" Language="C#" MasterPageFile="~/Pages/Layout.Master" AutoEventWireup="true" CodeBehind="DiscountPolicy.aspx.cs" Inherits="data_pharm_softwere.Pages.sales.DiscountPolicy.DiscountPolicy" %>
+﻿<%@ Page Title="Discount Policy" Language="C#" MasterPageFile="~/Pages/Layout.Master" AutoEventWireup="true" CodeBehind="DiscountPolicy.aspx.cs" Inherits="data_pharm_softwere.Pages.Sales.DiscountPolicy.DiscountPolicy" %>
 
 <%@ Register TagPrefix="uc" TagName="ImportInfo" Src="~/Components/Control/ImportInfo.ascx" %>
 

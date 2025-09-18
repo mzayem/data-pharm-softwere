@@ -20,4 +20,10 @@ namespace data_pharm_softwere.Models
         SIR,
         SOR
     }
+
+    public enum BillType
+    {
+        Normal,
+        Availability,
+    }
 }

@@ -7,7 +7,6 @@
     {
         public override void Up()
         {
-            DropForeignKey("dbo.Purchases", "VendorId", "dbo.Vendors");
             CreateTable(
                 "dbo.Sales",
                 c => new
@@ -19,7 +18,8 @@
                     SalesDate = c.DateTime(nullable: false),
                     AdvTaxOn = c.Int(nullable: false),
                     GSTType = c.Int(nullable: false),
-                    Remark = c.String(nullable: false, maxLength: 200),
+                    BillType = c.Int(nullable: false),
+                    Remarks = c.String(nullable: false, maxLength: 200),
                     AdvTaxRate = c.Decimal(nullable: false, precision: 18, scale: 2),
                     AdvTaxAmount = c.Decimal(nullable: false, precision: 18, scale: 2),
                     AdditionalCharges = c.Decimal(nullable: false, precision: 18, scale: 2),
@@ -73,13 +73,10 @@
                 .ForeignKey("dbo.Sales", t => t.SalesId, cascadeDelete: true)
                 .Index(t => t.SalesId)
                 .Index(t => t.BatchStockID);
-
-            AddForeignKey("dbo.Purchases", "VendorId", "dbo.Vendors", "AccountId");
         }
 
         public override void Down()
         {
-            DropForeignKey("dbo.Purchases", "VendorId", "dbo.Vendors");
             DropForeignKey("dbo.Sales", "SalesmanSupplierTownId", "dbo.SalesmanTowns");
             DropForeignKey("dbo.Sales", "SalesmanDriverTownId", "dbo.SalesmanTowns");
             DropForeignKey("dbo.Sales", "SalesmanBookerTownId", "dbo.SalesmanTowns");
@@ -100,7 +97,6 @@
             DropIndex("dbo.Sales", new[] { "CustomerId" });
             DropTable("dbo.SalesDetail");
             DropTable("dbo.Sales");
-            AddForeignKey("dbo.Purchases", "VendorId", "dbo.Vendors", "AccountId", cascadeDelete: true);
         }
     }
 }

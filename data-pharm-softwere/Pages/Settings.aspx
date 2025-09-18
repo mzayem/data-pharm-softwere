@@ -51,6 +51,31 @@
                             CssClass="text-danger"
                             Display="Dynamic" />
                     </div>
+                    
+                    <div class="col-md-2">
+                        <label class="form-label fw-semibold">Purchase Head</label>
+                        <asp:TextBox ID="txtPurchaseHead" runat="server" CssClass="form-control rounded-pill" placeholder ="P" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label fw-semibold">PurchaseReturn Head</label>
+                        <asp:TextBox ID="txtPurchaseReturnHead" runat="server" CssClass="form-control rounded-pill" placeholder="PR" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label fw-semibold">TransferIn Head</label>
+                        <asp:TextBox ID="txtTransferInHead" runat="server" CssClass="form-control rounded-pill" placeholder="TI" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label fw-semibold">TransferOut Head</label>
+                        <asp:TextBox ID="txtTransferOutHead" runat="server" CssClass="form-control rounded-pill" placeholder="TO" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label fw-semibold">Sales Head</label>
+                        <asp:TextBox ID="txtSalesHead" runat="server" CssClass="form-control rounded-pill" placeholder="S" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label fw-semibold">SalesReturn Head</label>
+                        <asp:TextBox ID="txtSalesReturnHead" runat="server" CssClass="form-control rounded-pill" placeholder="SR" />
+                    </div>
                 </div>
 
                 <div class="d-flex justify-content-end mt-4">

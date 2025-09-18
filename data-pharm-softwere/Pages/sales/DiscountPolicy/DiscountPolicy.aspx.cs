@@ -6,7 +6,7 @@ using System.Linq;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace data_pharm_softwere.Pages.sales.DiscountPolicy
+namespace data_pharm_softwere.Pages.Sales.DiscountPolicy
 {
     public partial class DiscountPolicy : System.Web.UI.Page
     {
