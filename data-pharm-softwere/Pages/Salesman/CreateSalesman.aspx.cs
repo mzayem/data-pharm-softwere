@@ -57,22 +57,42 @@ namespace data_pharm_softwere.Pages.Salesman
         {
             if (int.TryParse(ddlTown.SelectedValue, out int selectedTownId))
             {
-                var list = AssignedTowns; // get current from ViewState
+                var list = AssignedTowns;
 
-                if (!list.Any(x => x.TownID == selectedTownId))
+                var existingAssignments = list.Where(x => x.TownID == selectedTownId).ToList();
+
+                AssignmentType newType;
+
+                if (!existingAssignments.Any(x => x.AssignmentType == AssignmentType.Booker))
                 {
-                    list.Add(new AssignedTownViewModel
-                    {
-                        TownID = selectedTownId,
-                        TownName = ddlTown.SelectedItem.Text,
-                        AssignmentType = AssignmentType.Booker,
-                        Percentage = 0
-                    });
+                    newType = AssignmentType.Booker;
+                }
+                else if (!existingAssignments.Any(x => x.AssignmentType == AssignmentType.Supplier))
+                {
+                    newType = AssignmentType.Supplier;
+                }
+                else if (!existingAssignments.Any(x => x.AssignmentType == AssignmentType.Driver))
+                {
+                    newType = AssignmentType.Driver;
+                }
+                else
+                {
+                    lblMessage.Text = "This town already has Booker, Supplier, and Driver assigned.";
+                    lblMessage.CssClass = "alert alert-warning";
+                    ddlTown.SelectedIndex = 0;
+                    return;
                 }
 
-                AssignedTowns = list;  // ✅ save back to ViewState *before binding*
-                BindAssignedTowns();
+                list.Add(new AssignedTownViewModel
+                {
+                    TownID = selectedTownId,
+                    TownName = ddlTown.SelectedItem.Text,
+                    AssignmentType = newType,
+                    Percentage = 0
+                });
 
+                AssignedTowns = list;
+                BindAssignedTowns();
                 ddlTown.SelectedIndex = 0;
             }
         }
@@ -99,11 +119,9 @@ namespace data_pharm_softwere.Pages.Salesman
                 var ddl = (DropDownList)e.Item.FindControl("ddlAssignmentType");
                 if (ddl != null)
                 {
-                    // Bind enum to dropdown
                     ddl.DataSource = Enum.GetValues(typeof(AssignmentType));
                     ddl.DataBind();
 
-                    // Select current value
                     ddl.SelectedValue = item.AssignmentType.ToString();
                 }
             }
