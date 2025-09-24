@@ -80,5 +80,7 @@ namespace data_pharm_softwere.Models
         public virtual Product Product { get; set; }
 
         public virtual ICollection<PurchaseDetail> PurchaseDetails { get; set; }
+
+        public virtual ICollection<SalesDetail> SalesDetails { get; set; }
     }
 }
