@@ -7,13 +7,13 @@ namespace data_pharm_softwere.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.5.1")]
-    public sealed partial class MinorUpdate : IMigrationMetadata
+    public sealed partial class MinorChanges : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(MinorUpdate));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(MinorChanges));
         
         string IMigrationMetadata.Id
         {
-            get { return "202509221047376_MinorUpdate"; }
+            get { return "202509250515548_MinorChanges"; }
         }
         
         string IMigrationMetadata.Source

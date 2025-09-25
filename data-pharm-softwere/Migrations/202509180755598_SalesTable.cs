@@ -19,7 +19,7 @@
                     AdvTaxOn = c.Int(nullable: false),
                     GSTType = c.Int(nullable: false),
                     BillType = c.Int(nullable: false),
-                    Remarks = c.String(nullable: false, maxLength: 200),
+                    Remarks = c.String(nullable: true, maxLength: 200),
                     AdvTaxRate = c.Decimal(nullable: false, precision: 18, scale: 2),
                     AdvTaxAmount = c.Decimal(nullable: false, precision: 18, scale: 2),
                     AdditionalCharges = c.Decimal(nullable: false, precision: 18, scale: 2),

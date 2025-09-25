@@ -33,9 +33,8 @@ namespace data_pharm_softwere.Models
         public TaxBaseType GSTType { get; set; }
 
         [Required]
-        public BillType BillType { get; set; }
+        public BillType BillType { get; set; } = BillType.Normal;
 
-        [Required]
         [StringLength(200)]
         public string Remarks { get; set; }
 
